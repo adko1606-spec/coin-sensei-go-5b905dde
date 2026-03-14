@@ -1100,8 +1100,8 @@ export const lessons: Lesson[] = [
         id: "q_ttip3",
         type: "choice",
         text: "Čo je DPP (dohoda o pracovnej činnosti)?",
-        options: ["Forma brigádnickej práce s daňovými výhodami", "Typ podnikania", "Bankový produkt", "Investičný účet"],
-        correctIndex: 0,
+        options: ["Typ podnikania", "Bankový produkt", "Investičný účet", "Forma brigádnickej práce s daňovými výhodami"],
+        correctIndex: 3,
         explanation: "DPP umožňuje študentom pracovať s nižšími odvodmi – do 200€/mesiac neplatíš sociálne odvody.",
       },
       {

@@ -346,8 +346,8 @@ export const lessons: Lesson[] = [
         id: "q6",
         type: "choice",
         text: "Čo je pravidlo 50/30/20?",
-        options: ["50% potreby, 30% želania, 20% úspory", "50% úspory, 30% jedlo, 20% zábava", "50% dane, 30% bývanie, 20% iné", "50% investície, 30% úspory, 20% výdavky"],
-        correctIndex: 0,
+        options: ["50% úspory, 30% jedlo, 20% zábava", "50% dane, 30% bývanie, 20% iné", "50% potreby, 30% želania, 20% úspory", "50% investície, 30% úspory, 20% výdavky"],
+        correctIndex: 2,
         explanation: "Pravidlo 50/30/20 rozdeľuje príjem: 50% na potreby, 30% na želania a 20% na úspory.",
       },
       {

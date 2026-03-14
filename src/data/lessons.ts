@@ -409,8 +409,8 @@ export const lessons: Lesson[] = [
         id: "q_spend1",
         type: "choice",
         text: "Čo je impulzívny nákup?",
-        options: ["Neplánovaný nákup pod vplyvom emócií", "Nákup v zľave", "Online nákup", "Veľký nákup"],
-        correctIndex: 0,
+        options: ["Nákup v zľave", "Online nákup", "Neplánovaný nákup pod vplyvom emócií", "Veľký nákup"],
+        correctIndex: 2,
         explanation: "Impulzívny nákup je neplánovaný – robíš ho pod vplyvom momentálneho pocitu.",
       },
       {

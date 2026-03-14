@@ -619,8 +619,8 @@ export const lessons: Lesson[] = [
         id: "q_risk1",
         type: "choice",
         text: "Aký je vzťah medzi rizikom a výnosom?",
-        options: ["Vyššie riziko = potenciálne vyšší výnos", "Žiadny vzťah", "Nižšie riziko = vyšší výnos", "Riziko neexistuje"],
-        correctIndex: 0,
+        options: ["Žiadny vzťah", "Nižšie riziko = vyšší výnos", "Vyššie riziko = potenciálne vyšší výnos", "Riziko neexistuje"],
+        correctIndex: 2,
         explanation: "Investície s vyšším rizikom ponúkajú potenciálne vyšší výnos, ale aj väčšiu možnosť straty.",
       },
       {

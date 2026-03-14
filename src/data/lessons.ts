@@ -823,8 +823,8 @@ export const lessons: Lesson[] = [
         id: "q_alt1",
         type: "choice",
         text: "Čo je Ethereum?",
-        options: ["Platforma pre smart kontrakty", "Kópia Bitcoinu", "Banka", "Sociálna sieť"],
-        correctIndex: 0,
+        options: ["Kópia Bitcoinu", "Banka", "Platforma pre smart kontrakty", "Sociálna sieť"],
+        correctIndex: 2,
         explanation: "Ethereum je platforma, ktorá umožňuje vytvárať decentralizované aplikácie a smart kontrakty.",
       },
       {

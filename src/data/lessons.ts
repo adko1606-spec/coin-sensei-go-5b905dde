@@ -474,8 +474,8 @@ export const lessons: Lesson[] = [
         id: "q7",
         type: "choice",
         text: "Čo je akcia?",
-        options: ["Podiel vlastníctva vo firme", "Typ bankovky", "Druh pôžičky", "Bankový účet"],
-        correctIndex: 0,
+        options: ["Typ bankovky", "Podiel vlastníctva vo firme", "Druh pôžičky", "Bankový účet"],
+        correctIndex: 1,
         explanation: "Akcia predstavuje podiel na vlastníctve firmy.",
       },
       {

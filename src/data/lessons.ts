@@ -1050,8 +1050,8 @@ export const lessons: Lesson[] = [
         id: "q_itax4",
         type: "choice",
         text: "Čo je nezdaniteľná časť základu dane?",
-        options: ["Suma príjmu, z ktorej neplatíš daň", "Bonus od zamestnávateľa", "Bankový úrok", "Daňový podvod"],
-        correctIndex: 0,
+        options: ["Bonus od zamestnávateľa", "Suma príjmu, z ktorej neplatíš daň", "Bankový úrok", "Daňový podvod"],
+        correctIndex: 1,
         explanation: "Nezdaniteľná časť je suma, ktorú si odpočítaš od príjmu pred výpočtom dane.",
       },
       {

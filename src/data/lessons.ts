@@ -145,8 +145,8 @@ export const lessons: Lesson[] = [
         id: "q_bank1",
         type: "choice",
         text: "Čo je bežný účet?",
-        options: ["Účet na každodenné platby", "Investičný účet", "Úverový účet", "Sporiteľňa"],
-        correctIndex: 0,
+        options: ["Investičný účet", "Účet na každodenné platby", "Úverový účet", "Sporiteľňa"],
+        correctIndex: 1,
         explanation: "Bežný účet slúži na každodenné finančné operácie – príjem platu, platby a prevody.",
       },
       {

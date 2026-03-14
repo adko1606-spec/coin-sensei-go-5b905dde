@@ -1085,8 +1085,8 @@ export const lessons: Lesson[] = [
         id: "q_ttip1",
         type: "choice",
         text: "Čo je daňový bonus na dieťa?",
-        options: ["Zníženie dane pre rodičov", "Príjem pre dieťa", "Štipendiá", "Detský účet"],
-        correctIndex: 0,
+        options: ["Príjem pre dieťa", "Štipendiá", "Zníženie dane pre rodičov", "Detský účet"],
+        correctIndex: 2,
         explanation: "Daňový bonus na dieťa znižuje daň rodiča – je to priama úľava.",
       },
       {

@@ -545,8 +545,8 @@ export const lessons: Lesson[] = [
         id: "q8",
         type: "choice",
         text: "Čo je zložené úročenie?",
-        options: ["Úrok z úroku", "Jednoduchý úrok", "Poplatok banke", "Typ dane"],
-        correctIndex: 0,
+        options: ["Jednoduchý úrok", "Poplatok banke", "Úrok z úroku", "Typ dane"],
+        correctIndex: 2,
         explanation: "Zložené úročenie znamená, že zarábate úrok nielen z pôvodnej sumy, ale aj z predchádzajúcich úrokov.",
       },
       {

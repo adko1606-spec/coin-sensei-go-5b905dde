@@ -437,8 +437,8 @@ export const lessons: Lesson[] = [
         id: "q_spend4",
         type: "choice",
         text: "Čo je opportunity cost (náklady obetovanej príležitosti)?",
-        options: ["Hodnota toho, čo si vynechal kvôli inému rozhodnutiu", "Cena príležitosti", "Poplatok banke", "Typ investície"],
-        correctIndex: 0,
+        options: ["Cena príležitosti", "Poplatok banke", "Typ investície", "Hodnota toho, čo si vynechal kvôli inému rozhodnutiu"],
+        correctIndex: 3,
         explanation: "Keď míňaš na jednu vec, prichádzaš o možnosť použiť tie peniaze inak.",
       },
       {

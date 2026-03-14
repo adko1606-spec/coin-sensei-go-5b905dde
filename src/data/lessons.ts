@@ -747,8 +747,8 @@ export const lessons: Lesson[] = [
         id: "q_btc1",
         type: "choice",
         text: "Kto vytvoril Bitcoin?",
-        options: ["Satoshi Nakamoto (pseudonym)", "Elon Musk", "Mark Zuckerberg", "Vláda USA"],
-        correctIndex: 0,
+        options: ["Elon Musk", "Mark Zuckerberg", "Vláda USA", "Satoshi Nakamoto (pseudonym)"],
+        correctIndex: 3,
         explanation: "Bitcoin vytvoril neznámy autor pod pseudonymom Satoshi Nakamoto v roku 2009.",
       },
       {

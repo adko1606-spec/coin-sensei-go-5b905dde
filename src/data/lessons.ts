@@ -896,8 +896,8 @@ export const lessons: Lesson[] = [
         id: "q_crisk3",
         type: "choice",
         text: "Čo znamená 'DYOR' v krypto komunite?",
-        options: ["Do Your Own Research", "Do Your Order Right", "Daily Yield On Returns", "Digital Yield Or Risk"],
-        correctIndex: 0,
+        options: ["Do Your Order Right", "Daily Yield On Returns", "Do Your Own Research", "Digital Yield Or Risk"],
+        correctIndex: 2,
         explanation: "DYOR = urob si vlastný prieskum pred investovaním.",
       },
       {

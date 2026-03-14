@@ -682,8 +682,8 @@ export const lessons: Lesson[] = [
         id: "q_idx1",
         type: "choice",
         text: "Čo je S&P 500?",
-        options: ["Index 500 najväčších amerických firiem", "Americká banka", "Typ akcie", "Kryptomena"],
-        correctIndex: 0,
+        options: ["Americká banka", "Typ akcie", "Index 500 najväčších amerických firiem", "Kryptomena"],
+        correctIndex: 2,
         explanation: "S&P 500 sleduje výkonnosť 500 najväčších verejne obchodovaných spoločností v USA.",
       },
       {

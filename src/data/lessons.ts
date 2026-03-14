@@ -374,8 +374,8 @@ export const lessons: Lesson[] = [
         id: "q6d",
         type: "choice",
         text: "Prečo je dôležité sledovať výdavky?",
-        options: ["Pomáha identifikovať zbytočné míňanie", "Nie je to dôležité", "Len pre bohatých", "Banky to vyžadujú"],
-        correctIndex: 0,
+        options: ["Nie je to dôležité", "Pomáha identifikovať zbytočné míňanie", "Len pre bohatých", "Banky to vyžadujú"],
+        correctIndex: 1,
         explanation: "Sledovanie výdavkov ti ukáže, kam idú tvoje peniaze, a pomôže ti nájsť miesta na úspory.",
       },
       {

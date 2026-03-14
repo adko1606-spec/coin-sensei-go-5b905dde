@@ -1029,8 +1029,8 @@ export const lessons: Lesson[] = [
         id: "q_itax2",
         type: "choice",
         text: "Ako sa zdaňuje zisk z kryptomien na Slovensku?",
-        options: ["Ako ostatný príjem sadzbou 19-25%", "Kryptomeny sa nezdaňujú", "Pevná sadzba 5%", "Len pri výbere na účet"],
-        correctIndex: 0,
+        options: ["Kryptomeny sa nezdaňujú", "Pevná sadzba 5%", "Len pri výbere na účet", "Ako ostatný príjem sadzbou 19-25%"],
+        correctIndex: 3,
         explanation: "Zisk z kryptomien sa zdaňuje ako ostatný príjem (19%, resp. 25% nad hranicou).",
       },
       {

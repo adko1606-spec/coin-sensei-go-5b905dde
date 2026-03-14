@@ -97,8 +97,8 @@ export const lessons: Lesson[] = [
         id: "q3b",
         type: "choice",
         text: "Čo znamená pojem 'likvidita'?",
-        options: ["Schopnosť premeniť aktívum na hotovosť", "Množstvo vody v ekonomike", "Typ bankového účtu", "Spôsob platby"],
-        correctIndex: 0,
+        options: ["Množstvo vody v ekonomike", "Typ bankového účtu", "Spôsob platby", "Schopnosť premeniť aktívum na hotovosť"],
+        correctIndex: 3,
         explanation: "Likvidita vyjadruje, ako rýchlo a ľahko môžeš premeniť aktívum na hotovosť bez straty hodnoty.",
       },
       {

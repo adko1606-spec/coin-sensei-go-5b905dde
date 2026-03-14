@@ -703,8 +703,8 @@ export const lessons: Lesson[] = [
         id: "q_idx3",
         type: "choice",
         text: "Čo je medvedí trh (bear market)?",
-        options: ["Pokles trhu o 20% alebo viac", "Rast trhu", "Stabilný trh", "Nový trh"],
-        correctIndex: 0,
+        options: ["Rast trhu", "Pokles trhu o 20% alebo viac", "Stabilný trh", "Nový trh"],
+        correctIndex: 1,
         explanation: "Medvedí trh nastáva, keď index klesne o 20% alebo viac od svojho maxima.",
       },
       {

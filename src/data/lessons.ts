@@ -838,8 +838,8 @@ export const lessons: Lesson[] = [
         id: "q_alt3",
         type: "choice",
         text: "Čo je smart kontrakt?",
-        options: ["Samospúšťací program na blockchaine", "Papierová zmluva", "Typ pôžičky", "Banková služba"],
-        correctIndex: 0,
+        options: ["Papierová zmluva", "Typ pôžičky", "Banková služba", "Samospúšťací program na blockchaine"],
+        correctIndex: 3,
         explanation: "Smart kontrakt je program, ktorý sa automaticky vykoná, keď sú splnené podmienky.",
       },
       {

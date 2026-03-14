@@ -974,8 +974,8 @@ export const lessons: Lesson[] = [
         id: "q_tax4",
         type: "choice",
         text: "Čo je daňové priznanie?",
-        options: ["Dokument, v ktorom oznamuješ príjmy štátu", "Žiadosť o pôžičku", "Bankový výpis", "Poistná zmluva"],
-        correctIndex: 0,
+        options: ["Žiadosť o pôžičku", "Dokument, v ktorom oznamuješ príjmy štátu", "Bankový výpis", "Poistná zmluva"],
+        correctIndex: 1,
         explanation: "Daňové priznanie je formulár, kde uvedieš svoje príjmy a výdavky za rok.",
       },
       {

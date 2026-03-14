@@ -304,8 +304,8 @@ export const lessons: Lesson[] = [
         id: "q_debt4",
         type: "choice",
         text: "Čo je konsolidácia dlhov?",
-        options: ["Zlúčenie viacerých dlhov do jedného", "Odpustenie dlhov", "Nová pôžička", "Bankrot"],
-        correctIndex: 0,
+        options: ["Odpustenie dlhov", "Zlúčenie viacerých dlhov do jedného", "Nová pôžička", "Bankrot"],
+        correctIndex: 1,
         explanation: "Konsolidácia zlúči viacero dlhov do jednej splátky, často s nižším úrokom.",
       },
       {

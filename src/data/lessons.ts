@@ -168,8 +168,8 @@ export const lessons: Lesson[] = [
         id: "q_bank4",
         type: "choice",
         text: "Aký je rozdiel medzi debetnou a kreditnou kartou?",
-        options: ["Debetná míňa vlastné peniaze, kreditná požičané", "Žiadny rozdiel", "Kreditná je lacnejšia", "Debetná má vyšší limit"],
-        correctIndex: 0,
+        options: ["Žiadny rozdiel", "Kreditná je lacnejšia", "Debetná má vyšší limit", "Debetná míňa vlastné peniaze, kreditná požičané"],
+        correctIndex: 3,
         explanation: "Debetná karta čerpá z tvojho účtu, kreditná ti požičiava peniaze od banky.",
       },
       {

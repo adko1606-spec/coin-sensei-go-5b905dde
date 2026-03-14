@@ -634,8 +634,8 @@ export const lessons: Lesson[] = [
         id: "q_risk3",
         type: "choice",
         text: "Ktorá investícia je najmenej riziková?",
-        options: ["Štátne dlhopisy", "Jednotlivé akcie", "Kryptomeny", "Startupové investície"],
-        correctIndex: 0,
+        options: ["Jednotlivé akcie", "Kryptomeny", "Startupové investície", "Štátne dlhopisy"],
+        correctIndex: 3,
         explanation: "Štátne dlhopisy sú považované za najmenej rizikové.",
       },
       {

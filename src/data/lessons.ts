@@ -497,8 +497,8 @@ export const lessons: Lesson[] = [
         id: "q7d",
         type: "choice",
         text: "Čo znamená diverzifikácia?",
-        options: ["Rozloženie investícií do viacerých aktív", "Investovanie všetkého do jednej akcie", "Predaj všetkých investícií", "Typ fondu"],
-        correctIndex: 0,
+        options: ["Investovanie všetkého do jednej akcie", "Rozloženie investícií do viacerých aktív", "Predaj všetkých investícií", "Typ fondu"],
+        correctIndex: 1,
         explanation: "Diverzifikácia znižuje riziko rozložením peňazí do rôznych investícií.",
       },
       {

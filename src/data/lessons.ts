@@ -89,8 +89,8 @@ export const lessons: Lesson[] = [
         id: "q3",
         type: "choice",
         text: "Kto vydáva peniaze na Slovensku?",
-        options: ["Európska centrálna banka", "Vláda SR", "Komerčné banky", "Pošta"],
-        correctIndex: 0,
+        options: ["Vláda SR", "Komerčné banky", "Európska centrálna banka", "Pošta"],
+        correctIndex: 2,
         explanation: "Euro vydáva Európska centrálna banka (ECB) pre všetky krajiny eurozóny.",
       },
       {

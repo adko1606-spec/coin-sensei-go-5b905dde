@@ -226,8 +226,8 @@ export const lessons: Lesson[] = [
         id: "q5b",
         type: "choice",
         text: "Na koľko mesiacov výdavkov by mal stačiť núdzový fond?",
-        options: ["3-6 mesiacov", "1 týždeň", "10 rokov", "Netreba ho"],
-        correctIndex: 0,
+        options: ["1 týždeň", "3-6 mesiacov", "10 rokov", "Netreba ho"],
+        correctIndex: 1,
         explanation: "Odporúča sa mať núdzový fond na 3-6 mesiacov bežných výdavkov.",
       },
       {

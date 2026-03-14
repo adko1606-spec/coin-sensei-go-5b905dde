@@ -775,8 +775,8 @@ export const lessons: Lesson[] = [
         id: "q_btc4",
         type: "choice",
         text: "Čo je 'halving' Bitcoinu?",
-        options: ["Zníženie odmeny za ťažbu na polovicu", "Zdvojnásobenie ceny", "Rozdelenie Bitcoinu", "Nový update"],
-        correctIndex: 0,
+        options: ["Zdvojnásobenie ceny", "Zníženie odmeny za ťažbu na polovicu", "Rozdelenie Bitcoinu", "Nový update"],
+        correctIndex: 1,
         explanation: "Halving nastáva každé 4 roky a znižuje odmenu za ťažbu na polovicu.",
       },
       {

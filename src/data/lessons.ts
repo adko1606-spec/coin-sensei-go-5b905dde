@@ -489,8 +489,8 @@ export const lessons: Lesson[] = [
         id: "q7c",
         type: "choice",
         text: "Čo je dlhopis?",
-        options: ["Pôžička, ktorú dávaš firme alebo štátu", "Typ akcie", "Bankový účet", "Poistenie"],
-        correctIndex: 0,
+        options: ["Typ akcie", "Bankový účet", "Poistenie", "Pôžička, ktorú dávaš firme alebo štátu"],
+        correctIndex: 3,
         explanation: "Dlhopis je cenný papier – požičiavaš peniaze emitentovi, ktorý ti ich vráti aj s úrokom.",
       },
       {

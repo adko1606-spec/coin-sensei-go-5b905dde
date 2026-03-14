@@ -74,8 +74,8 @@ export const lessons: Lesson[] = [
         id: "q1",
         type: "choice",
         text: "Aká je hlavná funkcia peňazí?",
-        options: ["Prostriedok výmeny", "Dekorácia", "Hračka", "Potrava"],
-        correctIndex: 0,
+        options: ["Dekorácia", "Prostriedok výmeny", "Hračka", "Potrava"],
+        correctIndex: 1,
         explanation: "Peniaze slúžia primárne ako prostriedok výmeny za tovary a služby.",
       },
       {

@@ -160,8 +160,8 @@ export const lessons: Lesson[] = [
         id: "q_bank3",
         type: "choice",
         text: "Čo je debetná karta?",
-        options: ["Karta viazaná na vlastné peniaze na účte", "Karta s pôžičkou od banky", "Darčeková karta", "Členská karta"],
-        correctIndex: 0,
+        options: ["Karta s pôžičkou od banky", "Darčeková karta", "Karta viazaná na vlastné peniaze na účte", "Členská karta"],
+        correctIndex: 2,
         explanation: "Debetná karta čerpá priamo z tvojho účtu – míňaš len to, čo máš.",
       },
       {

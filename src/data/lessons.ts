@@ -218,8 +218,8 @@ export const lessons: Lesson[] = [
         id: "q5",
         type: "choice",
         text: "Čo je núdzový fond?",
-        options: ["Úspory na nečakané výdavky", "Investičný fond", "Pôžička od banky", "Kreditná karta"],
-        correctIndex: 0,
+        options: ["Investičný fond", "Pôžička od banky", "Úspory na nečakané výdavky", "Kreditná karta"],
+        correctIndex: 2,
         explanation: "Núdzový fond sú peniaze odložené na nečakané situácie.",
       },
       {

@@ -881,8 +881,8 @@ export const lessons: Lesson[] = [
         id: "q_crisk1",
         type: "choice",
         text: "Aké je najväčšie riziko kryptomien?",
-        options: ["Extrémna volatilita cien", "Nulové riziko", "Garantované straty", "Poplatky banke"],
-        correctIndex: 0,
+        options: ["Nulové riziko", "Garantované straty", "Extrémna volatilita cien", "Poplatky banke"],
+        correctIndex: 2,
         explanation: "Kryptomeny môžu stratiť aj 50-80% hodnoty za krátky čas.",
       },
       {

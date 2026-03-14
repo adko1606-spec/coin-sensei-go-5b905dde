@@ -946,8 +946,8 @@ export const lessons: Lesson[] = [
         id: "q_tax1",
         type: "choice",
         text: "Prečo platíme dane?",
-        options: ["Na financovanie verejných služieb", "Pretože banky to vyžadujú", "Na obohatenie politikov", "Nemáme inú možnosť"],
-        correctIndex: 0,
+        options: ["Pretože banky to vyžadujú", "Na obohatenie politikov", "Na financovanie verejných služieb", "Nemáme inú možnosť"],
+        correctIndex: 2,
         explanation: "Dane financujú školy, nemocnice, cesty a ďalšie verejné služby.",
       },
       {

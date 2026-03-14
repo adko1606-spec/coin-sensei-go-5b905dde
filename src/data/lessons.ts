@@ -281,8 +281,8 @@ export const lessons: Lesson[] = [
         id: "q_debt1",
         type: "choice",
         text: "Čo je úroková sadzba?",
-        options: ["Cena za požičanie peňazí", "Typ banky", "Spôsob platby", "Druh účtu"],
-        correctIndex: 0,
+        options: ["Typ banky", "Spôsob platby", "Druh účtu", "Cena za požičanie peňazí"],
+        correctIndex: 3,
         explanation: "Úroková sadzba je percento, ktoré platíš za požičané peniaze.",
       },
       {

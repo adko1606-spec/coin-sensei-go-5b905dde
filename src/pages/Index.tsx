@@ -44,11 +44,11 @@ const Index = () => {
       {/* Header */}
       <header className="sticky top-0 z-40 border-b border-border bg-card/80 backdrop-blur-xl">
         <div className="mx-auto flex max-w-lg items-center justify-between px-4 py-3">
-          <div className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl gradient-primary">
-              <GraduationCap className="h-5 w-5 text-primary-foreground" />
+          <div className="flex items-center gap-3">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl gradient-blue">
+              <GraduationCap className="h-7 w-7 text-accent-foreground" />
             </div>
-            <h1 className="text-xl font-extrabold text-foreground">FinAp</h1>
+            <h1 className="text-2xl font-extrabold text-foreground">FinAp</h1>
           </div>
           <div className="flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1">
             <BookOpen className="h-4 w-4 text-primary" />
@@ -66,7 +66,7 @@ const Index = () => {
           animate={{ opacity: 1, y: 0 }}
           className="mt-6 flex items-center gap-4"
         >
-          <img src={mascot} alt="FinAp korytnačka" className="h-16 w-16" />
+          <img src={mascot} alt="FinAp sova" className="h-16 w-16" />
           <div>
             <h2 className="text-2xl font-extrabold text-foreground">Ahoj! 👋</h2>
             <p className="text-muted-foreground">

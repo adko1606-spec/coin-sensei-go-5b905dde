@@ -51,7 +51,7 @@ export default {
           foreground: "hsl(var(--card-foreground))",
         },
         xp: "hsl(var(--xp-gold))",
-        streak: "hsl(var(--streak-orange))",
+        streak: "hsl(var(--streak-blue))",
         level: "hsl(var(--level-purple))",
         coin: "hsl(var(--coin-yellow))",
         sidebar: {

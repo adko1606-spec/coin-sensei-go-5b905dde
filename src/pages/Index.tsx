@@ -48,7 +48,7 @@ const Index = () => {
             <div className="flex h-9 w-9 items-center justify-center rounded-xl gradient-primary">
               <GraduationCap className="h-5 w-5 text-primary-foreground" />
             </div>
-            <h1 className="text-xl font-extrabold text-foreground">FinEdu</h1>
+            <h1 className="text-xl font-extrabold text-foreground">FinAp</h1>
           </div>
           <div className="flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1">
             <BookOpen className="h-4 w-4 text-primary" />

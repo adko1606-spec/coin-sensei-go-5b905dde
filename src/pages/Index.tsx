@@ -46,7 +46,7 @@ const Index = () => {
       <header className="sticky top-0 z-40 border-b border-border bg-card/80 backdrop-blur-xl">
         <div className="mx-auto flex max-w-lg items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
-            <img src={logo} alt="FinAp logo" className="h-12 w-12" />
+            <img src={logo} alt="FinAp logo" className="h-16 w-16" />
             <h1 className="text-2xl font-extrabold text-foreground">FinAp</h1>
           </div>
           <div className="flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1">

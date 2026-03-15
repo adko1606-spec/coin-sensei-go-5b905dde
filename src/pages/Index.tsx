@@ -66,7 +66,7 @@ const Index = () => {
           animate={{ opacity: 1, y: 0 }}
           className="mt-6 flex items-center gap-4"
         >
-          <img src={mascot} alt="FinAp korytnačka" className="h-16 w-16" />
+          <img src={mascot} alt="FinAp sova" className="h-16 w-16" />
           <div>
             <h2 className="text-2xl font-extrabold text-foreground">Ahoj! 👋</h2>
             <p className="text-muted-foreground">

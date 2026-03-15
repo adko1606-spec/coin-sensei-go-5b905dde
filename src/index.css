@@ -85,6 +85,9 @@
   .gradient-primary {
     background: var(--gradient-primary);
   }
+  .gradient-blue {
+    background: var(--gradient-blue);
+  }
   .gradient-gold {
     background: var(--gradient-gold);
   }

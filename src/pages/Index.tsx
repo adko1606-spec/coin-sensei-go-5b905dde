@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { BookOpen, GraduationCap } from "lucide-react";
+import { BookOpen } from "lucide-react";
 import StatsBar from "@/components/StatsBar";
 import LessonCard from "@/components/LessonCard";
 import CategoryFilter from "@/components/CategoryFilter";
 import QuizModal from "@/components/QuizModal";
 import { lessons as initialLessons, type Lesson } from "@/data/lessons";
 import mascot from "@/assets/mascot.png";
+import logo from "@/assets/logo.png";
 
 const Index = () => {
   const [lessons, setLessons] = useState<Lesson[]>(initialLessons);

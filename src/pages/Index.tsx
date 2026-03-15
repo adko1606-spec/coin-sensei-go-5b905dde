@@ -46,9 +46,7 @@ const Index = () => {
       <header className="sticky top-0 z-40 border-b border-border bg-card/80 backdrop-blur-xl">
         <div className="mx-auto flex max-w-lg items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl gradient-blue">
-              <GraduationCap className="h-7 w-7 text-accent-foreground" />
-            </div>
+            <img src={logo} alt="FinAp logo" className="h-12 w-12" />
             <h1 className="text-2xl font-extrabold text-foreground">FinAp</h1>
           </div>
           <div className="flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1">

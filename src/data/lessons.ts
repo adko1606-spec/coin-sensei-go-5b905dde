@@ -56,6 +56,7 @@ export const categories = [
   { id: "budgeting", name: "Rozpočet", emoji: "💰", color: "xp" },
   { id: "crypto", name: "Krypto", emoji: "🪙", color: "primary" },
   { id: "taxes", name: "Dane", emoji: "🏛️", color: "streak" },
+  { id: "legal", name: "Právo", emoji: "⚖️", color: "accent" },
 ];
 
 export const lessons: Lesson[] = [

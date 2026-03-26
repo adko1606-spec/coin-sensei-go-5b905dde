@@ -7,7 +7,7 @@ import { Progress } from "@/components/ui/progress";
 interface QuizModalProps {
   lesson: Lesson;
   onClose: () => void;
-  onComplete: (xp: number) => void;
+  onComplete: (xp: number, score: number) => void;
 }
 
 /* ─── Choice ─── */

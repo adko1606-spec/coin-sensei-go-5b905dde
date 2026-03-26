@@ -7,7 +7,7 @@ import { Progress } from "@/components/ui/progress";
 interface QuizModalProps {
   lesson: Lesson;
   onClose: () => void;
-  onComplete: (xp: number) => void;
+  onComplete: (xp: number, score: number) => void;
 }
 
 /* ─── Choice ─── */
@@ -319,7 +319,7 @@ const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
           <p className="mb-6 text-lg font-bold text-xp">+{earnedXp} XP</p>
 
           <button
-            onClick={() => onComplete(earnedXp)}
+            onClick={() => onComplete(earnedXp, score)}
             className="w-full rounded-2xl gradient-primary px-6 py-4 font-bold text-primary-foreground shadow-button transition-all hover:opacity-90 active:scale-95"
           >
             Pokračovať

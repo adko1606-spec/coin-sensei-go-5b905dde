@@ -48,7 +48,7 @@ interface CharacterPositions {
   glasses: Record<string, ItemPosition>;
 }
 
-const defaultHatPos: ItemPosition = { top: -15, left: 10, width: 65 };
+const defaultHatPos: ItemPosition = { top: -15, left: 50, width: 65 };
 const defaultGlassesPos: ItemPosition = { top: 30, left: 50, width: 55 };
 
 // Custom positions per character. Keys match character IDs.
@@ -59,7 +59,7 @@ export const CHARACTER_POSITIONS: Record<string, CharacterPositions> = {
   buffett: {
     // Big head portrait, already wears glasses, eyes at ~35%
     hat: {
-      hat_tophat: { top: -15, left: 50, width: 60 },
+      hat_tophat: { top: -15, left: 20, width: 60 },
       hat_cap: { top: -6, left: 52, width: 65 },
       hat_cowboy: { top: -10, left: 50, width: 70 },
       hat_crown: { top: -8, left: 50, width: 50 },

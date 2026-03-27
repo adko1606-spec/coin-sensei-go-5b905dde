@@ -11,7 +11,7 @@ export const characters: Character[] = [
     id: "buffett",
     name: "Warren Buffett",
     emoji: "🎩",
-    description: "Legendárny investor a CEO Berkshire Hathaway. Známy ako „Veštec z Omahy".",
+    description: "Legendárny investor a CEO Berkshire Hathaway. Známy ako 'Veštec z Omahy'.",
     category: "real",
   },
   {

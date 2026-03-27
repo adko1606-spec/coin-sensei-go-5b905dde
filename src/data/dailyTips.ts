@@ -27,7 +27,7 @@ export const dailyTips: string[] = [
   "💡 Sleduj ekonomické správy – pomôžu ti robiť lepšie finančné rozhodnutia.",
   "💡 Nezabúdaj na dane z kapitálových ziskov – plánuj ich dopredu.",
   "💡 Investuj do seba – vzdelanie má najvyššiu návratnosť investície.",
-  "💡 Zložený úrok je „ôsmy div sveta" – povedal Albert Einstein.",
+  "💡 Zložený úrok je 'ôsmy div sveta' – povedal Albert Einstein.",
   "💡 Rozpočet nie je obmedzenie, ale nástroj slobody.",
 ];
 

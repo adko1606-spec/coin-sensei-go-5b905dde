@@ -48,7 +48,7 @@ interface CharacterPositions {
   glasses: Record<string, ItemPosition>;
 }
 
-const defaultHatPos: ItemPosition = { top: -12, left: 50, width: 65 };
+const defaultHatPos: ItemPosition = { top: -5, left: 50, width: 65 };
 const defaultGlassesPos: ItemPosition = { top: 30, left: 50, width: 55 };
 
 // Custom positions per character. Keys match character IDs.
@@ -229,7 +229,7 @@ export const CHARACTER_POSITIONS: Record<string, CharacterPositions> = {
 export function getItemPosition(
   characterId: string | undefined,
   category: "hat" | "glasses",
-  itemId: string
+  itemId: string,
 ): ItemPosition {
   if (characterId && CHARACTER_POSITIONS[characterId]) {
     const charPos = CHARACTER_POSITIONS[characterId][category];

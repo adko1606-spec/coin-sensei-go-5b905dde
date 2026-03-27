@@ -1,0 +1,1 @@
+UPDATE cosmetic_items SET price = 400 WHERE id = 'color_gold';

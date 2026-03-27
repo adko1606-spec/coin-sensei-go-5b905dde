@@ -7,7 +7,7 @@ const DEFAULT_CENTER: VisualCenter = { x: 0.5, y: 0.5 };
 
 // Zistené z reálnej nepriehľadnej oblasti (alpha bbox) v PNG assetoch
 export const CHARACTER_VISUAL_CENTERS: Record<string, VisualCenter> = {
-  bear: { x: -0.52, y: -0.5 },
+  bear: { x: -0.46, y: -0.5 },
   bezos: { x: -0.52, y: -0.5 },
   buffett: { x: -0.52, y: -0.5 },
   bull: { x: -0.52, y: -0.5 },
@@ -62,10 +62,7 @@ export function getEffectVisualCenter(itemId?: string): VisualCenter {
   return (itemId && EFFECT_VISUAL_CENTERS[itemId]) || DEFAULT_CENTER;
 }
 
-export function getCenterCorrection(
-  center: VisualCenter,
-  widthPercent: number,
-): { x: number; y: number } {
+export function getCenterCorrection(center: VisualCenter, widthPercent: number): { x: number; y: number } {
   return {
     x: -widthPercent * (center.x - 0.5),
     y: -widthPercent * (center.y - 0.5),

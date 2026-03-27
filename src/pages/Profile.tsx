@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { LogOut, Flame, Zap, Trophy, Coins, Award, BookOpen, Target, ChevronRight, Check, ShoppingBag, Lock } from "lucide-react";
+import CharacterAvatar from "@/components/CharacterAvatar";
 import { useAuth } from "@/contexts/AuthContext";
 import BottomNav from "@/components/BottomNav";
 import { characters, type Character } from "@/data/characters";

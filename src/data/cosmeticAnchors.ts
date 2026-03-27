@@ -36,7 +36,7 @@ export const COSMETIC_VISUAL_CENTERS: Record<string, VisualCenter> = {
 };
 
 export const EFFECT_VISUAL_CENTERS: Record<string, VisualCenter> = {
-  color_aura: { x: 0.5, y: 0.5 },
+  color_aura: { x: 0.78, y: 0.7 },
   color_fire: { x: 0.49, y: 0.5 },
   color_gold: { x: 0.78, y: 0.7 },
   color_ice: { x: 0.55, y: 0.5 },

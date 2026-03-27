@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { LogOut, Flame, Zap, Trophy, Coins, Award, BookOpen, Target, ChevronRight, Check, ShoppingBag, Lock } from "lucide-react";
+import { LogOut, Flame, Zap, Trophy, Coins, Award, BookOpen, Target, ChevronRight, Check, ShoppingBag, Lock, Maximize2 } from "lucide-react";
 import CharacterAvatar from "@/components/CharacterAvatar";
 import { useAuth } from "@/contexts/AuthContext";
 import BottomNav from "@/components/BottomNav";
@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import logo from "@/assets/logo.png";
 import { toast } from "sonner";
 import FriendsSection from "@/components/FriendsSection";
+import { Slider } from "@/components/ui/slider";
 
 const COSMETIC_CATEGORIES = [
   { id: "hat", label: "🎩 Klobúky" },
@@ -27,6 +28,7 @@ const Profile = () => {
   const [cosmeticItems, setCosmeticItems] = useState<any[]>([]);
   const [userCosmetics, setUserCosmetics] = useState<any[]>([]);
   const [shopCategory, setShopCategory] = useState("hat");
+  const [effectScale, setEffectScale] = useState(1.6);
 
   const displayName = profile?.display_name || user?.email?.split("@")[0] || "Študent";
   const coins = profile?.coins ?? 0;

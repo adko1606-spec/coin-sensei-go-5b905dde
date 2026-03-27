@@ -102,7 +102,7 @@ const Home = () => {
           animate={{ opacity: 1, y: 0 }}
           className="mt-6 flex items-center gap-4"
         >
-          <div className="relative">
+          <div className="relative" style={{ overflow: "visible" }}>
             {selectedChar ? (
               <CharacterAvatar
                 characterId={selectedChar.id}

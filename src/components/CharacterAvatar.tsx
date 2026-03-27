@@ -1,7 +1,10 @@
 import { motion } from "framer-motion";
 import { COSMETIC_IMAGES, EFFECT_IMAGES, EFFECT_SCALE_MULTIPLIERS, getItemPosition } from "@/data/cosmeticAssets";
 import {
+  getCenterCorrection,
   getCharacterCenterOffset,
+  getCosmeticVisualCenter,
+  getEffectVisualCenter,
 } from "@/data/cosmeticAnchors";
 
 interface CosmeticItem {
@@ -74,8 +77,18 @@ const CharacterAvatar = ({
   const glassesPos = glasses ? getItemPosition(characterId, "glasses", glasses.id) : null;
   const characterCenterOffset = getCharacterCenterOffset(characterId);
 
+  const hatCenter = hat ? getCosmeticVisualCenter(hat.id) : null;
+  const glassesCenter = glasses ? getCosmeticVisualCenter(glasses.id) : null;
+  const effectCenter = effect ? getEffectVisualCenter(effect.id) : null;
+
+  const hatCorrection = hat && hatPos && hatCenter ? getCenterCorrection(hatCenter, hatPos.width) : null;
+  const glassesCorrection =
+    glasses && glassesPos && glassesCenter ? getCenterCorrection(glassesCenter, glassesPos.width) : null;
+
   const effectMultiplier = effect ? (EFFECT_SCALE_MULTIPLIERS[effect.id] ?? 1.0) : 1.0;
   const effectFinalScale = finalEffectScale * effectMultiplier;
+  const effectSizePercent = effectFinalScale * 100;
+  const effectCorrection = effectCenter ? getCenterCorrection(effectCenter, effectSizePercent) : { x: 0, y: 0 };
 
   return (
     <div className={`relative ${s.container} ${className}`} style={{ overflow: "visible" }}>
@@ -84,8 +97,8 @@ const CharacterAvatar = ({
         <motion.div
           className="absolute z-0 pointer-events-none"
           style={{
-            top: `${50 + characterCenterOffset.y}%`,
-            left: `${50 + characterCenterOffset.x}%`,
+            top: `${50 + characterCenterOffset.y + effectCorrection.y}%`,
+            left: `${50 + characterCenterOffset.x + effectCorrection.x}%`,
             width: `${effectFinalScale * 100}%`,
             height: `${effectFinalScale * 100}%`,
             transform: "translate(-50%, -50%)",
@@ -126,8 +139,8 @@ const CharacterAvatar = ({
           animate={{ y: 0, opacity: 1 }}
           className="absolute z-20 pointer-events-none"
           style={{
-             top: `${hatPos.top}%`,
-            left: `${hatPos.left}%`,
+            top: `${hatPos.top + (hatCorrection?.y ?? 0)}%`,
+            left: `${hatPos.left + (hatCorrection?.x ?? 0)}%`,
             width: `${hatPos.width}%`,
             transform: `translateX(-50%) rotate(${hatPos.rotation ?? 0}deg)`,
           }}
@@ -143,8 +156,8 @@ const CharacterAvatar = ({
           animate={{ scale: 1, opacity: 1 }}
           className="absolute z-20 pointer-events-none"
           style={{
-            top: `${glassesPos.top}%`,
-            left: `${glassesPos.left}%`,
+            top: `${glassesPos.top + (glassesCorrection?.y ?? 0)}%`,
+            left: `${glassesPos.left + (glassesCorrection?.x ?? 0)}%`,
             width: `${glassesPos.width}%`,
             transform: `translateX(-50%) rotate(${glassesPos.rotation ?? 0}deg)`,
           }}

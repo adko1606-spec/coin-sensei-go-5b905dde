@@ -7,7 +7,7 @@ const DEFAULT_CENTER: VisualCenter = { x: 0.5, y: 0.5 };
 
 // Zistené z reálnej nepriehľadnej oblasti (alpha bbox) v PNG assetoch
 export const CHARACTER_VISUAL_CENTERS: Record<string, VisualCenter> = {
-  bear: { x: -0.327, y: -0.5 },
+  bear: { x: -2, y: -2 },
   bezos: { x: -0.327, y: -0.5 },
   buffett: { x: -0.327, y: -0.5 },
   bull: { x: -0.327, y: -0.5 },
@@ -38,8 +38,8 @@ export const COSMETIC_VISUAL_CENTERS: Record<string, VisualCenter> = {
 export const EFFECT_VISUAL_CENTERS: Record<string, VisualCenter> = {
   color_aura: { x: 0.78, y: 0.7 },
   color_fire: { x: 0.49, y: 0.5 },
-  color_gold: { x: 0.9, y: 0.9 },
-  color_ice: { x: 0.9, y: 0.5 },
+  color_gold: { x: 0.76, y: 0.75 },
+  color_ice: { x: 0.55, y: 0.5 },
   color_rainbow: { x: 0.55, y: 0.5 },
   color_rays: { x: 0.76, y: 0.7 },
   color_lightning: { x: 0.68, y: 0.67 },

@@ -238,7 +238,7 @@ export const CHARACTER_POSITIONS: Record<string, CharacterPositions> = {
       hat_cap: { top: -25, left: 7, width: 75 },
       hat_cowboy: { top: -30, left: 7, width: 75 },
       hat_crown: { top: -37, left: 7, width: 75 },
-      hat_beanie: { top: -30, left: 4, width: 70 },
+      hat_beanie: { top: -27, left: 6, width: 70 },
       hat_wizard: { top: -35, left: 9, width: 75 },
     },
     glasses: {

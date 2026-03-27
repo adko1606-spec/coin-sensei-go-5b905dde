@@ -22,10 +22,11 @@ interface CharacterAvatarProps {
   size?: "sm" | "md" | "lg" | "xl";
   className?: string;
   showEffects?: boolean;
+  effectScale?: number;
 }
 
 const SIZE_MAP = {
-  sm: { container: "h-10 w-10", effectScale: 1,6 },
+  sm: { container: "h-10 w-10", effectScale: 1.6 },
   md: { container: "h-20 w-20", effectScale: 1.6 },
   lg: { container: "h-24 w-24", effectScale: 1.6 },
   xl: { container: "h-32 w-32", effectScale: 1.6 },
@@ -57,8 +58,10 @@ const CharacterAvatar = ({
   size = "md",
   className = "",
   showEffects = true,
+  effectScale: customEffectScale,
 }: CharacterAvatarProps) => {
   const s = SIZE_MAP[size];
+  const finalEffectScale = customEffectScale ?? s.effectScale;
 
   const hat = equippedItems.find((i) => i.category === "hat");
   const glasses = equippedItems.find((i) => i.category === "glasses");
@@ -82,7 +85,7 @@ const CharacterAvatar = ({
   const glassesCorrection =
     glasses && glassesPos && glassesCenter ? getCenterCorrection(glassesCenter, glassesPos.width) : null;
 
-  const effectSizePercent = s.effectScale * 100;
+  const effectSizePercent = finalEffectScale * 100;
   const effectCorrection = effectCenter ? getCenterCorrection(effectCenter, effectSizePercent) : { x: 0, y: 0 };
 
   return (
@@ -94,8 +97,8 @@ const CharacterAvatar = ({
           style={{
             top: `${50 + characterCenterOffset.y + effectCorrection.y}%`,
             left: `${50 + characterCenterOffset.x + effectCorrection.x}%`,
-            width: `${s.effectScale * 100}%`,
-            height: `${s.effectScale * 100}%`,
+            width: `${finalEffectScale * 100}%`,
+            height: `${finalEffectScale * 100}%`,
             transform: "translate(-50%, -50%)",
             transformOrigin: "center center",
           }}

@@ -74,6 +74,7 @@ const CharacterAvatar = ({
             width: `${s.effectScale * 100}%`,
             height: `${s.effectScale * 100}%`,
             transform: "translate(-50%, -50%)",
+            transformOrigin: "center center",
           }}
           animate={effectAnim?.animate}
           transition={{
@@ -86,6 +87,7 @@ const CharacterAvatar = ({
             src={effectImage}
             alt="effect"
             className="w-full h-full object-contain"
+            style={{ display: "block" }}
             loading="lazy"
           />
         </motion.div>

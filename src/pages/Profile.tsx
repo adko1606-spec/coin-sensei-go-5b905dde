@@ -145,7 +145,7 @@ const Profile = () => {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mt-6 rounded-2xl bg-card p-6 shadow-card">
           <div className="flex items-center gap-4">
             <button onClick={() => setShowCharacterPicker(true)}
-              className="relative hover:ring-2 ring-accent transition-all rounded-2xl">
+              className="relative hover:ring-2 ring-accent transition-all rounded-2xl" style={{ overflow: "visible" }}>
               <CharacterAvatar
                 characterId={activeCharacter?.id}
                 characterImage={activeCharacter?.image}
@@ -176,7 +176,7 @@ const Profile = () => {
         {/* Character + Shop buttons */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }} className="mt-4 space-y-3">
           <button onClick={() => setShowCharacterPicker(true)}
-            className="w-full flex items-center justify-between rounded-2xl bg-card p-4 shadow-card hover:bg-muted/50 transition-colors">
+            className="w-full flex items-center justify-between rounded-2xl bg-card p-4 shadow-card hover:bg-muted/50 transition-colors" style={{ overflow: "visible" }}>
             <div className="flex items-center gap-3">
               <CharacterAvatar
                 characterId={activeCharacter?.id}

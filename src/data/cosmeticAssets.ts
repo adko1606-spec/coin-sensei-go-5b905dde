@@ -5,11 +5,6 @@ import hatCowboy from "@/assets/cosmetics/hat_cowboy.png";
 import hatCrown from "@/assets/cosmetics/hat_crown.png";
 import hatBeanie from "@/assets/cosmetics/hat_beanie.png";
 import hatWizard from "@/assets/cosmetics/hat_wizard.png";
-import glassesSun from "@/assets/cosmetics/glasses_sun.png";
-import glassesNerd from "@/assets/cosmetics/glasses_nerd.png";
-import glassesMonocle from "@/assets/cosmetics/glasses_monocle.png";
-import glassesAviator from "@/assets/cosmetics/glasses_aviator.png";
-import glassesPixel from "@/assets/cosmetics/glasses_pixel.png";
 
 // Effect image imports
 import fireEffect from "@/assets/effects/fire_effect.png";
@@ -28,11 +23,6 @@ export const COSMETIC_IMAGES: Record<string, string> = {
   hat_crown: hatCrown,
   hat_beanie: hatBeanie,
   hat_wizard: hatWizard,
-  glasses_sun: glassesSun,
-  glasses_nerd: glassesNerd,
-  glasses_monocle: glassesMonocle,
-  glasses_aviator: glassesAviator,
-  glasses_pixel: glassesPixel,
 };
 
 export const EFFECT_SCALE_MULTIPLIERS: Record<string, number> = {
@@ -68,11 +58,9 @@ interface ItemPosition {
 
 interface CharacterPositions {
   hat: Record<string, ItemPosition>;
-  glasses: Record<string, ItemPosition>;
 }
 
 const defaultHatPos: ItemPosition = { top: -15, left: 50, width: 65 };
-const defaultGlassesPos: ItemPosition = { top: 30, left: 50, width: 55 };
 
 // Custom positions per character. Keys match character IDs.
 // top/left in %, width in %, rotation in degrees
@@ -86,13 +74,6 @@ export const CHARACTER_POSITIONS: Record<string, CharacterPositions> = {
       hat_beanie: { top: -48, left: 8, width: 85 },
       hat_wizard: { top: -40, left: 15, width: 75 },
     },
-    glasses: {
-      glasses_sun: { top: 3, left: 12, width: 75 },
-      glasses_nerd: { top: 3, left: 12, width: 75 },
-      glasses_monocle: { top: 0, left: -3, width: 105 },
-      glasses_aviator: { top: 3, left: 17, width: 75 },
-      glasses_pixel: { top: -5, left: 6, width: 90 },
-    },
   },
   satoshi: {
     hat: {
@@ -102,13 +83,6 @@ export const CHARACTER_POSITIONS: Record<string, CharacterPositions> = {
       hat_crown: { top: -42, left: 12, width: 75 },
       hat_beanie: { top: -48, left: 8, width: 85 },
       hat_wizard: { top: -40, left: 15, width: 75 },
-    },
-    glasses: {
-      glasses_sun: { top: 0, left: 12, width: 75 },
-      glasses_nerd: { top: 0, left: 12, width: 75 },
-      glasses_monocle: { top: -3, left: -3, width: 105 },
-      glasses_aviator: { top: 0, left: 17, width: 75 },
-      glasses_pixel: { top: -8, left: 6, width: 90 },
     },
   },
   trump: {
@@ -120,13 +94,6 @@ export const CHARACTER_POSITIONS: Record<string, CharacterPositions> = {
       hat_beanie: { top: -40, left: 14, width: 75 },
       hat_wizard: { top: -40, left: 20, width: 75 },
     },
-    glasses: {
-      glasses_sun: { top: 3, left: 12, width: 75 },
-      glasses_nerd: { top: 3, left: 12, width: 75 },
-      glasses_monocle: { top: 0, left: -3, width: 105 },
-      glasses_aviator: { top: 3, left: 17, width: 75 },
-      glasses_pixel: { top: -5, left: 6, width: 90 },
-    },
   },
   bezos: {
     hat: {
@@ -136,13 +103,6 @@ export const CHARACTER_POSITIONS: Record<string, CharacterPositions> = {
       hat_crown: { top: -42, left: 12, width: 75 },
       hat_beanie: { top: -48, left: 8, width: 85 },
       hat_wizard: { top: -45, left: 15, width: 75 },
-    },
-    glasses: {
-      glasses_sun: { top: 10, left: 12, width: 75 },
-      glasses_nerd: { top: 10, left: 12, width: 75 },
-      glasses_monocle: { top: 7, left: -3, width: 105 },
-      glasses_aviator: { top: 10, left: 17, width: 75 },
-      glasses_pixel: { top: 2, left: 6, width: 90 },
     },
   },
   zuckerberg: {
@@ -154,13 +114,6 @@ export const CHARACTER_POSITIONS: Record<string, CharacterPositions> = {
       hat_beanie: { top: -48, left: 8, width: 85 },
       hat_wizard: { top: -40, left: 15, width: 75 },
     },
-    glasses: {
-      glasses_sun: { top: 7, left: 12, width: 75 },
-      glasses_nerd: { top: 7, left: 12, width: 75 },
-      glasses_monocle: { top: 4, left: -3, width: 105 },
-      glasses_aviator: { top: 7, left: 17, width: 75 },
-      glasses_pixel: { top: -1, left: 6, width: 90 },
-    },
   },
   musk: {
     hat: {
@@ -170,13 +123,6 @@ export const CHARACTER_POSITIONS: Record<string, CharacterPositions> = {
       hat_crown: { top: -42, left: 12, width: 75 },
       hat_beanie: { top: -48, left: 8, width: 85 },
       hat_wizard: { top: -40, left: 15, width: 75 },
-    },
-    glasses: {
-      glasses_sun: { top: 7, left: 12, width: 75 },
-      glasses_nerd: { top: 7, left: 12, width: 75 },
-      glasses_monocle: { top: 4, left: -3, width: 105 },
-      glasses_aviator: { top: 7, left: 17, width: 75 },
-      glasses_pixel: { top: -1, left: 6, width: 90 },
     },
   },
   dalio: {
@@ -188,13 +134,6 @@ export const CHARACTER_POSITIONS: Record<string, CharacterPositions> = {
       hat_beanie: { top: -48, left: 8, width: 85 },
       hat_wizard: { top: -40, left: 15, width: 75 },
     },
-    glasses: {
-      glasses_sun: { top: 7, left: 12, width: 75 },
-      glasses_nerd: { top: 7, left: 12, width: 75 },
-      glasses_monocle: { top: 4, left: -3, width: 105 },
-      glasses_aviator: { top: 7, left: 17, width: 75 },
-      glasses_pixel: { top: -1, left: 6, width: 90 },
-    },
   },
   bull: {
     hat: {
@@ -204,13 +143,6 @@ export const CHARACTER_POSITIONS: Record<string, CharacterPositions> = {
       hat_crown: { top: -42, left: 12, width: 75 },
       hat_beanie: { top: -35, left: 16, width: 70 },
       hat_wizard: { top: -32, left: 19, width: 70 },
-    },
-    glasses: {
-      glasses_sun: { top: -2, left: 12, width: 75 },
-      glasses_nerd: { top: -2, left: 12, width: 75 },
-      glasses_monocle: { top: -5, left: -3, width: 105 },
-      glasses_aviator: { top: -2, left: 17, width: 75 },
-      glasses_pixel: { top: -10, left: 6, width: 90 },
     },
   },
   bear: {
@@ -222,13 +154,6 @@ export const CHARACTER_POSITIONS: Record<string, CharacterPositions> = {
       hat_beanie: { top: -45, left: 15, width: 73 },
       hat_wizard: { top: -47, left: 17, width: 75 },
     },
-    glasses: {
-      glasses_sun: { top: -7, left: 12, width: 75 },
-      glasses_nerd: { top: -7, left: 12, width: 75 },
-      glasses_monocle: { top: -10, left: -3, width: 105 },
-      glasses_aviator: { top: -7, left: 17, width: 75 },
-      glasses_pixel: { top: -15, left: 6, width: 90 },
-    },
   },
   unicorn: {
     hat: {
@@ -238,13 +163,6 @@ export const CHARACTER_POSITIONS: Record<string, CharacterPositions> = {
       hat_crown: { top: -37, left: 7, width: 75 },
       hat_beanie: { top: -27, left: 6, width: 70 },
       hat_wizard: { top: -35, left: 9, width: 75 },
-    },
-    glasses: {
-      glasses_sun: { top: -3, left: 5, width: 75 },
-      glasses_nerd: { top: -3, left: 5, width: 75 },
-      glasses_monocle: { top: -6, left: -10, width: 105 },
-      glasses_aviator: { top: -3, left: 10, width: 75 },
-      glasses_pixel: { top: -11, left: -1, width: 90 },
     },
   },
   whale: {
@@ -256,13 +174,6 @@ export const CHARACTER_POSITIONS: Record<string, CharacterPositions> = {
       hat_beanie: { top: -29, left: 6, width: 70 },
       hat_wizard: { top: -30, left: 6, width: 75 },
     },
-    glasses: {
-      glasses_sun: { top: -5, left: 3, width: 75 },
-      glasses_nerd: { top: -5, left: 3, width: 75 },
-      glasses_monocle: { top: -8, left: -12, width: 105 },
-      glasses_aviator: { top: -5, left: 8, width: 75 },
-      glasses_pixel: { top: -13, left: -3, width: 90 },
-    },
   },
   diamond_hands: {
     hat: {
@@ -273,23 +184,17 @@ export const CHARACTER_POSITIONS: Record<string, CharacterPositions> = {
       hat_beanie: { top: -48, left: 8, width: 85 },
       hat_wizard: { top: -40, left: 15, width: 75 },
     },
-    glasses: {
-      glasses_sun: { top: -5, left: 12, width: 75 },
-      glasses_nerd: { top: -5, left: 12, width: 75 },
-      glasses_monocle: { top: -8, left: -3, width: 105 },
-      glasses_aviator: { top: -5, left: 17, width: 75 },
-      glasses_pixel: { top: -13, left: 6, width: 90 },
-    },
   },
 };
+
 export function getItemPosition(
   characterId: string | undefined,
-  category: "hat" | "glasses",
+  category: "hat",
   itemId: string,
 ): ItemPosition {
   if (characterId && CHARACTER_POSITIONS[characterId]) {
     const charPos = CHARACTER_POSITIONS[characterId][category];
     if (charPos[itemId]) return charPos[itemId];
   }
-  return category === "hat" ? defaultHatPos : defaultGlassesPos;
+  return defaultHatPos;
 }

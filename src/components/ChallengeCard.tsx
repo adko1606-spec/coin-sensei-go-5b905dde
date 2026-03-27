@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
 import { Check, Calendar } from "lucide-react";
-import type { DailyChallenge, MonthlyChallenge } from "@/data/dailyChallenges";
+import type { DailyChallenge, WeeklyChallenge } from "@/data/dailyChallenges";
 
 interface ChallengeCardProps {
-  challenge: DailyChallenge | MonthlyChallenge;
+  challenge: DailyChallenge | WeeklyChallenge;
   status: { current: number; completed: boolean };
   index: number;
   delayBase?: number;
@@ -25,7 +25,7 @@ export function ChallengeCard({ challenge, status, index, delayBase = 0.3 }: Cha
   const isCompleted = status.completed;
   const current = status.current;
   const isMonthly = "tier" in challenge;
-  const tier = isMonthly ? (challenge as MonthlyChallenge).tier : null;
+  const tier = isMonthly ? (challenge as WeeklyChallenge).tier : null;
   const colors = tier ? tierColors[tier] : null;
 
   return (

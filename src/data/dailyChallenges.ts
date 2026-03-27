@@ -79,106 +79,106 @@ const challengePool: Omit<DailyChallenge, "id">[] = [
   },
 ];
 
-const monthlyChallengePool: Omit<MonthlyChallenge, "id">[] = [
+const weeklyChallengePool: Omit<WeeklyChallenge, "id">[] = [
   // Bronze tier
   {
-    title: "Dokončí 20 lekcií",
-    description: "Splň 20 lekcií tento mesiac",
+    title: "Dokončí 10 lekcií",
+    description: "Splň 10 lekcií tento týždeň",
     icon: "📖",
-    target: 20,
-    reward: { xp: 200, coins: 80 },
+    target: 10,
+    reward: { xp: 150, coins: 60 },
     type: "complete_lessons",
     tier: "bronze",
   },
   {
-    title: "Získaj 1 000 XP",
-    description: "Nazbieraj 1 000 XP za mesiac",
+    title: "Získaj 500 XP",
+    description: "Nazbieraj 500 XP za týždeň",
     icon: "⚡",
-    target: 1000,
-    reward: { xp: 250, coins: 100 },
+    target: 500,
+    reward: { xp: 200, coins: 80 },
     type: "earn_xp",
     tier: "bronze",
   },
   {
-    title: "Odpovedz správne 100×",
-    description: "Daj 100 správnych odpovedí za mesiac",
+    title: "Odpovedz správne 50×",
+    description: "Daj 50 správnych odpovedí za týždeň",
     icon: "✅",
-    target: 100,
-    reward: { xp: 200, coins: 80 },
+    target: 50,
+    reward: { xp: 150, coins: 60 },
     type: "correct_answers",
     tier: "bronze",
   },
   // Silver tier
   {
-    title: "Dokončí 40 lekcií",
-    description: "Splň 40 lekcií tento mesiac",
+    title: "Dokončí 20 lekcií",
+    description: "Splň 20 lekcií tento týždeň",
     icon: "📚",
-    target: 40,
-    reward: { xp: 500, coins: 200 },
+    target: 20,
+    reward: { xp: 400, coins: 150 },
     type: "complete_lessons",
     tier: "silver",
   },
   {
-    title: "Získaj 3 000 XP",
-    description: "Nazbieraj 3 000 XP za mesiac",
+    title: "Získaj 1 500 XP",
+    description: "Nazbieraj 1 500 XP za týždeň",
     icon: "🔥",
-    target: 3000,
-    reward: { xp: 600, coins: 250 },
+    target: 1500,
+    reward: { xp: 500, coins: 200 },
     type: "earn_xp",
     tier: "silver",
   },
   {
-    title: "Odpovedz správne 250×",
-    description: "Daj 250 správnych odpovedí za mesiac",
+    title: "Odpovedz správne 120×",
+    description: "Daj 120 správnych odpovedí za týždeň",
     icon: "💪",
-    target: 250,
-    reward: { xp: 500, coins: 200 },
+    target: 120,
+    reward: { xp: 400, coins: 150 },
     type: "correct_answers",
     tier: "silver",
   },
   {
-    title: "10 perfektných kvízov",
-    description: "Dosiahni 100% v 10 kvízoch za mesiac",
+    title: "5 perfektných kvízov",
+    description: "Dosiahni 100% v 5 kvízoch za týždeň",
     icon: "⭐",
-    target: 10,
-    reward: { xp: 500, coins: 200 },
+    target: 5,
+    reward: { xp: 400, coins: 150 },
     type: "perfect_quiz",
     tier: "silver",
   },
   // Gold tier
   {
-    title: "Dokončí 70 lekcií",
-    description: "Splň 70 lekcií tento mesiac",
+    title: "Dokončí 35 lekcií",
+    description: "Splň 35 lekcií tento týždeň",
     icon: "👑",
-    target: 70,
-    reward: { xp: 1000, coins: 500 },
+    target: 35,
+    reward: { xp: 800, coins: 400 },
     type: "complete_lessons",
     tier: "gold",
   },
   {
-    title: "Získaj 5 000 XP",
-    description: "Nazbieraj 5 000 XP za mesiac",
+    title: "Získaj 3 000 XP",
+    description: "Nazbieraj 3 000 XP za týždeň",
     icon: "🏆",
-    target: 5000,
-    reward: { xp: 1200, coins: 600 },
+    target: 3000,
+    reward: { xp: 1000, coins: 500 },
     type: "earn_xp",
     tier: "gold",
   },
   {
-    title: "Odpovedz správne 500×",
-    description: "Daj 500 správnych odpovedí za mesiac",
+    title: "Odpovedz správne 250×",
+    description: "Daj 250 správnych odpovedí za týždeň",
     icon: "🎯",
-    target: 500,
-    reward: { xp: 1000, coins: 500 },
+    target: 250,
+    reward: { xp: 800, coins: 400 },
     type: "correct_answers",
     tier: "gold",
   },
   {
-    title: "20 perfektných kvízov",
-    description: "Dosiahni 100% v 20 kvízoch za mesiac",
+    title: "10 perfektných kvízov",
+    description: "Dosiahni 100% v 10 kvízoch za týždeň",
     icon: "💎",
-    target: 20,
-    reward: { xp: 1500, coins: 750 },
+    target: 10,
+    reward: { xp: 1200, coins: 600 },
     type: "perfect_quiz",
     tier: "gold",
   },
@@ -200,24 +200,26 @@ export function getTodaysChallenges(): DailyChallenge[] {
   }));
 }
 
-export function getMonthsChallenges(): MonthlyChallenge[] {
+export function getWeeksChallenges(): WeeklyChallenge[] {
   const today = new Date();
-  const seed = today.getFullYear() * 100 + (today.getMonth() + 1);
+  // Week seed: year + ISO week number
+  const startOfYear = new Date(today.getFullYear(), 0, 1);
+  const weekNum = Math.ceil(((today.getTime() - startOfYear.getTime()) / 86400000 + startOfYear.getDay() + 1) / 7);
+  const seed = today.getFullYear() * 100 + weekNum;
 
-  const shuffled = [...monthlyChallengePool].sort((a, b) => {
+  const shuffled = [...weeklyChallengePool].sort((a, b) => {
     const ha = hashCode(a.title + seed);
     const hb = hashCode(b.title + seed);
     return ha - hb;
   });
 
-  // Pick 1 from each tier
   const bronze = shuffled.find((c) => c.tier === "bronze")!;
   const silver = shuffled.find((c) => c.tier === "silver")!;
   const gold = shuffled.find((c) => c.tier === "gold")!;
 
   return [bronze, silver, gold].map((c, i) => ({
     ...c,
-    id: `monthly_${seed}_${i}`,
+    id: `weekly_${seed}_${i}`,
   }));
 }
 

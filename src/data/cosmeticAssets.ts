@@ -59,7 +59,7 @@ export const CHARACTER_POSITIONS: Record<string, CharacterPositions> = {
   buffett: {
     // Big head portrait, already wears glasses, eyes at ~35%
     hat: {
-      hat_tophat: { top: -32, left: 20, width: 100 },
+      hat_tophat: { top: -32, left: 20, width: 75 },
       hat_cap: { top: -6, left: 52, width: 65 },
       hat_cowboy: { top: -10, left: 50, width: 70 },
       hat_crown: { top: -8, left: 50, width: 50 },

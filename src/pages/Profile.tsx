@@ -371,6 +371,7 @@ const Profile = () => {
                             characterName={activeCharacter?.name}
                             equippedItems={[item]}
                             size="lg"
+                            effectScale={item.category === "color" ? effectScale : undefined}
                           />
                         ) : (
                           <div className="text-center text-4xl">{item.icon}</div>

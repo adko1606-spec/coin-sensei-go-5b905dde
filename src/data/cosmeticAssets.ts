@@ -276,11 +276,11 @@ export const CHARACTER_POSITIONS: Record<string, CharacterPositions> = {
       hat_wizard: { top: -40, left: 15, width: 75 },
     },
     glasses: {
-      glasses_sun: { top: 3, left: 12, width: 75 },
-      glasses_nerd: { top: 3, left: 12, width: 75 },
-      glasses_monocle: { top: 0, left: -3, width: 105 },
-      glasses_aviator: { top: 3, left: 17, width: 75 },
-      glasses_pixel: { top: -5, left: 6, width: 90 },
+      glasses_sun: { top: -5, left: 12, width: 75 },
+      glasses_nerd: { top: -5, left: 12, width: 75 },
+      glasses_monocle: { top: -8, left: -3, width: 105 },
+      glasses_aviator: { top: -5, left: 17, width: 75 },
+      glasses_pixel: { top: -13, left: 6, width: 90 },
     },
   },
 };

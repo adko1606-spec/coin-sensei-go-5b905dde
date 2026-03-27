@@ -74,18 +74,8 @@ const CharacterAvatar = ({
   const glassesPos = glasses ? getItemPosition(characterId, "glasses", glasses.id) : null;
   const characterCenterOffset = getCharacterCenterOffset(characterId);
 
-  const hatCenter = hat ? getCosmeticVisualCenter(hat.id) : null;
-  const glassesCenter = glasses ? getCosmeticVisualCenter(glasses.id) : null;
-  const effectCenter = effect ? getEffectVisualCenter(effect.id) : null;
-
-  const hatCorrection = hat && hatPos && hatCenter ? getCenterCorrection(hatCenter, hatPos.width) : null;
-  const glassesCorrection =
-    glasses && glassesPos && glassesCenter ? getCenterCorrection(glassesCenter, glassesPos.width) : null;
-
   const effectMultiplier = effect ? (EFFECT_SCALE_MULTIPLIERS[effect.id] ?? 1.0) : 1.0;
   const effectFinalScale = finalEffectScale * effectMultiplier;
-  const effectSizePercent = effectFinalScale * 100;
-  const effectCorrection = effectCenter ? getCenterCorrection(effectCenter, effectSizePercent) : { x: 0, y: 0 };
 
   return (
     <div className={`relative ${s.container} ${className}`} style={{ overflow: "visible" }}>

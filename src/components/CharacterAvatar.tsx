@@ -85,7 +85,9 @@ const CharacterAvatar = ({
   const glassesCorrection =
     glasses && glassesPos && glassesCenter ? getCenterCorrection(glassesCenter, glassesPos.width) : null;
 
-  const effectSizePercent = finalEffectScale * 100;
+  const effectMultiplier = effect ? (EFFECT_SCALE_MULTIPLIERS[effect.id] ?? 1.0) : 1.0;
+  const effectFinalScale = finalEffectScale * effectMultiplier;
+  const effectSizePercent = effectFinalScale * 100;
   const effectCorrection = effectCenter ? getCenterCorrection(effectCenter, effectSizePercent) : { x: 0, y: 0 };
 
   return (
@@ -97,8 +99,8 @@ const CharacterAvatar = ({
           style={{
             top: `${50 + characterCenterOffset.y + effectCorrection.y}%`,
             left: `${50 + characterCenterOffset.x + effectCorrection.x}%`,
-            width: `${finalEffectScale * 100}%`,
-            height: `${finalEffectScale * 100}%`,
+            width: `${effectFinalScale * 100}%`,
+            height: `${effectFinalScale * 100}%`,
             transform: "translate(-50%, -50%)",
             transformOrigin: "center center",
           }}

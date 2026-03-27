@@ -105,6 +105,7 @@ const Home = () => {
           <div className="relative">
             {selectedChar ? (
               <CharacterAvatar
+                characterId={selectedChar.id}
                 characterImage={selectedChar.image}
                 characterName={selectedChar.name}
                 equippedItems={equippedCosmeticItems}

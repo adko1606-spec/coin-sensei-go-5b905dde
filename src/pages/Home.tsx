@@ -1,14 +1,16 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Lightbulb, Target, Coins, Flame, Check } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import StatsBar from "@/components/StatsBar";
 import BottomNav from "@/components/BottomNav";
+import CharacterAvatar from "@/components/CharacterAvatar";
 import { getTodaysTip } from "@/data/dailyTips";
 import { getTodaysChallenges, type DailyChallenge } from "@/data/dailyChallenges";
 import logo from "@/assets/logo.png";
 import mascot from "@/assets/mascot.png";
 import { characters } from "@/data/characters";
+import { supabase } from "@/integrations/supabase/client";
 
 const Home = () => {
   const { user, profile, progress, totalXp, loading } = useAuth();

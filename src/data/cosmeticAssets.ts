@@ -46,6 +46,19 @@ export const EFFECT_IMAGES: Record<string, string> = {
   color_sakura: sakuraEffect,
 };
 
+// Per-effect scale multipliers (applied on top of base effectScale)
+// Adjust these to make individual effects bigger/smaller
+export const EFFECT_SCALE_MULTIPLIERS: Record<string, number> = {
+  color_fire: 1.0,
+  color_ice: 1.15,
+  color_gold: 1.4,
+  color_rainbow: 1.15,
+  color_rays: 1.0,
+  color_aura: 1.6,
+  color_lightning: 1.6,
+  color_sakura: 1.0,
+};
+
 // Per-character positioning for hats and glasses (percentages)
 // top/left are % of container, width is % of container width
 interface ItemPosition {

@@ -22,6 +22,20 @@ const Home = () => {
   const coins = (profile as any)?.coins ?? 0;
   const currentStreak = (profile as any)?.current_streak ?? 0;
   const selectedChar = characters.find((c) => c.id === (profile as any)?.selected_character);
+  const [equippedCosmeticItems, setEquippedCosmeticItems] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (!user) return;
+    const loadEquipped = async () => {
+      const { data: userCosmetics } = await supabase.from("user_cosmetics").select("item_id").eq("user_id", user.id).eq("equipped", true);
+      if (userCosmetics && userCosmetics.length > 0) {
+        const itemIds = userCosmetics.map((uc) => uc.item_id);
+        const { data: items } = await supabase.from("cosmetic_items").select("*").in("id", itemIds);
+        if (items) setEquippedCosmeticItems(items);
+      }
+    };
+    loadEquipped();
+  }, [user]);
 
   // Calculate challenge completion
   const challengeStatus = useMemo(() => {

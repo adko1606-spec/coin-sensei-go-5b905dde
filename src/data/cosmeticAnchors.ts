@@ -7,18 +7,18 @@ const DEFAULT_CENTER: VisualCenter = { x: 0.5, y: 0.5 };
 
 // Zistené z reálnej nepriehľadnej oblasti (alpha bbox) v PNG assetoch
 export const CHARACTER_VISUAL_CENTERS: Record<string, VisualCenter> = {
-  bear: { x: -2, y: -2 },
-  bezos: { x: -2, y: -2 },
-  buffett: { x: -2, y: -2 },
-  bull: { x: -2, y: -2 },
-  dalio: { x: -2, y: -2 },
-  diamond_hands: { x: -2, y: -2 },
-  musk: { x: -2, y: -2 },
-  satoshi: { x: -2, y: -2 },
-  trump: { x: -2, y: -2 },
-  unicorn: { x: -2, y: -2 },
-  whale: { x: -2, y: -2 },
-  zuckerberg: { x: -2, y: -2 },
+  bear: { x: -0.5, y: -0.5 },
+  bezos: { x: -0.5, y: -0.5 },
+  buffett: { x: -0.5, y: -0.5 },
+  bull: { x: -0.5, y: -0.5 },
+  dalio: { x: -0.5, y: -0.5 },
+  diamond_hands: { x: -0.5, y: -0.5 },
+  musk: { x: -0.5, y: -0.5 },
+  satoshi: { x: -0.5, y: -0.5 },
+  trump: { x: -0.5, y: -0.5 },
+  unicorn: { x: -0.5, y: -0.5 },
+  whale: { x: -0.5, y: -0.5 },
+  zuckerberg: { x: -0.5, y: -0.5 },
 };
 
 export const COSMETIC_VISUAL_CENTERS: Record<string, VisualCenter> = {

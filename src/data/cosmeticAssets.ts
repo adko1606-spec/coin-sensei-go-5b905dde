@@ -46,6 +46,17 @@ export const EFFECT_IMAGES: Record<string, string> = {
   color_sakura: sakuraEffect,
 };
 
+export const EFFECT_SCALE_MULTIPLIERS: Record<string, number> = {
+  color_fire: 1.0,
+  color_ice: 1.0,
+  color_gold: 2.2,
+  color_rainbow: 1.0,
+  color_rays: 2.2,
+  color_aura: 1.0,
+  color_lightning: 1.0,
+  color_sakura: 1.0,
+};
+
 // Per-character positioning for hats and glasses (percentages)
 // top/left are % of container, width is % of container width
 interface ItemPosition {

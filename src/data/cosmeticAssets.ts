@@ -46,19 +46,6 @@ export const EFFECT_IMAGES: Record<string, string> = {
   color_sakura: sakuraEffect,
 };
 
-// Per-effect scale multipliers (applied on top of base effectScale)
-// Adjust these to make individual effects bigger/smaller
-export const EFFECT_SCALE_MULTIPLIERS: Record<string, number> = {
-  color_fire: 1.0,
-  color_ice: 1.15,
-  color_gold: 2.2,
-  color_rainbow: 1.15,
-  color_rays: 2.2,
-  color_aura: 2.2,
-  color_lightning: 1.6,
-  color_sakura: 1.0,
-};
-
 // Per-character positioning for hats and glasses (percentages)
 // top/left are % of container, width is % of container width
 interface ItemPosition {
@@ -87,7 +74,7 @@ export const CHARACTER_POSITIONS: Record<string, CharacterPositions> = {
       hat_cap: { top: -30, left: 12, width: 75 },
       hat_cowboy: { top: -35, left: 12, width: 75 },
       hat_crown: { top: -42, left: 12, width: 75 },
-      hat_beanie: { top: -28, left: 12, width: 75 },
+      hat_beanie: { top: -10, left: 12, width: 75 },
       hat_wizard: { top: -40, left: 12, width: 75 },
     },
     glasses: {

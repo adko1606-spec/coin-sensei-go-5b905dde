@@ -251,12 +251,12 @@ export const CHARACTER_POSITIONS: Record<string, CharacterPositions> = {
   },
   whale: {
     hat: {
-      hat_tophat: { top: -35, left: 12, width: 75 },
-      hat_cap: { top: -30, left: 12, width: 75 },
-      hat_cowboy: { top: -35, left: 12, width: 75 },
-      hat_crown: { top: -42, left: 12, width: 75 },
-      hat_beanie: { top: -48, left: 8, width: 85 },
-      hat_wizard: { top: -40, left: 15, width: 75 },
+      hat_tophat: { top: -30, left: 7, width: 75 },
+      hat_cap: { top: -25, left: 7, width: 75 },
+      hat_cowboy: { top: -30, left: 7, width: 75 },
+      hat_crown: { top: -37, left: 7, width: 75 },
+      hat_beanie: { top: -27, left: 6, width: 70 },
+      hat_wizard: { top: -35, left: 9, width: 75 },
     },
     glasses: {
       glasses_sun: { top: 24, left: 38, width: 30 },

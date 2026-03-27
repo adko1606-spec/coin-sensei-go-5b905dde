@@ -39,7 +39,7 @@ export const EFFECT_SCALE_MULTIPLIERS: Record<string, number> = {
   color_fire: 1.1,
   color_ice: 1.13,
   color_gold: 2.2,
-  color_rainbow: 1.2,
+  color_rainbow: 1.13,
   color_rays: 2.2,
   color_aura: 2.2,
   color_lightning: 1.65,

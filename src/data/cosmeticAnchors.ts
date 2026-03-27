@@ -7,18 +7,18 @@ const DEFAULT_CENTER: VisualCenter = { x: 0.5, y: 0.5 };
 
 // Zistené z reálnej nepriehľadnej oblasti (alpha bbox) v PNG assetoch
 export const CHARACTER_VISUAL_CENTERS: Record<string, VisualCenter> = {
-  bear: { x: 0.5723, y: 0.5059 },
-  bezos: { x: 0.5645, y: 0.5312 },
-  buffett: { x: 0.5322, y: 0.5146 },
-  bull: { x: 0.5215, y: 0.4873 },
-  dalio: { x: 0.4805, y: 0.5195 },
-  diamond_hands: { x: 0.502, y: 0.46 },
-  musk: { x: 0.498, y: 0.5234 },
-  satoshi: { x: 0.4863, y: 0.5234 },
-  trump: { x: 0.5791, y: 0.541 },
-  unicorn: { x: 0.5273, y: 0.5205 },
-  whale: { x: 0.541, y: 0.5215 },
-  zuckerberg: { x: 0.4834, y: 0.5264 },
+  bear: { x: 0.5, y: 0.5 },
+  bezos: { x: 0.5, y: 0.5 },
+  buffett: { x: 0.5, y: 0.5 },
+  bull: { x: 0.5, y: 0.5 },
+  dalio: { x: 0.5, y: 0.5 },
+  diamond_hands: { x: 0.5, y: 0.5 },
+  musk: { x: 0.5, y: 0.5 },
+  satoshi: { x: 0.5, y: 0.5 },
+  trump: { x: 0.5, y: 0.5 },
+  unicorn: { x: 0.5, y: 0.5 },
+  whale: { x: 0.5, y: 0.5 },
+  zuckerberg: { x: 0.5, y: 0.5 },
 };
 
 export const COSMETIC_VISUAL_CENTERS: Record<string, VisualCenter> = {
@@ -36,14 +36,14 @@ export const COSMETIC_VISUAL_CENTERS: Record<string, VisualCenter> = {
 };
 
 export const EFFECT_VISUAL_CENTERS: Record<string, VisualCenter> = {
-  color_aura: { x: 0.5124, y: 0.4564 },
-  color_fire: { x: 0.485, y: 0.4798 },
-  color_gold: { x: 0.526, y: 0.4993 },
-  color_ice: { x: 0.4896, y: 0.4766 },
-  color_rainbow: { x: 0.5215, y: 0.4824 },
+  color_aura: { x: 0.5, y: 0.5 },
+  color_fire: { x: 0.5, y: 0.5 },
+  color_gold: { x: 0.5, y: 0.5 },
+  color_ice: { x: 0.5, y: 0.5 },
+  color_rainbow: { x: 0.5, y: 0.5 },
   color_rays: { x: 0.5, y: 0.5 },
-  color_lightning: { x: 0.5283, y: 0.4688 },
-  color_sakura: { x: 0.5312, y: 0.4697 },
+  color_lightning: { x: 0.5, y: 0.5 },
+  color_sakura: { x: 0.5, y: 0.5 },
 };
 
 export function getCharacterCenterOffset(characterId?: string): { x: number; y: number } {

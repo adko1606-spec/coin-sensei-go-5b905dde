@@ -39,7 +39,7 @@ const Home = () => {
     loadEquipped();
   }, [user]);
 
-  const calcStatus = (list: (DailyChallenge | MonthlyChallenge)[]) => {
+  const calcStatus = (list: (DailyChallenge | WeeklyChallenge)[]) => {
     const completedLessons = progress.filter((p) => p.completed).length;
     const totalXpEarned = progress.reduce((s, p) => s + p.xp_earned, 0);
     const correctAnswers = progress.reduce((s, p) => Math.round(p.score / 100 * 12), 0);

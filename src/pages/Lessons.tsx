@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import { BookOpen, Coins } from "lucide-react";
 import LessonCard from "@/components/LessonCard";
@@ -12,8 +13,9 @@ import logo from "@/assets/logo.png";
 const Lessons = () => {
   const { user, profile, totalXp, loading, saveProgress, isLessonCompleted } = useAuth();
 
+  const [searchParams] = useSearchParams();
   const [lessons, setLessons] = useState<Lesson[]>(initialLessons);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(searchParams.get("category"));
   const [activeLesson, setActiveLesson] = useState<Lesson | null>(null);
 
   const coins = (profile as any)?.coins ?? 0;

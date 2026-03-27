@@ -1,26 +1,23 @@
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { BookOpen, LogOut, User } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import StatsBar from "@/components/StatsBar";
+import { AnimatePresence } from "framer-motion";
+import { BookOpen, Coins } from "lucide-react";
 import LessonCard from "@/components/LessonCard";
 import CategoryFilter from "@/components/CategoryFilter";
 import QuizModal from "@/components/QuizModal";
+import BottomNav from "@/components/BottomNav";
 import { lessons as initialLessons, type Lesson } from "@/data/lessons";
 import { useAuth } from "@/contexts/AuthContext";
-import mascot from "@/assets/mascot.png";
 import logo from "@/assets/logo.png";
 
-const Index = () => {
-  const { user, profile, totalXp, loading, signOut, saveProgress, isLessonCompleted } = useAuth();
-  const navigate = useNavigate();
+const Lessons = () => {
+  const { user, profile, totalXp, loading, saveProgress, isLessonCompleted } = useAuth();
 
   const [lessons, setLessons] = useState<Lesson[]>(initialLessons);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [activeLesson, setActiveLesson] = useState<Lesson | null>(null);
-  const [streak] = useState(3);
 
-  // Sync progress from DB
+  const coins = (profile as any)?.coins ?? 0;
+
   useEffect(() => {
     if (!loading && user) {
       setLessons((prev) => {
@@ -28,7 +25,6 @@ const Index = () => {
           ...l,
           completed: isLessonCompleted(l.id),
         }));
-        // Unlock lessons based on completion
         for (let i = 0; i < updated.length; i++) {
           if (i === 0) {
             updated[i].locked = false;
@@ -41,15 +37,7 @@ const Index = () => {
     }
   }, [loading, user, isLessonCompleted]);
 
-  // Redirect to auth if not logged in
-  useEffect(() => {
-    if (!loading && !user) {
-      navigate("/auth");
-    }
-  }, [loading, user, navigate]);
-
   const completedCount = lessons.filter((l) => l.completed).length;
-  const level = Math.floor(totalXp / 50) + 1;
 
   const filteredLessons = selectedCategory
     ? lessons.filter((l) => l.category === selectedCategory)
@@ -79,16 +67,13 @@ const Index = () => {
     );
   }
 
-  const displayName = profile?.display_name || user?.email?.split("@")[0] || "Študent";
-
   return (
-    <div className="min-h-screen gradient-hero">
-      {/* Header */}
+    <div className="min-h-screen gradient-hero pb-20">
       <header className="sticky top-0 z-40 border-b border-border bg-card/80 backdrop-blur-xl">
         <div className="mx-auto flex max-w-lg items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
             <img src={logo} alt="FinAp logo" className="h-20 w-20" />
-            <h1 className="text-2xl font-extrabold text-foreground">FinAp</h1>
+            <h1 className="text-2xl font-extrabold text-primary">FinAp</h1>
           </div>
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1">
@@ -97,47 +82,19 @@ const Index = () => {
                 {completedCount}/{lessons.length}
               </span>
             </div>
-            <button
-              onClick={signOut}
-              className="rounded-full p-2 text-muted-foreground hover:bg-muted transition-colors"
-              title="Odhlásiť sa"
-            >
-              <LogOut className="h-5 w-5" />
-            </button>
+            <div className="flex items-center gap-1 rounded-full bg-coin/10 px-3 py-1">
+              <Coins className="h-4 w-4 text-coin" />
+              <span className="text-sm font-bold text-coin">{coins}</span>
+            </div>
           </div>
         </div>
       </header>
 
       <main className="mx-auto max-w-lg px-4 pb-8">
-        {/* Welcome */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mt-6 flex items-center gap-4"
-        >
-          <img src={mascot} alt="FinAp maskot" className="h-16 w-16" />
-          <div>
-            <h2 className="text-2xl font-extrabold text-foreground">Ahoj, {displayName}! 👋</h2>
-            <p className="text-muted-foreground">
-              Nauč sa ovládať svoje financie
-            </p>
-          </div>
-        </motion.div>
-
-        {/* Stats */}
         <div className="mt-6">
-          <StatsBar xp={totalXp} streak={streak} level={level} />
+          <CategoryFilter selected={selectedCategory} onSelect={setSelectedCategory} />
         </div>
 
-        {/* Categories */}
-        <div className="mt-6">
-          <CategoryFilter
-            selected={selectedCategory}
-            onSelect={setSelectedCategory}
-          />
-        </div>
-
-        {/* Learning Path */}
         <div className="mt-8 flex flex-col items-center gap-6">
           {filteredLessons.map((lesson, index) => (
             <LessonCard
@@ -150,7 +107,6 @@ const Index = () => {
         </div>
       </main>
 
-      {/* Quiz Modal */}
       <AnimatePresence>
         {activeLesson && (
           <QuizModal
@@ -160,8 +116,10 @@ const Index = () => {
           />
         )}
       </AnimatePresence>
+
+      <BottomNav />
     </div>
   );
 };
 
-export default Index;
+export default Lessons;

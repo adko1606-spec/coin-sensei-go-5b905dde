@@ -5,6 +5,10 @@ import type { User, Session } from "@supabase/supabase-js";
 interface Profile {
   display_name: string | null;
   avatar_url: string | null;
+  coins: number;
+  current_streak: number;
+  longest_streak: number;
+  selected_character: string | null;
 }
 
 interface ProgressEntry {
@@ -50,10 +54,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const loadProfile = useCallback(async (userId: string) => {
     const { data } = await supabase
       .from("profiles")
-      .select("display_name, avatar_url")
+      .select("display_name, avatar_url, coins, current_streak, longest_streak, selected_character")
       .eq("user_id", userId)
       .single();
-    if (data) setProfile(data);
+    if (data) setProfile(data as any);
   }, []);
 
   const loadProgress = useCallback(async (userId: string) => {

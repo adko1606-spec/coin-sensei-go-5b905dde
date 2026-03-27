@@ -15,7 +15,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 220 25% 12%;
 
-    --primary: 145 65% 42%;
+    --primary: 145 72% 40%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 38 92% 55%;
@@ -24,7 +24,7 @@
     --muted: 150 15% 92%;
     --muted-foreground: 220 10% 46%;
 
-    --accent: 200 90% 65%;
+    --accent: 205 100% 50%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 72% 55%;
@@ -38,13 +38,13 @@
 
     /* Custom tokens */
     --xp-gold: 45 93% 58%;
-    --streak-blue: 200 90% 65%;
+    --streak-blue: 205 100% 50%;
     --level-purple: 270 60% 58%;
     --success-green: 145 65% 42%;
     --coin-yellow: 48 96% 53%;
 
-    --gradient-primary: linear-gradient(135deg, hsl(145 65% 42%), hsl(160 60% 45%));
-    --gradient-blue: linear-gradient(135deg, hsl(200 90% 65%), hsl(210 85% 60%));
+    --gradient-primary: linear-gradient(135deg, hsl(145 72% 40%), hsl(155 65% 45%));
+    --gradient-blue: linear-gradient(135deg, hsl(205 100% 50%), hsl(215 90% 55%));
     --gradient-gold: linear-gradient(135deg, hsl(45 93% 58%), hsl(38 92% 55%));
     --gradient-hero: linear-gradient(180deg, hsl(150 20% 97%) 0%, hsl(200 40% 95%) 100%);
 
@@ -102,5 +102,8 @@
   }
   .shadow-float {
     box-shadow: var(--shadow-float);
+  }
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
   }
 }

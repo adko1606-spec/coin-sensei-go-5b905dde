@@ -91,7 +91,7 @@ export const CHARACTER_POSITIONS: Record<string, CharacterPositions> = {
     glasses: {
       glasses_sun: { top: 3, left: 12, width: 75 },
       glasses_nerd: { top: 3, left: 12, width: 75 },
-      glasses_monocle: { top: 3, left: 12, width: 90 },
+      glasses_monocle: { top: 3, left: 9, width: 105 },
       glasses_aviator: { top: 3, left: 12, width: 75 },
       glasses_pixel: { top: 3, left: 12, width: 75 },
     },

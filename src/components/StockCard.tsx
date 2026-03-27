@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
-import { TrendingUp, TrendingDown, Minus, ArrowRight } from "lucide-react";
+import { TrendingUp, TrendingDown, Minus, ArrowRight, Shield } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { sectorProfiles } from "@/data/marketScenarios";
 
 interface Stock {
   id: string;
@@ -26,21 +26,18 @@ interface StockCardProps {
   onSelect: (stock: Stock) => void;
 }
 
-const sectorLabels: Record<string, string> = {
-  technology: "Technológie",
-  energy: "Energia",
-  finance: "Financie",
-  healthcare: "Zdravotníctvo",
-  consumer: "Spotrebiteľský",
-  crypto: "Krypto",
-  real_estate: "Reality",
-  entertainment: "Zábava",
+const riskColors: Record<number, string> = {
+  1: "bg-primary/15 text-primary",
+  2: "bg-accent/15 text-accent-foreground",
+  3: "bg-orange-500/15 text-orange-600",
+  4: "bg-destructive/15 text-destructive",
 };
 
 const StockCard = ({ stock, investment, index, onSelect }: StockCardProps) => {
   const change = stock.price_change_percent;
   const isPositive = change > 0;
   const isNegative = change < 0;
+  const profile = sectorProfiles[stock.sector];
 
   return (
     <motion.div
@@ -56,11 +53,14 @@ const StockCard = ({ stock, investment, index, onSelect }: StockCardProps) => {
           <div className="flex items-center gap-3">
             <div className="text-3xl">{stock.icon}</div>
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 <h3 className="font-bold text-sm text-foreground truncate">{stock.name}</h3>
-                <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-muted text-muted-foreground font-medium">
-                  {sectorLabels[stock.sector] || stock.sector}
-                </span>
+                {profile && (
+                  <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium flex items-center gap-0.5 ${riskColors[profile.riskLevel]}`}>
+                    <Shield className="h-2.5 w-2.5" />
+                    {profile.risk} riziko
+                  </span>
+                )}
               </div>
               <p className="text-xs text-muted-foreground truncate">{stock.description}</p>
             </div>
@@ -78,24 +78,20 @@ const StockCard = ({ stock, investment, index, onSelect }: StockCardProps) => {
                     isPositive ? "text-primary" : isNegative ? "text-destructive" : "text-muted-foreground"
                   }`}
                 >
-                  {isPositive ? "+" : ""}
-                  {change.toFixed(1)}%
+                  {isPositive ? "+" : ""}{Math.round(change)}%
                 </span>
               </div>
-              <p className="text-xs text-muted-foreground">
-                {stock.current_price.toFixed(0)} 🪙
-              </p>
             </div>
           </div>
 
           {investment && investment.current_value > 0 && (
             <div className="mt-3 pt-3 border-t border-border/50 flex items-center justify-between">
               <div className="text-xs">
-                <span className="text-muted-foreground">Investované: </span>
+                <span className="text-muted-foreground">Vložené: </span>
                 <span className="font-bold text-foreground">{investment.invested_coins} 🪙</span>
               </div>
               <div className="text-xs">
-                <span className="text-muted-foreground">Hodnota: </span>
+                <span className="text-muted-foreground">Teraz: </span>
                 <span
                   className={`font-bold ${
                     investment.current_value >= investment.invested_coins

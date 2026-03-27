@@ -19,10 +19,10 @@ interface CharacterAvatarProps {
 }
 
 const SIZE_MAP = {
-  sm: { container: "h-10 w-10", effectScale: 1.8 },
-  md: { container: "h-20 w-20", effectScale: 1.8 },
-  lg: { container: "h-24 w-24", effectScale: 1.8 },
-  xl: { container: "h-32 w-32", effectScale: 1.8 },
+  sm: { container: "h-10 w-10", effectScale: 1.6 },
+  md: { container: "h-20 w-20", effectScale: 1.6 },
+  lg: { container: "h-24 w-24", effectScale: 1.6 },
+  xl: { container: "h-32 w-32", effectScale: 1.6 },
 };
 
 const EFFECT_ANIMATIONS: Record<string, {
@@ -74,6 +74,7 @@ const CharacterAvatar = ({
             width: `${s.effectScale * 100}%`,
             height: `${s.effectScale * 100}%`,
             transform: "translate(-50%, -50%)",
+            transformOrigin: "center center",
           }}
           animate={effectAnim?.animate}
           transition={{
@@ -86,6 +87,7 @@ const CharacterAvatar = ({
             src={effectImage}
             alt="effect"
             className="w-full h-full object-contain"
+            style={{ display: "block" }}
             loading="lazy"
           />
         </motion.div>

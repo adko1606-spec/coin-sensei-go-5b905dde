@@ -337,9 +337,20 @@ const Profile = () => {
                 {cosmeticItems.filter((item: any) => item.category === shopCategory).map((item: any) => {
                   const owned = userCosmetics.some((uc) => uc.item_id === item.id);
                   const equipped = userCosmetics.some((uc) => uc.item_id === item.id && uc.equipped);
-                  return (
+                    return (
                     <div key={item.id} className={`rounded-2xl p-4 transition-all ${equipped ? "bg-primary/10 ring-2 ring-primary" : "bg-muted/50"}`}>
-                      <div className="text-center text-4xl mb-2">{item.icon}</div>
+                      <div className="flex justify-center mb-2">
+                        {(item.category === "hat" || item.category === "glasses" || item.category === "color") ? (
+                          <CharacterAvatar
+                            characterImage={activeCharacter?.image}
+                            characterName={activeCharacter?.name}
+                            equippedItems={[item]}
+                            size="lg"
+                          />
+                        ) : (
+                          <div className="text-center text-4xl">{item.icon}</div>
+                        )}
+                      </div>
                       <p className="text-sm font-bold text-foreground text-center">{item.name}</p>
                       <p className="text-[11px] text-muted-foreground text-center mb-2">{item.description}</p>
                       {owned ? (

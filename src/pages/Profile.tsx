@@ -12,7 +12,6 @@ import FriendsSection from "@/components/FriendsSection";
 
 const COSMETIC_CATEGORIES = [
   { id: "hat", label: "🎩 Klobúky" },
-  { id: "glasses", label: "👓 Okuliare" },
   { id: "accessory", label: "💼 Doplnky" },
   { id: "color", label: "🎨 Efekty" },
 ];
@@ -345,7 +344,7 @@ const Profile = () => {
                     return (
                     <div key={item.id} className={`rounded-2xl p-4 pt-8 transition-all ${equipped ? "bg-primary/10 ring-2 ring-primary" : "bg-muted/50"}`} style={{ overflow: "visible" }}>
                       <div className="flex justify-center mb-2" style={{ overflow: "visible" }}>
-                        {(item.category === "hat" || item.category === "glasses" || item.category === "color") ? (
+                        {(item.category === "hat" || item.category === "color") ? (
                           <CharacterAvatar
                             characterId={activeCharacter?.id}
                             characterImage={activeCharacter?.image}

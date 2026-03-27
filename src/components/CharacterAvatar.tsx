@@ -64,26 +64,20 @@ const CharacterAvatar = ({
   const finalEffectScale = customEffectScale ?? s.effectScale;
 
   const hat = equippedItems.find((i) => i.category === "hat");
-  const glasses = equippedItems.find((i) => i.category === "glasses");
   const accessories = equippedItems.filter((i) => i.category === "accessory");
   const effect = equippedItems.find((i) => i.category === "color");
 
   const hatImage = hat ? COSMETIC_IMAGES[hat.id] : null;
-  const glassesImage = glasses ? COSMETIC_IMAGES[glasses.id] : null;
   const effectImage = effect ? EFFECT_IMAGES[effect.id] : null;
   const effectAnim = effect ? EFFECT_ANIMATIONS[effect.id] : null;
 
   const hatPos = hat ? getItemPosition(characterId, "hat", hat.id) : null;
-  const glassesPos = glasses ? getItemPosition(characterId, "glasses", glasses.id) : null;
   const characterCenterOffset = getCharacterCenterOffset(characterId);
 
   const hatCenter = hat ? getCosmeticVisualCenter(hat.id) : null;
-  const glassesCenter = glasses ? getCosmeticVisualCenter(glasses.id) : null;
   const effectCenter = effect ? getEffectVisualCenter(effect.id) : null;
 
   const hatCorrection = hat && hatPos && hatCenter ? getCenterCorrection(hatCenter, hatPos.width) : null;
-  const glassesCorrection =
-    glasses && glassesPos && glassesCenter ? getCenterCorrection(glassesCenter, glassesPos.width) : null;
 
   const effectMultiplier = effect ? (EFFECT_SCALE_MULTIPLIERS[effect.id] ?? 1.0) : 1.0;
   const effectFinalScale = finalEffectScale * effectMultiplier;
@@ -149,22 +143,6 @@ const CharacterAvatar = ({
         </motion.div>
       )}
 
-      {/* Glasses image overlay */}
-      {glasses && glassesImage && glassesPos && (
-        <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          className="absolute z-20 pointer-events-none"
-          style={{
-            top: `${glassesPos.top + (glassesCorrection?.y ?? 0)}%`,
-            left: `${glassesPos.left + (glassesCorrection?.x ?? 0)}%`,
-            width: `${glassesPos.width}%`,
-            transform: `translateX(-50%) rotate(${glassesPos.rotation ?? 0}deg)`,
-          }}
-        >
-          <img src={glassesImage} alt={glasses.name} className="w-full h-auto" loading="lazy" />
-        </motion.div>
-      )}
 
       {/* Accessories - small badges */}
       {accessories.length > 0 && (

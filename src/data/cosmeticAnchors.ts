@@ -7,7 +7,7 @@ const DEFAULT_CENTER: VisualCenter = { x: 0.5, y: 0.5 };
 
 // Zistené z reálnej nepriehľadnej oblasti (alpha bbox) v PNG assetoch
 export const CHARACTER_VISUAL_CENTERS: Record<string, VisualCenter> = {
-  bear: { x: -2, y: -2 },
+  bear: { x: -0.327, y: -0.5 },
   bezos: { x: -0.327, y: -0.5 },
   buffett: { x: -0.327, y: -0.5 },
   bull: { x: -0.327, y: -0.5 },

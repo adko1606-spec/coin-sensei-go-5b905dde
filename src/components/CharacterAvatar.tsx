@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { COSMETIC_IMAGES, EFFECT_IMAGES, getItemPosition } from "@/data/cosmeticAssets";
+import { COSMETIC_IMAGES, EFFECT_IMAGES, EFFECT_SCALE_MULTIPLIERS, getItemPosition } from "@/data/cosmeticAssets";
 import {
   getCenterCorrection,
   getCharacterCenterOffset,

@@ -1,14 +1,16 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Lightbulb, Target, Coins, Flame, Check } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import StatsBar from "@/components/StatsBar";
 import BottomNav from "@/components/BottomNav";
+import CharacterAvatar from "@/components/CharacterAvatar";
 import { getTodaysTip } from "@/data/dailyTips";
 import { getTodaysChallenges, type DailyChallenge } from "@/data/dailyChallenges";
 import logo from "@/assets/logo.png";
 import mascot from "@/assets/mascot.png";
 import { characters } from "@/data/characters";
+import { supabase } from "@/integrations/supabase/client";
 
 const Home = () => {
   const { user, profile, progress, totalXp, loading } = useAuth();
@@ -20,6 +22,20 @@ const Home = () => {
   const coins = (profile as any)?.coins ?? 0;
   const currentStreak = (profile as any)?.current_streak ?? 0;
   const selectedChar = characters.find((c) => c.id === (profile as any)?.selected_character);
+  const [equippedCosmeticItems, setEquippedCosmeticItems] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (!user) return;
+    const loadEquipped = async () => {
+      const { data: userCosmetics } = await supabase.from("user_cosmetics").select("item_id").eq("user_id", user.id).eq("equipped", true);
+      if (userCosmetics && userCosmetics.length > 0) {
+        const itemIds = userCosmetics.map((uc) => uc.item_id);
+        const { data: items } = await supabase.from("cosmetic_items").select("*").in("id", itemIds);
+        if (items) setEquippedCosmeticItems(items);
+      }
+    };
+    loadEquipped();
+  }, [user]);
 
   // Calculate challenge completion
   const challengeStatus = useMemo(() => {
@@ -87,8 +103,13 @@ const Home = () => {
           className="mt-6 flex items-center gap-4"
         >
           <div className="relative">
-          {selectedChar ? (
-              <img src={selectedChar.image} alt={selectedChar.name} className="h-16 w-16 rounded-2xl object-cover" />
+            {selectedChar ? (
+              <CharacterAvatar
+                characterImage={selectedChar.image}
+                characterName={selectedChar.name}
+                equippedItems={equippedCosmeticItems}
+                size="md"
+              />
             ) : (
               <img src={mascot} alt="FinAp maskot" className="h-16 w-16" />
             )}

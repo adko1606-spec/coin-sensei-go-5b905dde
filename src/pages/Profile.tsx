@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { LogOut, Flame, Zap, Trophy, Coins, Award, BookOpen, Target, ChevronRight, Check, ShoppingBag, Lock } from "lucide-react";
+import CharacterAvatar from "@/components/CharacterAvatar";
 import { useAuth } from "@/contexts/AuthContext";
 import BottomNav from "@/components/BottomNav";
 import { characters, type Character } from "@/data/characters";
@@ -112,6 +113,9 @@ const Profile = () => {
 
   const activeCharacter = characters.find((c) => c.id === selectedChar);
   const equippedItems = userCosmetics.filter((uc) => uc.equipped);
+  const equippedCosmeticItems = equippedItems
+    .map((uc) => cosmeticItems.find((i: any) => i.id === uc.item_id))
+    .filter(Boolean) as any[];
   const equippedIcons = equippedItems.map((uc) => cosmeticItems.find((i: any) => i.id === uc.item_id)?.icon).filter(Boolean);
 
   if (loading) {
@@ -141,21 +145,14 @@ const Profile = () => {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mt-6 rounded-2xl bg-card p-6 shadow-card">
           <div className="flex items-center gap-4">
             <button onClick={() => setShowCharacterPicker(true)}
-              className="relative flex h-20 w-20 items-center justify-center rounded-2xl bg-accent/20 overflow-hidden hover:ring-2 ring-accent transition-all">
-              {activeCharacter ? (
-                <img src={activeCharacter.image} alt={activeCharacter.name} className="h-full w-full object-cover" />
-              ) : (
-                <span className="text-4xl">🎓</span>
-              )}
-              {/* Equipped cosmetic overlay */}
-              {equippedIcons.length > 0 && (
-                <div className="absolute -top-1 -right-1 flex gap-0.5">
-                  {equippedIcons.map((icon, i) => (
-                    <span key={i} className="text-sm bg-card rounded-full p-0.5 shadow-sm">{icon}</span>
-                  ))}
-                </div>
-              )}
-              <div className="absolute -bottom-1 -right-1 h-6 w-6 rounded-full bg-primary flex items-center justify-center">
+              className="relative hover:ring-2 ring-accent transition-all rounded-2xl">
+              <CharacterAvatar
+                characterImage={activeCharacter?.image}
+                characterName={activeCharacter?.name}
+                equippedItems={equippedCosmeticItems}
+                size="md"
+              />
+              <div className="absolute -bottom-1 -right-1 h-6 w-6 rounded-full bg-primary flex items-center justify-center z-30">
                 <span className="text-[10px] text-primary-foreground font-bold">{level}</span>
               </div>
             </button>
@@ -180,11 +177,13 @@ const Profile = () => {
           <button onClick={() => setShowCharacterPicker(true)}
             className="w-full flex items-center justify-between rounded-2xl bg-card p-4 shadow-card hover:bg-muted/50 transition-colors">
             <div className="flex items-center gap-3">
-              {activeCharacter ? (
-                <img src={activeCharacter.image} alt={activeCharacter.name} className="h-10 w-10 rounded-xl object-cover" />
-              ) : (
-                <span className="text-2xl">🎓</span>
-              )}
+              <CharacterAvatar
+                characterImage={activeCharacter?.image}
+                characterName={activeCharacter?.name}
+                equippedItems={equippedCosmeticItems}
+                size="sm"
+                showEffects={false}
+              />
               <div>
                 <p className="text-sm font-bold text-foreground">Zmeniť postavu</p>
                 <p className="text-xs text-muted-foreground">{activeCharacter?.name || "Vyber si svoju postavu"}</p>
@@ -338,9 +337,20 @@ const Profile = () => {
                 {cosmeticItems.filter((item: any) => item.category === shopCategory).map((item: any) => {
                   const owned = userCosmetics.some((uc) => uc.item_id === item.id);
                   const equipped = userCosmetics.some((uc) => uc.item_id === item.id && uc.equipped);
-                  return (
+                    return (
                     <div key={item.id} className={`rounded-2xl p-4 transition-all ${equipped ? "bg-primary/10 ring-2 ring-primary" : "bg-muted/50"}`}>
-                      <div className="text-center text-4xl mb-2">{item.icon}</div>
+                      <div className="flex justify-center mb-2">
+                        {(item.category === "hat" || item.category === "glasses" || item.category === "color") ? (
+                          <CharacterAvatar
+                            characterImage={activeCharacter?.image}
+                            characterName={activeCharacter?.name}
+                            equippedItems={[item]}
+                            size="lg"
+                          />
+                        ) : (
+                          <div className="text-center text-4xl">{item.icon}</div>
+                        )}
+                      </div>
                       <p className="text-sm font-bold text-foreground text-center">{item.name}</p>
                       <p className="text-[11px] text-muted-foreground text-center mb-2">{item.description}</p>
                       {owned ? (

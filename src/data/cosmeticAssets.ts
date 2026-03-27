@@ -89,7 +89,7 @@ export const CHARACTER_POSITIONS: Record<string, CharacterPositions> = {
       hat_wizard: { top: -40, left: 15, width: 75 },
     },
     glasses: {
-      glasses_sun: { top: 10, left: 20, width: 65 },
+      glasses_sun: { top: 9, left: 15, width: 75 },
       glasses_nerd: { top: 28, left: 50, width: 50 },
       glasses_monocle: { top: 30, left: 40, width: 30 },
       glasses_aviator: { top: 28, left: 50, width: 55 },

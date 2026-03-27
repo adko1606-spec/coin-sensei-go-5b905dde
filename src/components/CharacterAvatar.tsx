@@ -84,8 +84,8 @@ const CharacterAvatar = ({
         <motion.div
           className="absolute z-0 pointer-events-none"
           style={{
-            top: `${50 + characterCenterOffset.y + effectCorrection.y}%`,
-            left: `${50 + characterCenterOffset.x + effectCorrection.x}%`,
+            top: `${50 + characterCenterOffset.y}%`,
+            left: `${50 + characterCenterOffset.x}%`,
             width: `${effectFinalScale * 100}%`,
             height: `${effectFinalScale * 100}%`,
             transform: "translate(-50%, -50%)",
@@ -126,8 +126,8 @@ const CharacterAvatar = ({
           animate={{ y: 0, opacity: 1 }}
           className="absolute z-20 pointer-events-none"
           style={{
-            top: `${hatPos.top + (hatCorrection?.y ?? 0)}%`,
-            left: `${hatPos.left + (hatCorrection?.x ?? 0)}%`,
+             top: `${hatPos.top}%`,
+            left: `${hatPos.left}%`,
             width: `${hatPos.width}%`,
             transform: `translateX(-50%) rotate(${hatPos.rotation ?? 0}deg)`,
           }}
@@ -143,8 +143,8 @@ const CharacterAvatar = ({
           animate={{ scale: 1, opacity: 1 }}
           className="absolute z-20 pointer-events-none"
           style={{
-            top: `${glassesPos.top + (glassesCorrection?.y ?? 0)}%`,
-            left: `${glassesPos.left + (glassesCorrection?.x ?? 0)}%`,
+            top: `${glassesPos.top}%`,
+            left: `${glassesPos.left}%`,
             width: `${glassesPos.width}%`,
             transform: `translateX(-50%) rotate(${glassesPos.rotation ?? 0}deg)`,
           }}

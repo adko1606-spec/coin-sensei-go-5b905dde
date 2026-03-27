@@ -217,12 +217,12 @@ export const CHARACTER_POSITIONS: Record<string, CharacterPositions> = {
   },
   bear: {
     hat: {
-      hat_tophat: { top: -50, left: 12, width: 75 },
-      hat_cap: { top: -50, left: 12, width: 75 },
-      hat_cowboy: { top: -55, left: 12, width: 75 },
-      hat_crown: { top: -62, left: 12, width: 75 },
-      hat_beanie: { top: -68, left: 8, width: 85 },
-      hat_wizard: { top: -60, left: 15, width: 75 },
+      hat_tophat: { top: -40, left: 12, width: 75 },
+      hat_cap: { top: -45, left: 12, width: 75 },
+      hat_cowboy: { top: -46, left: 12, width: 75 },
+      hat_crown: { top: -50, left: 12, width: 75 },
+      hat_beanie: { top: -58, left: 8, width: 73 },
+      hat_wizard: { top: -50, left: 15, width: 75 },
     },
     glasses: {
       glasses_sun: { top: 20, left: 50, width: 36 },

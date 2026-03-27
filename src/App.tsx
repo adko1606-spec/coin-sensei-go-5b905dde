@@ -8,6 +8,7 @@ import Home from "./pages/Home";
 import Study from "./pages/Study";
 import Lessons from "./pages/Lessons";
 import Leaderboard from "./pages/Leaderboard";
+import Invest from "./pages/Invest";
 import Profile from "./pages/Profile";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
@@ -39,6 +40,7 @@ const App = () => (
             <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
             <Route path="/study" element={<ProtectedRoute><Study /></ProtectedRoute>} />
             <Route path="/lessons" element={<ProtectedRoute><Lessons /></ProtectedRoute>} />
+            <Route path="/invest" element={<ProtectedRoute><Invest /></ProtectedRoute>} />
             <Route path="/leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             <Route path="/auth" element={<AuthRoute><Auth /></AuthRoute>} />

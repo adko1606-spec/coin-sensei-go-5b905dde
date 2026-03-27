@@ -8,7 +8,7 @@ export interface DailyChallenge {
   type: "complete_lessons" | "earn_xp" | "correct_answers" | "perfect_quiz";
 }
 
-export interface MonthlyChallenge extends DailyChallenge {
+export interface WeeklyChallenge extends DailyChallenge {
   tier: "bronze" | "silver" | "gold";
 }
 

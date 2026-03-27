@@ -55,10 +55,8 @@ const Home = () => {
           className="mt-6 flex items-center gap-4"
         >
           <div className="relative">
-            {selectedChar ? (
-              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-accent/20 text-3xl">
-                {selectedChar.emoji}
-              </div>
+          {selectedChar ? (
+              <img src={selectedChar.image} alt={selectedChar.name} className="h-16 w-16 rounded-2xl object-cover" />
             ) : (
               <img src={mascot} alt="FinAp maskot" className="h-16 w-16" />
             )}

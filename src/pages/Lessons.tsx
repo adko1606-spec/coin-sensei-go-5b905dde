@@ -43,9 +43,9 @@ const Lessons = () => {
     ? lessons.filter((l) => l.category === selectedCategory)
     : lessons;
 
-  const handleComplete = async (earnedXp: number, score: number) => {
+  const handleComplete = async (earnedXp: number, score: number, totalQuestions: number) => {
     if (!activeLesson) return;
-    await saveProgress(activeLesson.id, score, earnedXp);
+    await saveProgress(activeLesson.id, score, earnedXp, activeLesson.questions.length);
     setLessons((prev) => {
       const updated = prev.map((l) =>
         l.id === activeLesson.id ? { ...l, completed: true } : l

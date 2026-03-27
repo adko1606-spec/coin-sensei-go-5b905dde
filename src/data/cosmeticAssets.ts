@@ -35,17 +35,6 @@ export const COSMETIC_IMAGES: Record<string, string> = {
   glasses_pixel: glassesPixel,
 };
 
-export const EFFECT_SCALE_MULTIPLIERS: Record<string, number> = {
-  color_fire: 1.0,
-  color_ice: 1.13,
-  color_gold: 2.2,
-  color_rainbow: 1.13,
-  color_rays: 2.2,
-  color_aura: 2.2,
-  color_lightning: 1.65,
-  color_sakura: 1.1,
-};
-
 export const EFFECT_IMAGES: Record<string, string> = {
   color_fire: fireEffect,
   color_ice: iceEffect,
@@ -85,7 +74,7 @@ export const CHARACTER_POSITIONS: Record<string, CharacterPositions> = {
       hat_cap: { top: -30, left: 12, width: 75 },
       hat_cowboy: { top: -35, left: 12, width: 75 },
       hat_crown: { top: -42, left: 12, width: 75 },
-      hat_beanie: { top: -80, left: 12, width: 75 },
+      hat_beanie: { top: -50, left: 12, width: 75 },
       hat_wizard: { top: -40, left: 12, width: 75 },
     },
     glasses: {

@@ -40,7 +40,7 @@ export const EFFECT_VISUAL_CENTERS: Record<string, VisualCenter> = {
   color_fire: { x: 0.49, y: 0.5 },
   color_gold: { x: 0.78, y: 0.7 },
   color_ice: { x: 0.55, y: 0.5 },
-  color_rainbow: { x: 0.5, y: 0.5 },
+  color_rainbow: { x: 0.55, y: 0.5 },
   color_rays: { x: 0.5, y: 0.5 },
   color_lightning: { x: 0.5, y: 0.5 },
   color_sakura: { x: 0.5, y: 0.5 },

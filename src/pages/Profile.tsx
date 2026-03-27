@@ -7,6 +7,7 @@ import { characters, type Character } from "@/data/characters";
 import { supabase } from "@/integrations/supabase/client";
 import logo from "@/assets/logo.png";
 import { toast } from "sonner";
+import FriendsSection from "@/components/FriendsSection";
 
 const COSMETIC_CATEGORIES = [
   { id: "hat", label: "🎩 Klobúky" },
@@ -224,6 +225,9 @@ const Profile = () => {
             </div>
           ))}
         </motion.div>
+
+        {/* Friends */}
+        <FriendsSection />
 
         {/* Badges */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mt-6 mb-4">

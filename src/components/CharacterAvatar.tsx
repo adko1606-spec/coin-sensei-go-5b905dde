@@ -22,6 +22,7 @@ interface CharacterAvatarProps {
   size?: "sm" | "md" | "lg" | "xl";
   className?: string;
   showEffects?: boolean;
+  effectScale?: number;
 }
 
 const SIZE_MAP = {
@@ -54,8 +55,10 @@ const CharacterAvatar = ({
   size = "md",
   className = "",
   showEffects = true,
+  effectScale: customEffectScale,
 }: CharacterAvatarProps) => {
   const s = SIZE_MAP[size];
+  const finalEffectScale = customEffectScale ?? s.effectScale;
 
   const hat = equippedItems.find((i) => i.category === "hat");
   const glasses = equippedItems.find((i) => i.category === "glasses");

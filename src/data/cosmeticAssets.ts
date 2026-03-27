@@ -60,9 +60,9 @@ export const CHARACTER_POSITIONS: Record<string, CharacterPositions> = {
     // Big head portrait, already wears glasses, eyes at ~35%
     hat: {
       hat_tophat: { top: -35, left: 15, width: 75 },
-      hat_cap: { top: -6, left: 52, width: 65 },
-      hat_cowboy: { top: -10, left: 50, width: 70 },
-      hat_crown: { top: -8, left: 50, width: 50 },
+      hat_cap: { top: -35, left: 15, width: 75 },
+      hat_cowboy: { top: -35, left: 15, width: 75 },
+      hat_crown: { top: -35, left: 15, width: 75 },
     },
     glasses: {
       glasses_sun: { top: 30, left: 50, width: 55 },

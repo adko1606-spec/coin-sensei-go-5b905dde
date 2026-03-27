@@ -1,12 +1,13 @@
 import { useState, useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Lightbulb, Target, Coins, Flame, Check } from "lucide-react";
+import { Lightbulb, Target, Coins, Flame, Calendar } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import StatsBar from "@/components/StatsBar";
 import BottomNav from "@/components/BottomNav";
 import CharacterAvatar from "@/components/CharacterAvatar";
+import { ChallengeCard } from "@/components/ChallengeCard";
 import { getTodaysTip } from "@/data/dailyTips";
-import { getTodaysChallenges, type DailyChallenge } from "@/data/dailyChallenges";
+import { getTodaysChallenges, getMonthsChallenges, type DailyChallenge, type MonthlyChallenge } from "@/data/dailyChallenges";
 import logo from "@/assets/logo.png";
 import mascot from "@/assets/mascot.png";
 import { characters } from "@/data/characters";
@@ -16,6 +17,7 @@ const Home = () => {
   const { user, profile, progress, totalXp, loading } = useAuth();
   const [tip] = useState(getTodaysTip());
   const [challenges] = useState<DailyChallenge[]>(getTodaysChallenges());
+  const [monthlyChallenges] = useState<MonthlyChallenge[]>(getMonthsChallenges());
 
   const displayName = profile?.display_name || user?.email?.split("@")[0] || "Študent";
   const level = Math.floor(totalXp / 50) + 1;
@@ -37,37 +39,26 @@ const Home = () => {
     loadEquipped();
   }, [user]);
 
-  // Calculate challenge completion
-  const challengeStatus = useMemo(() => {
+  const calcStatus = (list: (DailyChallenge | MonthlyChallenge)[]) => {
     const completedLessons = progress.filter((p) => p.completed).length;
     const totalXpEarned = progress.reduce((s, p) => s + p.xp_earned, 0);
-    const correctAnswers = progress.reduce((s, p) => Math.round(p.score / 100 * 12), 0); // approximate
-    const hasPerfect = progress.some((p) => p.score === 100);
+    const correctAnswers = progress.reduce((s, p) => Math.round(p.score / 100 * 12), 0);
+    const perfectCount = progress.filter((p) => p.score === 100).length;
 
-    return challenges.map((c) => {
+    return list.map((c) => {
       let current = 0;
-      let completed = false;
       switch (c.type) {
-        case "complete_lessons":
-          current = completedLessons;
-          completed = completedLessons >= c.target;
-          break;
-        case "earn_xp":
-          current = totalXpEarned;
-          completed = totalXpEarned >= c.target;
-          break;
-        case "correct_answers":
-          current = correctAnswers;
-          completed = correctAnswers >= c.target;
-          break;
-        case "perfect_quiz":
-          current = hasPerfect ? 1 : 0;
-          completed = hasPerfect;
-          break;
+        case "complete_lessons": current = completedLessons; break;
+        case "earn_xp": current = totalXpEarned; break;
+        case "correct_answers": current = correctAnswers; break;
+        case "perfect_quiz": current = perfectCount; break;
       }
-      return { id: c.id, current: Math.min(current, c.target), completed };
+      return { id: c.id, current: Math.min(current, c.target), completed: current >= c.target };
     });
-  }, [progress, challenges]);
+  };
+
+  const challengeStatus = useMemo(() => calcStatus(challenges), [progress, challenges]);
+  const monthlyStatus = useMemo(() => calcStatus(monthlyChallenges), [progress, monthlyChallenges]);
 
   if (loading) {
     return (
@@ -159,57 +150,42 @@ const Home = () => {
           </div>
 
           <div className="space-y-3">
-            {challenges.map((challenge, idx) => {
-              const status = challengeStatus.find((s) => s.id === challenge.id);
-              const isCompleted = status?.completed ?? false;
-              const current = status?.current ?? 0;
+            {challenges.map((challenge, idx) => (
+              <ChallengeCard
+                key={challenge.id}
+                challenge={challenge}
+                status={challengeStatus.find((s) => s.id === challenge.id) ?? { current: 0, completed: false }}
+                index={idx}
+              />
+            ))}
+          </div>
+        </motion.div>
 
-              return (
-                <motion.div
-                  key={challenge.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.3 + idx * 0.1 }}
-                  className={`flex items-center gap-3 rounded-2xl p-4 shadow-card transition-all ${
-                    isCompleted ? "bg-primary/10 border-2 border-primary" : "bg-card"
-                  }`}
-                >
-                  <div className={`flex h-12 w-12 items-center justify-center rounded-xl text-2xl ${
-                    isCompleted ? "bg-primary/20" : "bg-primary/10"
-                  }`}>
-                    {isCompleted ? <Check className="h-6 w-6 text-primary" /> : challenge.icon}
-                  </div>
-                  <div className="flex-1">
-                    <p className={`text-sm font-bold ${isCompleted ? "text-primary line-through" : "text-foreground"}`}>
-                      {challenge.title}
-                    </p>
-                    <p className="text-xs text-muted-foreground">{challenge.description}</p>
-                    {/* Progress bar */}
-                    {!isCompleted && (
-                      <div className="mt-1.5 h-1.5 w-full rounded-full bg-muted overflow-hidden">
-                        <div
-                          className="h-full rounded-full bg-primary transition-all"
-                          style={{ width: `${Math.min((current / challenge.target) * 100, 100)}%` }}
-                        />
-                      </div>
-                    )}
-                    {!isCompleted && (
-                      <p className="text-[10px] text-muted-foreground mt-0.5">{current}/{challenge.target}</p>
-                    )}
-                  </div>
-                  <div className="flex flex-col items-end gap-0.5">
-                    {isCompleted ? (
-                      <span className="text-xs font-bold text-primary">Splnené ✓</span>
-                    ) : (
-                      <>
-                        <span className="text-xs font-bold text-xp">+{challenge.reward.xp} XP</span>
-                        <span className="text-xs font-bold text-coin">+{challenge.reward.coins} 🪙</span>
-                      </>
-                    )}
-                  </div>
-                </motion.div>
-              );
-            })}
+        {/* Monthly Challenges */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="mt-6"
+        >
+          <div className="flex items-center gap-2 mb-3">
+            <Calendar className="h-5 w-5 text-accent" />
+            <h3 className="text-lg font-extrabold text-foreground">Mesačné výzvy</h3>
+            <span className="ml-auto text-[10px] font-bold text-muted-foreground uppercase">
+              {new Date().toLocaleString("sk-SK", { month: "long" })}
+            </span>
+          </div>
+
+          <div className="space-y-3">
+            {monthlyChallenges.map((challenge, idx) => (
+              <ChallengeCard
+                key={challenge.id}
+                challenge={challenge}
+                status={monthlyStatus.find((s) => s.id === challenge.id) ?? { current: 0, completed: false }}
+                index={idx}
+                delayBase={0.5}
+              />
+            ))}
           </div>
         </motion.div>
       </main>

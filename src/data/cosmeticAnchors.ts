@@ -22,11 +22,6 @@ export const CHARACTER_VISUAL_CENTERS: Record<string, VisualCenter> = {
 };
 
 export const COSMETIC_VISUAL_CENTERS: Record<string, VisualCenter> = {
-  glasses_monocle: { x: 0.4941, y: 0.5664 },
-  glasses_nerd: { x: 0.502, y: 0.5459 },
-  glasses_sun: { x: 0.5049, y: 0.3564 },
-  glasses_aviator: { x: 0.4922, y: 0.4561 },
-  glasses_pixel: { x: 0.5039, y: 0.4121 },
   hat_cap: { x: 0.4834, y: 0.4785 },
   hat_cowboy: { x: 0.502, y: 0.5693 },
   hat_crown: { x: 0.5, y: 0.4883 },

@@ -5,11 +5,6 @@ import hatCowboy from "@/assets/cosmetics/hat_cowboy.png";
 import hatCrown from "@/assets/cosmetics/hat_crown.png";
 import hatBeanie from "@/assets/cosmetics/hat_beanie.png";
 import hatWizard from "@/assets/cosmetics/hat_wizard.png";
-import glassesSun from "@/assets/cosmetics/glasses_sun.png";
-import glassesNerd from "@/assets/cosmetics/glasses_nerd.png";
-import glassesMonocle from "@/assets/cosmetics/glasses_monocle.png";
-import glassesAviator from "@/assets/cosmetics/glasses_aviator.png";
-import glassesPixel from "@/assets/cosmetics/glasses_pixel.png";
 
 // Effect image imports
 import fireEffect from "@/assets/effects/fire_effect.png";
@@ -28,11 +23,6 @@ export const COSMETIC_IMAGES: Record<string, string> = {
   hat_crown: hatCrown,
   hat_beanie: hatBeanie,
   hat_wizard: hatWizard,
-  glasses_sun: glassesSun,
-  glasses_nerd: glassesNerd,
-  glasses_monocle: glassesMonocle,
-  glasses_aviator: glassesAviator,
-  glasses_pixel: glassesPixel,
 };
 
 export const EFFECT_SCALE_MULTIPLIERS: Record<string, number> = {

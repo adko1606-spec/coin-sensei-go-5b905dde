@@ -48,7 +48,7 @@ interface CharacterPositions {
   glasses: Record<string, ItemPosition>;
 }
 
-const defaultHatPos: ItemPosition = { top: -5, left: 50, width: 65 };
+const defaultHatPos: ItemPosition = { top: 0, left: 50, width: 65 };
 const defaultGlassesPos: ItemPosition = { top: 30, left: 50, width: 55 };
 
 // Custom positions per character. Keys match character IDs.

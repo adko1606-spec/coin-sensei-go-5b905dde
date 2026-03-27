@@ -73,8 +73,8 @@ export const CHARACTER_POSITIONS: Record<string, CharacterPositions> = {
   satoshi: {
     // Hooded character with mask, eyes at ~32%
     hat: {
-      hat_tophat: { top: -12, left: 48, width: 55 },
-      hat_cap: { top: -4, left: 50, width: 58 },
+      hat_tophat: { top: -35, left: 12, width: 75 },
+      hat_cap: { top: -35, left: 12, width: 75 },
       hat_cowboy: { top: -8, left: 48, width: 62 },
       hat_crown: { top: -6, left: 48, width: 45 },
     },

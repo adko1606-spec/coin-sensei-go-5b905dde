@@ -43,7 +43,7 @@ export const EFFECT_VISUAL_CENTERS: Record<string, VisualCenter> = {
   color_rainbow: { x: 0.55, y: 0.5 },
   color_rays: { x: 0.76, y: 0.7 },
   color_lightning: { x: 0.68, y: 0.65 },
-  color_sakura: { x: 0.5, y: 0.5 },
+  color_sakura: { x: 0.5, y: 0.4 },
 };
 
 export function getCharacterCenterOffset(characterId?: string): { x: number; y: number } {

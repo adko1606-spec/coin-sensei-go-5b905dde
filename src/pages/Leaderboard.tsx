@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Trophy, Zap, Flame, BookOpen, Crown, Medal } from "lucide-react";
+import { Trophy, Zap, Flame, BookOpen, Crown, Medal, Globe, Users } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import BottomNav from "@/components/BottomNav";
 import { supabase } from "@/integrations/supabase/client";
@@ -17,7 +17,7 @@ type LeaderboardEntry = {
   completed_lessons: number;
 };
 
-const TABS = [
+const METRIC_TABS = [
   { id: "xp", label: "XP", icon: Zap, color: "text-xp" },
   { id: "streak", label: "Séria", icon: Flame, color: "text-streak" },
   { id: "lessons", label: "Lekcie", icon: BookOpen, color: "text-primary" },
@@ -32,35 +32,49 @@ const getRankIcon = (rank: number) => {
 
 const Leaderboard = () => {
   const { user, loading } = useAuth();
-  const [tab, setTab] = useState("xp");
-  const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
+  const [metricTab, setMetricTab] = useState("xp");
+  const [scope, setScope] = useState<"global" | "friends">("global");
+  const [allEntries, setAllEntries] = useState<LeaderboardEntry[]>([]);
+  const [friendIds, setFriendIds] = useState<Set<string>>(new Set());
   const [loadingData, setLoadingData] = useState(true);
 
   useEffect(() => {
-    const fetchLeaderboard = async () => {
+    const fetchData = async () => {
       setLoadingData(true);
 
-      // Get all profiles
-      const { data: profiles } = await supabase
-        .from("profiles")
-        .select("user_id, display_name, selected_character, coins, current_streak");
+      // Fetch profiles, progress, and friendships in parallel
+      const [profilesRes, progressRes, friendshipsRes] = await Promise.all([
+        supabase.from("profiles").select("user_id, display_name, selected_character, coins, current_streak"),
+        supabase.from("user_progress").select("user_id, xp_earned, completed"),
+        user
+          ? supabase
+              .from("friendships")
+              .select("sender_id, receiver_id")
+              .eq("status", "accepted")
+              .or(`sender_id.eq.${user.id},receiver_id.eq.${user.id}`)
+          : Promise.resolve({ data: [] }),
+      ]);
 
-      if (!profiles) { setLoadingData(false); return; }
+      // Build friends set
+      const fIds = new Set<string>();
+      if (user) {
+        fIds.add(user.id); // include self
+        ((friendshipsRes.data as any[]) || []).forEach((f) => {
+          fIds.add(f.sender_id === user.id ? f.receiver_id : f.sender_id);
+        });
+      }
+      setFriendIds(fIds);
 
-      // Get all progress
-      const { data: allProgress } = await supabase
-        .from("user_progress")
-        .select("user_id, xp_earned, completed");
-
+      // Build progress map
       const progressMap = new Map<string, { total_xp: number; completed_lessons: number }>();
-      (allProgress || []).forEach((p: any) => {
+      ((progressRes.data as any[]) || []).forEach((p) => {
         const existing = progressMap.get(p.user_id) || { total_xp: 0, completed_lessons: 0 };
         existing.total_xp += p.xp_earned;
         if (p.completed) existing.completed_lessons += 1;
         progressMap.set(p.user_id, existing);
       });
 
-      const combined: LeaderboardEntry[] = profiles.map((p: any) => ({
+      const combined: LeaderboardEntry[] = ((profilesRes.data as any[]) || []).map((p) => ({
         user_id: p.user_id,
         display_name: p.display_name || "Hráč",
         selected_character: p.selected_character,
@@ -70,22 +84,26 @@ const Leaderboard = () => {
         completed_lessons: progressMap.get(p.user_id)?.completed_lessons ?? 0,
       }));
 
-      setEntries(combined);
+      setAllEntries(combined);
       setLoadingData(false);
     };
 
-    fetchLeaderboard();
-  }, []);
+    fetchData();
+  }, [user]);
 
-  const sorted = [...entries].sort((a, b) => {
-    if (tab === "xp") return b.total_xp - a.total_xp;
-    if (tab === "streak") return b.current_streak - a.current_streak;
+  const filtered = scope === "friends"
+    ? allEntries.filter((e) => friendIds.has(e.user_id))
+    : allEntries;
+
+  const sorted = [...filtered].sort((a, b) => {
+    if (metricTab === "xp") return b.total_xp - a.total_xp;
+    if (metricTab === "streak") return b.current_streak - a.current_streak;
     return b.completed_lessons - a.completed_lessons;
   });
 
   const getValue = (entry: LeaderboardEntry) => {
-    if (tab === "xp") return `${entry.total_xp} XP`;
-    if (tab === "streak") return `${entry.current_streak} dní`;
+    if (metricTab === "xp") return `${entry.total_xp} XP`;
+    if (metricTab === "streak") return `${entry.current_streak} dní`;
     return `${entry.completed_lessons} lekcií`;
   };
 
@@ -118,17 +136,43 @@ const Leaderboard = () => {
           <p className="text-sm text-muted-foreground">Súťaž s ostatnými hráčmi</p>
         </motion.div>
 
-        {/* Tabs */}
+        {/* Scope toggle: Global vs Friends */}
+        <div className="flex gap-2 mb-3">
+          <button
+            onClick={() => setScope("global")}
+            className={`flex-1 flex items-center justify-center gap-2 rounded-2xl py-3 text-sm font-bold transition-all ${
+              scope === "global"
+                ? "gradient-blue text-primary-foreground shadow-button"
+                : "bg-card text-foreground shadow-card"
+            }`}
+          >
+            <Globe className={`h-4 w-4 ${scope === "global" ? "text-primary-foreground" : "text-accent"}`} />
+            Globálny
+          </button>
+          <button
+            onClick={() => setScope("friends")}
+            className={`flex-1 flex items-center justify-center gap-2 rounded-2xl py-3 text-sm font-bold transition-all ${
+              scope === "friends"
+                ? "gradient-blue text-primary-foreground shadow-button"
+                : "bg-card text-foreground shadow-card"
+            }`}
+          >
+            <Users className={`h-4 w-4 ${scope === "friends" ? "text-primary-foreground" : "text-accent"}`} />
+            Priatelia
+          </button>
+        </div>
+
+        {/* Metric tabs */}
         <div className="flex gap-2 mb-4">
-          {TABS.map((t) => (
+          {METRIC_TABS.map((t) => (
             <button
               key={t.id}
-              onClick={() => setTab(t.id)}
+              onClick={() => setMetricTab(t.id)}
               className={`flex-1 flex items-center justify-center gap-2 rounded-2xl py-3 text-sm font-bold transition-all ${
-                tab === t.id ? "gradient-primary text-primary-foreground shadow-button" : "bg-card text-foreground shadow-card"
+                metricTab === t.id ? "gradient-primary text-primary-foreground shadow-button" : "bg-card text-foreground shadow-card"
               }`}
             >
-              <t.icon className={`h-4 w-4 ${tab === t.id ? "text-primary-foreground" : t.color}`} />
+              <t.icon className={`h-4 w-4 ${metricTab === t.id ? "text-primary-foreground" : t.color}`} />
               {t.label}
             </button>
           ))}
@@ -199,7 +243,9 @@ const Leaderboard = () => {
 
             {sorted.length === 0 && (
               <div className="text-center py-8 text-muted-foreground">
-                Zatiaľ žiadni hráči v rebríčku
+                {scope === "friends"
+                  ? "Zatiaľ nemáš žiadnych priateľov. Pridaj si ich v profile!"
+                  : "Zatiaľ žiadni hráči v rebríčku"}
               </div>
             )}
           </div>

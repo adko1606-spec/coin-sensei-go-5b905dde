@@ -177,11 +177,13 @@ const Profile = () => {
           <button onClick={() => setShowCharacterPicker(true)}
             className="w-full flex items-center justify-between rounded-2xl bg-card p-4 shadow-card hover:bg-muted/50 transition-colors">
             <div className="flex items-center gap-3">
-              {activeCharacter ? (
-                <img src={activeCharacter.image} alt={activeCharacter.name} className="h-10 w-10 rounded-xl object-cover" />
-              ) : (
-                <span className="text-2xl">🎓</span>
-              )}
+              <CharacterAvatar
+                characterImage={activeCharacter?.image}
+                characterName={activeCharacter?.name}
+                equippedItems={equippedCosmeticItems}
+                size="sm"
+                showEffects={false}
+              />
               <div>
                 <p className="text-sm font-bold text-foreground">Zmeniť postavu</p>
                 <p className="text-xs text-muted-foreground">{activeCharacter?.name || "Vyber si svoju postavu"}</p>

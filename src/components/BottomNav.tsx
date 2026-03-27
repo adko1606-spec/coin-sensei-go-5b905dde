@@ -1,10 +1,11 @@
-import { Home, BookOpen, User } from "lucide-react";
+import { Home, BookOpen, Trophy, User } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 
 const tabs = [
   { path: "/", label: "Domov", icon: Home },
   { path: "/lessons", label: "Lekcie", icon: BookOpen },
+  { path: "/leaderboard", label: "Rebríček", icon: Trophy },
   { path: "/profile", label: "Profil", icon: User },
 ];
 

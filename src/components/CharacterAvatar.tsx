@@ -97,8 +97,8 @@ const CharacterAvatar = ({
           style={{
             top: `${50 + characterCenterOffset.y + effectCorrection.y}%`,
             left: `${50 + characterCenterOffset.x + effectCorrection.x}%`,
-            width: `${effectFinalScale * 100}%`,
-            height: `${effectFinalScale * 100}%`,
+            width: `${finalEffectScale * 100}%`,
+            height: `${finalEffectScale * 100}%`,
             transform: "translate(-50%, -50%)",
             transformOrigin: "center center",
           }}

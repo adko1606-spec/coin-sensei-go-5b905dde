@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { COSMETIC_IMAGES, EFFECT_IMAGES, EFFECT_SCALE_MULTIPLIERS, getItemPosition } from "@/data/cosmeticAssets";
+import { COSMETIC_IMAGES, EFFECT_IMAGES, getItemPosition } from "@/data/cosmeticAssets";
 import {
   getCenterCorrection,
   getCharacterCenterOffset,
@@ -85,9 +85,7 @@ const CharacterAvatar = ({
   const glassesCorrection =
     glasses && glassesPos && glassesCenter ? getCenterCorrection(glassesCenter, glassesPos.width) : null;
 
-  const effectMultiplier = effect ? (EFFECT_SCALE_MULTIPLIERS[effect.id] ?? 1.0) : 1.0;
-  const effectFinalScale = finalEffectScale * effectMultiplier;
-  const effectSizePercent = effectFinalScale * 100;
+  const effectSizePercent = finalEffectScale * 100;
   const effectCorrection = effectCenter ? getCenterCorrection(effectCenter, effectSizePercent) : { x: 0, y: 0 };
 
   return (

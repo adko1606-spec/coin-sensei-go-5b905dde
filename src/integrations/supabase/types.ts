@@ -101,6 +101,79 @@ export type Database = {
         }
         Relationships: []
       }
+      investment_transactions: {
+        Row: {
+          amount: number
+          balance_after: number
+          created_at: string
+          event_text: string | null
+          id: string
+          stock_id: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          balance_after: number
+          created_at?: string
+          event_text?: string | null
+          id?: string
+          stock_id: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          balance_after?: number
+          created_at?: string
+          event_text?: string | null
+          id?: string
+          stock_id?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "investment_transactions_stock_id_fkey"
+            columns: ["stock_id"]
+            isOneToOne: false
+            referencedRelation: "stocks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      market_events: {
+        Row: {
+          created_at: string
+          event_text: string
+          id: string
+          price_impact_percent: number
+          stock_id: string
+        }
+        Insert: {
+          created_at?: string
+          event_text: string
+          id?: string
+          price_impact_percent?: number
+          stock_id: string
+        }
+        Update: {
+          created_at?: string
+          event_text?: string
+          id?: string
+          price_impact_percent?: number
+          stock_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "market_events_stock_id_fkey"
+            columns: ["stock_id"]
+            isOneToOne: false
+            referencedRelation: "stocks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -137,6 +210,45 @@ export type Database = {
           selected_character?: string | null
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      stocks: {
+        Row: {
+          base_volatility: number
+          created_at: string
+          current_price: number
+          description: string
+          icon: string
+          id: string
+          name: string
+          price_change_percent: number
+          sector: string
+          updated_at: string
+        }
+        Insert: {
+          base_volatility?: number
+          created_at?: string
+          current_price?: number
+          description: string
+          icon?: string
+          id: string
+          name: string
+          price_change_percent?: number
+          sector?: string
+          updated_at?: string
+        }
+        Update: {
+          base_volatility?: number
+          created_at?: string
+          current_price?: number
+          description?: string
+          icon?: string
+          id?: string
+          name?: string
+          price_change_percent?: number
+          sector?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -197,6 +309,47 @@ export type Database = {
             columns: ["item_id"]
             isOneToOne: false
             referencedRelation: "cosmetic_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_investments: {
+        Row: {
+          current_value: number
+          id: string
+          invested_at: string
+          invested_coins: number
+          is_active: boolean
+          last_update: string
+          stock_id: string
+          user_id: string
+        }
+        Insert: {
+          current_value: number
+          id?: string
+          invested_at?: string
+          invested_coins: number
+          is_active?: boolean
+          last_update?: string
+          stock_id: string
+          user_id: string
+        }
+        Update: {
+          current_value?: number
+          id?: string
+          invested_at?: string
+          invested_coins?: number
+          is_active?: boolean
+          last_update?: string
+          stock_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_investments_stock_id_fkey"
+            columns: ["stock_id"]
+            isOneToOne: false
+            referencedRelation: "stocks"
             referencedColumns: ["id"]
           },
         ]

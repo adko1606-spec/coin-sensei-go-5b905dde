@@ -1,4 +1,4 @@
-import { Home, BookOpen, GraduationCap, Trophy, User } from "lucide-react";
+import { Home, BookOpen, GraduationCap, Trophy, User, TrendingUp } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 
@@ -6,6 +6,7 @@ const tabs = [
   { path: "/", label: "Domov", icon: Home },
   { path: "/study", label: "Učivo", icon: GraduationCap },
   { path: "/lessons", label: "Lekcie", icon: BookOpen },
+  { path: "/invest", label: "Investície", icon: TrendingUp },
   { path: "/leaderboard", label: "Rebríček", icon: Trophy },
   { path: "/profile", label: "Profil", icon: User },
 ];

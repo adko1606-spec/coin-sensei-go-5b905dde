@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
-import { Lock, CheckCircle2, ChevronRight } from "lucide-react";
+import { Lock, CheckCircle2, ChevronRight, AlertCircle } from "lucide-react";
 import type { Lesson } from "@/data/lessons";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface LessonCardProps {
   lesson: Lesson;
@@ -9,7 +10,10 @@ interface LessonCardProps {
 }
 
 const LessonCard = ({ lesson, index, onStart }: LessonCardProps) => {
+  const { getLessonScore } = useAuth();
   const isEven = index % 2 === 0;
+  const lessonScore = getLessonScore(lesson.id);
+  const hasErrors = lessonScore !== null && lessonScore.score < 100;
 
   return (
     <motion.div
@@ -19,14 +23,10 @@ const LessonCard = ({ lesson, index, onStart }: LessonCardProps) => {
       className="flex items-center gap-4"
       style={{ justifyContent: isEven ? "flex-start" : "flex-end" }}
     >
-      {/* Connector line */}
       {index > 0 && (
         <div
           className="absolute h-8 w-0.5 bg-border"
-          style={{
-            top: -16,
-            left: "50%",
-          }}
+          style={{ top: -16, left: "50%" }}
         />
       )}
 
@@ -35,27 +35,33 @@ const LessonCard = ({ lesson, index, onStart }: LessonCardProps) => {
         disabled={lesson.locked}
         className={`
           group relative flex w-72 items-center gap-4 rounded-2xl p-4 transition-all duration-300
-          ${lesson.completed
-            ? "bg-primary/10 border-2 border-primary"
-            : lesson.locked
-              ? "bg-muted/50 border-2 border-border opacity-60 cursor-not-allowed"
-              : "bg-card border-2 border-border shadow-card hover:shadow-float hover:scale-[1.02] cursor-pointer"
+          ${lesson.completed && hasErrors
+            ? "bg-destructive/5 border-2 border-destructive/60"
+            : lesson.completed
+              ? "bg-primary/10 border-2 border-primary"
+              : lesson.locked
+                ? "bg-muted/50 border-2 border-border opacity-60 cursor-not-allowed"
+                : "bg-card border-2 border-border shadow-card hover:shadow-float hover:scale-[1.02] cursor-pointer"
           }
         `}
       >
         <div
           className={`
             flex h-14 w-14 shrink-0 items-center justify-center rounded-xl text-2xl
-            ${lesson.completed
-              ? "gradient-primary"
-              : lesson.locked
-                ? "bg-muted"
-                : "bg-primary/10"
+            ${lesson.completed && hasErrors
+              ? "bg-destructive/10"
+              : lesson.completed
+                ? "gradient-primary"
+                : lesson.locked
+                  ? "bg-muted"
+                  : "bg-primary/10"
             }
           `}
         >
           {lesson.locked ? (
             <Lock className="h-6 w-6 text-muted-foreground" />
+          ) : lesson.completed && hasErrors ? (
+            <AlertCircle className="h-6 w-6 text-destructive" />
           ) : lesson.completed ? (
             <CheckCircle2 className="h-6 w-6 text-primary-foreground" />
           ) : (
@@ -68,8 +74,13 @@ const LessonCard = ({ lesson, index, onStart }: LessonCardProps) => {
           <p className="text-sm text-muted-foreground line-clamp-1">
             {lesson.description}
           </p>
-          <div className="mt-1 flex items-center gap-1">
+          <div className="mt-1 flex items-center gap-2">
             <span className="text-xs font-bold text-xp">+{lesson.xp} XP</span>
+            {lessonScore && (
+              <span className={`text-xs font-bold ${hasErrors ? "text-destructive" : "text-primary"}`}>
+                {lessonScore.score}%
+              </span>
+            )}
           </div>
         </div>
 

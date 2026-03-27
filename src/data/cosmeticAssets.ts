@@ -51,10 +51,10 @@ export const EFFECT_IMAGES: Record<string, string> = {
 export const EFFECT_SCALE_MULTIPLIERS: Record<string, number> = {
   color_fire: 1.0,
   color_ice: 1.15,
-  color_gold: 1.4,
+  color_gold: 2.8,
   color_rainbow: 1.15,
   color_rays: 1.0,
-  color_aura: 1.6,
+  color_aura: 2.2,
   color_lightning: 1.6,
   color_sakura: 1.0,
 };

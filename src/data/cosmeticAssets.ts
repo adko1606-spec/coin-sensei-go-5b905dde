@@ -74,7 +74,7 @@ export const CHARACTER_POSITIONS: Record<string, CharacterPositions> = {
       hat_cap: { top: -30, left: 12, width: 75 },
       hat_cowboy: { top: -35, left: 12, width: 75 },
       hat_crown: { top: -42, left: 12, width: 75 },
-      hat_beanie: { top: -40, left: 12, width: 75 },
+      hat_beanie: { top: -70, left: 12, width: 75 },
       hat_wizard: { top: -40, left: 12, width: 75 },
     },
     glasses: {

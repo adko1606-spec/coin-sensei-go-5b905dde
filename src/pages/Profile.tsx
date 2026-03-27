@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { LogOut, Flame, Zap, Trophy, Coins, Award, BookOpen, Target, ChevronRight, Check, ShoppingBag, Lock } from "lucide-react";
+import { LogOut, Flame, Zap, Trophy, Coins, Award, BookOpen, Target, ChevronRight, Check, ShoppingBag, Lock, Maximize2 } from "lucide-react";
 import CharacterAvatar from "@/components/CharacterAvatar";
 import { useAuth } from "@/contexts/AuthContext";
 import BottomNav from "@/components/BottomNav";
@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import logo from "@/assets/logo.png";
 import { toast } from "sonner";
 import FriendsSection from "@/components/FriendsSection";
+import { Slider } from "@/components/ui/slider";
 
 const COSMETIC_CATEGORIES = [
   { id: "hat", label: "🎩 Klobúky" },
@@ -27,6 +28,7 @@ const Profile = () => {
   const [cosmeticItems, setCosmeticItems] = useState<any[]>([]);
   const [userCosmetics, setUserCosmetics] = useState<any[]>([]);
   const [shopCategory, setShopCategory] = useState("hat");
+  const [effectScale, setEffectScale] = useState(1.6);
 
   const displayName = profile?.display_name || user?.email?.split("@")[0] || "Študent";
   const coins = profile?.coins ?? 0;
@@ -152,6 +154,7 @@ const Profile = () => {
                 characterName={activeCharacter?.name}
                 equippedItems={equippedCosmeticItems}
                 size="md"
+                effectScale={effectScale}
               />
               <div className="absolute -bottom-1 -right-1 h-6 w-6 rounded-full bg-primary flex items-center justify-center z-30">
                 <span className="text-[10px] text-primary-foreground font-bold">{level}</span>
@@ -334,6 +337,25 @@ const Profile = () => {
                 ))}
               </div>
 
+              {/* Effect size slider */}
+              {shopCategory === "color" && (
+                <div className="mb-4 rounded-2xl bg-card p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Maximize2 className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm font-bold text-foreground">Veľkosť efektu</span>
+                    <span className="text-xs text-muted-foreground ml-auto">{Math.round(effectScale * 100)}%</span>
+                  </div>
+                  <Slider
+                    value={[effectScale]}
+                    onValueChange={(v) => setEffectScale(v[0])}
+                    min={0.5}
+                    max={3}
+                    step={0.05}
+                    className="w-full"
+                  />
+                </div>
+              )}
+
               {/* Items */}
               <div className="grid grid-cols-2 gap-3" style={{ overflow: "visible" }}>
                 {cosmeticItems.filter((item: any) => item.category === shopCategory).map((item: any) => {
@@ -349,6 +371,7 @@ const Profile = () => {
                             characterName={activeCharacter?.name}
                             equippedItems={[item]}
                             size="lg"
+                            effectScale={item.category === "color" ? effectScale : undefined}
                           />
                         ) : (
                           <div className="text-center text-4xl">{item.icon}</div>

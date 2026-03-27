@@ -145,21 +145,14 @@ const Profile = () => {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mt-6 rounded-2xl bg-card p-6 shadow-card">
           <div className="flex items-center gap-4">
             <button onClick={() => setShowCharacterPicker(true)}
-              className="relative flex h-20 w-20 items-center justify-center rounded-2xl bg-accent/20 overflow-hidden hover:ring-2 ring-accent transition-all">
-              {activeCharacter ? (
-                <img src={activeCharacter.image} alt={activeCharacter.name} className="h-full w-full object-cover" />
-              ) : (
-                <span className="text-4xl">🎓</span>
-              )}
-              {/* Equipped cosmetic overlay */}
-              {equippedIcons.length > 0 && (
-                <div className="absolute -top-1 -right-1 flex gap-0.5">
-                  {equippedIcons.map((icon, i) => (
-                    <span key={i} className="text-sm bg-card rounded-full p-0.5 shadow-sm">{icon}</span>
-                  ))}
-                </div>
-              )}
-              <div className="absolute -bottom-1 -right-1 h-6 w-6 rounded-full bg-primary flex items-center justify-center">
+              className="relative hover:ring-2 ring-accent transition-all rounded-2xl">
+              <CharacterAvatar
+                characterImage={activeCharacter?.image}
+                characterName={activeCharacter?.name}
+                equippedItems={equippedCosmeticItems}
+                size="md"
+              />
+              <div className="absolute -bottom-1 -right-1 h-6 w-6 rounded-full bg-primary flex items-center justify-center z-30">
                 <span className="text-[10px] text-primary-foreground font-bold">{level}</span>
               </div>
             </button>

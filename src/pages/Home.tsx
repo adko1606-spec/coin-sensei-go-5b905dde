@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { Lightbulb, Target, Coins, Flame } from "lucide-react";
+import { Lightbulb, Target, Coins, Flame, Check } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import StatsBar from "@/components/StatsBar";
 import BottomNav from "@/components/BottomNav";
@@ -11,7 +11,7 @@ import mascot from "@/assets/mascot.png";
 import { characters } from "@/data/characters";
 
 const Home = () => {
-  const { user, profile, totalXp, loading } = useAuth();
+  const { user, profile, progress, totalXp, loading } = useAuth();
   const [tip] = useState(getTodaysTip());
   const [challenges] = useState<DailyChallenge[]>(getTodaysChallenges());
 
@@ -20,6 +20,38 @@ const Home = () => {
   const coins = (profile as any)?.coins ?? 0;
   const currentStreak = (profile as any)?.current_streak ?? 0;
   const selectedChar = characters.find((c) => c.id === (profile as any)?.selected_character);
+
+  // Calculate challenge completion
+  const challengeStatus = useMemo(() => {
+    const completedLessons = progress.filter((p) => p.completed).length;
+    const totalXpEarned = progress.reduce((s, p) => s + p.xp_earned, 0);
+    const correctAnswers = progress.reduce((s, p) => Math.round(p.score / 100 * 12), 0); // approximate
+    const hasPerfect = progress.some((p) => p.score === 100);
+
+    return challenges.map((c) => {
+      let current = 0;
+      let completed = false;
+      switch (c.type) {
+        case "complete_lessons":
+          current = completedLessons;
+          completed = completedLessons >= c.target;
+          break;
+        case "earn_xp":
+          current = totalXpEarned;
+          completed = totalXpEarned >= c.target;
+          break;
+        case "correct_answers":
+          current = correctAnswers;
+          completed = correctAnswers >= c.target;
+          break;
+        case "perfect_quiz":
+          current = hasPerfect ? 1 : 0;
+          completed = hasPerfect;
+          break;
+      }
+      return { id: c.id, current: Math.min(current, c.target), completed };
+    });
+  }, [progress, challenges]);
 
   if (loading) {
     return (
@@ -105,27 +137,57 @@ const Home = () => {
           </div>
 
           <div className="space-y-3">
-            {challenges.map((challenge, idx) => (
-              <motion.div
-                key={challenge.id}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3 + idx * 0.1 }}
-                className="flex items-center gap-3 rounded-2xl bg-card p-4 shadow-card"
-              >
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-2xl">
-                  {challenge.icon}
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-bold text-foreground">{challenge.title}</p>
-                  <p className="text-xs text-muted-foreground">{challenge.description}</p>
-                </div>
-                <div className="flex flex-col items-end gap-0.5">
-                  <span className="text-xs font-bold text-xp">+{challenge.reward.xp} XP</span>
-                  <span className="text-xs font-bold text-coin">+{challenge.reward.coins} 🪙</span>
-                </div>
-              </motion.div>
-            ))}
+            {challenges.map((challenge, idx) => {
+              const status = challengeStatus.find((s) => s.id === challenge.id);
+              const isCompleted = status?.completed ?? false;
+              const current = status?.current ?? 0;
+
+              return (
+                <motion.div
+                  key={challenge.id}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.3 + idx * 0.1 }}
+                  className={`flex items-center gap-3 rounded-2xl p-4 shadow-card transition-all ${
+                    isCompleted ? "bg-primary/10 border-2 border-primary" : "bg-card"
+                  }`}
+                >
+                  <div className={`flex h-12 w-12 items-center justify-center rounded-xl text-2xl ${
+                    isCompleted ? "bg-primary/20" : "bg-primary/10"
+                  }`}>
+                    {isCompleted ? <Check className="h-6 w-6 text-primary" /> : challenge.icon}
+                  </div>
+                  <div className="flex-1">
+                    <p className={`text-sm font-bold ${isCompleted ? "text-primary line-through" : "text-foreground"}`}>
+                      {challenge.title}
+                    </p>
+                    <p className="text-xs text-muted-foreground">{challenge.description}</p>
+                    {/* Progress bar */}
+                    {!isCompleted && (
+                      <div className="mt-1.5 h-1.5 w-full rounded-full bg-muted overflow-hidden">
+                        <div
+                          className="h-full rounded-full bg-primary transition-all"
+                          style={{ width: `${Math.min((current / challenge.target) * 100, 100)}%` }}
+                        />
+                      </div>
+                    )}
+                    {!isCompleted && (
+                      <p className="text-[10px] text-muted-foreground mt-0.5">{current}/{challenge.target}</p>
+                    )}
+                  </div>
+                  <div className="flex flex-col items-end gap-0.5">
+                    {isCompleted ? (
+                      <span className="text-xs font-bold text-primary">Splnené ✓</span>
+                    ) : (
+                      <>
+                        <span className="text-xs font-bold text-xp">+{challenge.reward.xp} XP</span>
+                        <span className="text-xs font-bold text-coin">+{challenge.reward.coins} 🪙</span>
+                      </>
+                    )}
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </motion.div>
       </main>

@@ -63,6 +63,7 @@ const Profile = () => {
     if (!user) return;
     setSelectedChar(charId);
     await supabase.from("profiles").update({ selected_character: charId } as any).eq("user_id", user.id);
+    await refreshProfile();
     setShowCharacterPicker(false);
   };
 
@@ -252,11 +253,11 @@ const Profile = () => {
       <AnimatePresence>
         {showCharacterPicker && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-end justify-center bg-foreground/40 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/40 backdrop-blur-sm p-4"
             onClick={() => setShowCharacterPicker(false)}>
-            <motion.div initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }}
-              transition={{ type: "spring", damping: 30, stiffness: 300 }}
-              className="w-full max-w-lg rounded-t-3xl bg-card p-6 max-h-[80vh] overflow-y-auto"
+            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="w-full max-w-lg rounded-3xl bg-card p-6 max-h-[85vh] overflow-y-auto shadow-xl"
               onClick={(e) => e.stopPropagation()}>
               <div className="mb-4 flex items-center justify-between">
                 <h3 className="text-xl font-extrabold text-foreground">Vyber si postavu</h3>
@@ -299,11 +300,11 @@ const Profile = () => {
       <AnimatePresence>
         {showShop && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-end justify-center bg-foreground/40 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/40 backdrop-blur-sm p-4"
             onClick={() => setShowShop(false)}>
-            <motion.div initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }}
-              transition={{ type: "spring", damping: 30, stiffness: 300 }}
-              className="w-full max-w-lg rounded-t-3xl bg-card p-6 max-h-[80vh] overflow-y-auto"
+            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="w-full max-w-lg rounded-3xl bg-card p-6 max-h-[85vh] overflow-y-auto shadow-xl"
               onClick={(e) => e.stopPropagation()}>
               <div className="mb-4 flex items-center justify-between">
                 <h3 className="text-xl font-extrabold text-foreground">Obchod</h3>

@@ -22,7 +22,6 @@ interface CharacterAvatarProps {
   size?: "sm" | "md" | "lg" | "xl";
   className?: string;
   showEffects?: boolean;
-  effectScale?: number;
 }
 
 const SIZE_MAP = {
@@ -32,14 +31,17 @@ const SIZE_MAP = {
   xl: { container: "h-32 w-32", effectScale: 1.6 },
 };
 
-const EFFECT_ANIMATIONS: Record<string, {
-  animate?: Record<string, any>;
-  duration: number;
-  ease: string;
-}> = {
+const EFFECT_ANIMATIONS: Record<
+  string,
+  {
+    animate?: Record<string, any>;
+    duration: number;
+    ease: string;
+  }
+> = {
   color_fire: { animate: { scale: [1, 1.08, 1], opacity: [0.85, 1, 0.85] }, duration: 1.5, ease: "easeInOut" },
   color_ice: { animate: { scale: [1, 1.05, 1], opacity: [0.8, 1, 0.8] }, duration: 2, ease: "easeInOut" },
-  color_gold: { animate: { rotate: [0, 360] }, duration: 10, ease: "linear" },
+  color_gold: { animate: { rotate: [1, 360] }, duration: 10, ease: "linear" },
   color_rainbow: { animate: { rotate: [0, 360] }, duration: 8, ease: "linear" },
   color_rays: { animate: { rotate: [0, 360], scale: [0.95, 1.05, 0.95] }, duration: 6, ease: "linear" },
   color_aura: { animate: { scale: [1, 1.12, 1], opacity: [0.6, 1, 0.6] }, duration: 2.5, ease: "easeInOut" },
@@ -55,10 +57,8 @@ const CharacterAvatar = ({
   size = "md",
   className = "",
   showEffects = true,
-  effectScale: customEffectScale,
 }: CharacterAvatarProps) => {
   const s = SIZE_MAP[size];
-  const finalEffectScale = customEffectScale ?? s.effectScale;
 
   const hat = equippedItems.find((i) => i.category === "hat");
   const glasses = equippedItems.find((i) => i.category === "glasses");
@@ -82,7 +82,7 @@ const CharacterAvatar = ({
   const glassesCorrection =
     glasses && glassesPos && glassesCenter ? getCenterCorrection(glassesCenter, glassesPos.width) : null;
 
-  const effectSizePercent = finalEffectScale * 100;
+  const effectSizePercent = s.effectScale * 100;
   const effectCorrection = effectCenter ? getCenterCorrection(effectCenter, effectSizePercent) : { x: 0, y: 0 };
 
   return (
@@ -94,8 +94,8 @@ const CharacterAvatar = ({
           style={{
             top: `${50 + characterCenterOffset.y + effectCorrection.y}%`,
             left: `${50 + characterCenterOffset.x + effectCorrection.x}%`,
-            width: `${finalEffectScale * 100}%`,
-            height: `${finalEffectScale * 100}%`,
+            width: `${s.effectScale * 100}%`,
+            height: `${s.effectScale * 100}%`,
             transform: "translate(-50%, -50%)",
             transformOrigin: "center center",
           }}
@@ -103,7 +103,7 @@ const CharacterAvatar = ({
           transition={{
             duration: effectAnim?.duration ?? 2,
             repeat: Infinity,
-            ease: effectAnim?.ease as any ?? "easeInOut",
+            ease: (effectAnim?.ease as any) ?? "easeInOut",
           }}
         >
           <img

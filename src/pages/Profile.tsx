@@ -147,6 +147,7 @@ const Profile = () => {
             <button onClick={() => setShowCharacterPicker(true)}
               className="relative hover:ring-2 ring-accent transition-all rounded-2xl">
               <CharacterAvatar
+                characterId={activeCharacter?.id}
                 characterImage={activeCharacter?.image}
                 characterName={activeCharacter?.name}
                 equippedItems={equippedCosmeticItems}
@@ -178,6 +179,7 @@ const Profile = () => {
             className="w-full flex items-center justify-between rounded-2xl bg-card p-4 shadow-card hover:bg-muted/50 transition-colors">
             <div className="flex items-center gap-3">
               <CharacterAvatar
+                characterId={activeCharacter?.id}
                 characterImage={activeCharacter?.image}
                 characterName={activeCharacter?.name}
                 equippedItems={equippedCosmeticItems}
@@ -342,6 +344,7 @@ const Profile = () => {
                       <div className="flex justify-center mb-2">
                         {(item.category === "hat" || item.category === "glasses" || item.category === "color") ? (
                           <CharacterAvatar
+                            characterId={activeCharacter?.id}
                             characterImage={activeCharacter?.image}
                             characterName={activeCharacter?.name}
                             equippedItems={[item]}

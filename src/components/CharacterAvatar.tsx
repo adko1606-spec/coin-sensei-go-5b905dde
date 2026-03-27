@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { COSMETIC_IMAGES, EFFECT_IMAGES, getItemPosition } from "@/data/cosmeticAssets";
 
 interface CosmeticItem {
   id: string;
@@ -8,6 +9,7 @@ interface CosmeticItem {
 }
 
 interface CharacterAvatarProps {
+  characterId?: string;
   characterImage?: string;
   characterName?: string;
   equippedItems: CosmeticItem[];
@@ -17,43 +19,27 @@ interface CharacterAvatarProps {
 }
 
 const SIZE_MAP = {
-  sm: { container: "h-10 w-10", hat: "text-sm -top-2", glasses: "text-[10px] top-[30%]", effect: "inset-[-6px]" },
-  md: { container: "h-20 w-20", hat: "text-2xl -top-4", glasses: "text-lg top-[28%]", effect: "inset-[-12px]" },
-  lg: { container: "h-24 w-24", hat: "text-3xl -top-5", glasses: "text-xl top-[28%]", effect: "inset-[-16px]" },
-  xl: { container: "h-32 w-32", hat: "text-4xl -top-6", glasses: "text-2xl top-[28%]", effect: "inset-[-20px]" },
+  sm: { container: "h-10 w-10", effectScale: 1.8 },
+  md: { container: "h-20 w-20", effectScale: 1.8 },
+  lg: { container: "h-24 w-24", effectScale: 1.8 },
+  xl: { container: "h-32 w-32", effectScale: 1.8 },
 };
 
-const EFFECT_STYLES: Record<string, {
-  className: string;
+const EFFECT_ANIMATIONS: Record<string, {
   animate?: Record<string, any>;
+  duration: number;
+  ease: string;
 }> = {
-  color_fire: {
-    className: "fire-effect",
-    animate: { scale: [1, 1.05, 1], opacity: [0.8, 1, 0.8] },
-  },
-  color_ice: {
-    className: "ice-effect",
-    animate: { scale: [1, 1.03, 1], opacity: [0.7, 0.9, 0.7] },
-  },
-  color_gold: {
-    className: "gold-effect",
-    animate: { rotate: [0, 360] },
-  },
-  color_rainbow: {
-    className: "rainbow-effect",
-    animate: { rotate: [0, 360] },
-  },
-  color_rays: {
-    className: "rays-effect",
-    animate: { rotate: [0, 360], scale: [0.95, 1.05, 0.95] },
-  },
-  color_aura: {
-    className: "aura-effect",
-    animate: { scale: [1, 1.1, 1], opacity: [0.6, 1, 0.6] },
-  },
+  color_fire: { animate: { scale: [1, 1.08, 1], opacity: [0.85, 1, 0.85] }, duration: 1.5, ease: "easeInOut" },
+  color_ice: { animate: { scale: [1, 1.05, 1], opacity: [0.8, 1, 0.8] }, duration: 2, ease: "easeInOut" },
+  color_gold: { animate: { rotate: [0, 360] }, duration: 10, ease: "linear" },
+  color_rainbow: { animate: { rotate: [0, 360] }, duration: 8, ease: "linear" },
+  color_rays: { animate: { rotate: [0, 360], scale: [0.95, 1.05, 0.95] }, duration: 6, ease: "linear" },
+  color_aura: { animate: { scale: [1, 1.12, 1], opacity: [0.6, 1, 0.6] }, duration: 2.5, ease: "easeInOut" },
 };
 
 const CharacterAvatar = ({
+  characterId,
   characterImage,
   characterName,
   equippedItems,
@@ -68,23 +54,41 @@ const CharacterAvatar = ({
   const accessories = equippedItems.filter((i) => i.category === "accessory");
   const effect = equippedItems.find((i) => i.category === "color");
 
-  const effectStyle = effect ? EFFECT_STYLES[effect.id] : null;
+  const hatImage = hat ? COSMETIC_IMAGES[hat.id] : null;
+  const glassesImage = glasses ? COSMETIC_IMAGES[glasses.id] : null;
+  const effectImage = effect ? EFFECT_IMAGES[effect.id] : null;
+  const effectAnim = effect ? EFFECT_ANIMATIONS[effect.id] : null;
+
+  const hatPos = hat ? getItemPosition(characterId, "hat", hat.id) : null;
+  const glassesPos = glasses ? getItemPosition(characterId, "glasses", glasses.id) : null;
 
   return (
-    <div className={`relative ${s.container} ${className}`}>
-      {/* Background effect */}
-      {showEffects && effectStyle && (
+    <div className={`relative ${s.container} ${className}`} style={{ overflow: "visible" }}>
+      {/* Background effect image */}
+      {showEffects && effectImage && (
         <motion.div
-          className={`absolute ${s.effect} rounded-full ${effectStyle.className} z-0`}
-          animate={effectStyle.animate}
-          transition={{
-            duration: effect?.id === "color_gold" || effect?.id === "color_rainbow" || effect?.id === "color_rays"
-              ? 8 : 2,
-            repeat: Infinity,
-            ease: effect?.id === "color_gold" || effect?.id === "color_rainbow" || effect?.id === "color_rays"
-              ? "linear" : "easeInOut",
+          className="absolute z-0 pointer-events-none"
+          style={{
+            top: "50%",
+            left: "50%",
+            width: `${s.effectScale * 100}%`,
+            height: `${s.effectScale * 100}%`,
+            transform: "translate(-50%, -50%)",
           }}
-        />
+          animate={effectAnim?.animate}
+          transition={{
+            duration: effectAnim?.duration ?? 2,
+            repeat: Infinity,
+            ease: effectAnim?.ease as any ?? "easeInOut",
+          }}
+        >
+          <img
+            src={effectImage}
+            alt="effect"
+            className="w-full h-full object-contain"
+            loading="lazy"
+          />
+        </motion.div>
       )}
 
       {/* Character image */}
@@ -98,27 +102,37 @@ const CharacterAvatar = ({
         )}
       </div>
 
-      {/* Hat - positioned on top of head */}
-      {hat && (
+      {/* Hat image overlay */}
+      {hat && hatImage && hatPos && (
         <motion.div
           initial={{ y: -5, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          className={`absolute ${s.hat} left-1/2 -translate-x-1/2 z-20 drop-shadow-lg`}
-          style={{ filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.3))" }}
+          className="absolute z-20 pointer-events-none"
+          style={{
+            top: `${hatPos.top}%`,
+            left: `${hatPos.left}%`,
+            width: `${hatPos.width}%`,
+            transform: `translateX(-50%) rotate(${hatPos.rotation ?? 0}deg)`,
+          }}
         >
-          {hat.icon}
+          <img src={hatImage} alt={hat.name} className="w-full h-auto" loading="lazy" />
         </motion.div>
       )}
 
-      {/* Glasses - positioned on eyes */}
-      {glasses && (
+      {/* Glasses image overlay */}
+      {glasses && glassesImage && glassesPos && (
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className={`absolute ${s.glasses} left-1/2 -translate-x-1/2 z-20 drop-shadow-md`}
-          style={{ filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.2))" }}
+          className="absolute z-20 pointer-events-none"
+          style={{
+            top: `${glassesPos.top}%`,
+            left: `${glassesPos.left}%`,
+            width: `${glassesPos.width}%`,
+            transform: `translateX(-50%) rotate(${glassesPos.rotation ?? 0}deg)`,
+          }}
         >
-          {glasses.icon}
+          <img src={glassesImage} alt={glasses.name} className="w-full h-auto" loading="lazy" />
         </motion.div>
       )}
 

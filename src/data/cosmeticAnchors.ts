@@ -25,10 +25,14 @@ export const COSMETIC_VISUAL_CENTERS: Record<string, VisualCenter> = {
   glasses_monocle: { x: 0.4941, y: 0.5664 },
   glasses_nerd: { x: 0.502, y: 0.5459 },
   glasses_sun: { x: 0.5049, y: 0.3564 },
-  hat_cap: { x: 0.499, y: 0.5586 },
+  glasses_aviator: { x: 0.4922, y: 0.4561 },
+  glasses_pixel: { x: 0.5039, y: 0.4121 },
+  hat_cap: { x: 0.4834, y: 0.4785 },
   hat_cowboy: { x: 0.502, y: 0.5693 },
   hat_crown: { x: 0.5, y: 0.4883 },
   hat_tophat: { x: 0.5068, y: 0.5693 },
+  hat_beanie: { x: 0.498, y: 0.4814 },
+  hat_wizard: { x: 0.5469, y: 0.5059 },
 };
 
 export const EFFECT_VISUAL_CENTERS: Record<string, VisualCenter> = {
@@ -38,6 +42,8 @@ export const EFFECT_VISUAL_CENTERS: Record<string, VisualCenter> = {
   color_ice: { x: 0.4896, y: 0.4766 },
   color_rainbow: { x: 0.5215, y: 0.4824 },
   color_rays: { x: 0.5, y: 0.5 },
+  color_lightning: { x: 0.5283, y: 0.4688 },
+  color_sakura: { x: 0.5312, y: 0.4697 },
 };
 
 export function getCharacterCenterOffset(characterId?: string): { x: number; y: number } {

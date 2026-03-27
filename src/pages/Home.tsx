@@ -103,8 +103,13 @@ const Home = () => {
           className="mt-6 flex items-center gap-4"
         >
           <div className="relative">
-          {selectedChar ? (
-              <img src={selectedChar.image} alt={selectedChar.name} className="h-16 w-16 rounded-2xl object-cover" />
+            {selectedChar ? (
+              <CharacterAvatar
+                characterImage={selectedChar.image}
+                characterName={selectedChar.name}
+                equippedItems={equippedCosmeticItems}
+                size="md"
+              />
             ) : (
               <img src={mascot} alt="FinAp maskot" className="h-16 w-16" />
             )}

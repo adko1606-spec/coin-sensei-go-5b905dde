@@ -55,15 +55,16 @@ const defaultGlassesPos: ItemPosition = { top: 30, left: 50, width: 55 };
 // top/left in %, width in %, rotation in degrees
 // Human portraits: eyes ~28-35%, head top ~-10 to -5%
 // Animal full-body: eyes ~20-28%, head top ~-2 to 5%
+const defaultHats: Record<string, ItemPosition> = {
+  hat_tophat: { top: -35, left: 12, width: 75 },
+  hat_cap: { top: -30, left: 12, width: 75 },
+  hat_cowboy: { top: -35, left: 12, width: 75 },
+  hat_crown: { top: -42, left: 12, width: 75 },
+};
+
 export const CHARACTER_POSITIONS: Record<string, CharacterPositions> = {
   buffett: {
-    // Big head portrait, already wears glasses, eyes at ~35%
-    hat: {
-      hat_tophat: { top: -35, left: 12, width: 75 },
-      hat_cap: { top: -30, left: 12, width: 75 },
-      hat_cowboy: { top: -35, left: 12, width: 75 },
-      hat_crown: { top: -42, left: 12, width: 75 },
-    },
+    hat: { ...defaultHats },
     glasses: {
       glasses_sun: { top: 30, left: 50, width: 55 },
       glasses_nerd: { top: 28, left: 50, width: 50 },
@@ -71,13 +72,7 @@ export const CHARACTER_POSITIONS: Record<string, CharacterPositions> = {
     },
   },
   satoshi: {
-    // Hooded character with mask, eyes at ~32%
-    hat: {
-      hat_tophat: { top: -35, left: 12, width: 75 },
-      hat_cap: { top: -35, left: 12, width: 75 },
-      hat_cowboy: { top: -8, left: 48, width: 62 },
-      hat_crown: { top: -6, left: 48, width: 45 },
-    },
+    hat: { ...defaultHats },
     glasses: {
       glasses_sun: { top: 28, left: 48, width: 48 },
       glasses_nerd: { top: 26, left: 48, width: 44 },
@@ -85,13 +80,7 @@ export const CHARACTER_POSITIONS: Record<string, CharacterPositions> = {
     },
   },
   trump: {
-    // Big hair, eyes at ~30%
-    hat: {
-      hat_tophat: { top: -10, left: 50, width: 62 },
-      hat_cap: { top: -2, left: 52, width: 65 },
-      hat_cowboy: { top: -6, left: 50, width: 68 },
-      hat_crown: { top: -4, left: 50, width: 50 },
-    },
+    hat: { ...defaultHats },
     glasses: {
       glasses_sun: { top: 28, left: 50, width: 52 },
       glasses_nerd: { top: 26, left: 50, width: 48 },
@@ -99,13 +88,7 @@ export const CHARACTER_POSITIONS: Record<string, CharacterPositions> = {
     },
   },
   bezos: {
-    // Bald, laughing, eyes at ~30%
-    hat: {
-      hat_tophat: { top: -15, left: 50, width: 58 },
-      hat_cap: { top: -6, left: 52, width: 62 },
-      hat_cowboy: { top: -10, left: 50, width: 66 },
-      hat_crown: { top: -8, left: 50, width: 48 },
-    },
+    hat: { ...defaultHats },
     glasses: {
       glasses_sun: { top: 26, left: 50, width: 50 },
       glasses_nerd: { top: 24, left: 50, width: 46 },
@@ -113,13 +96,7 @@ export const CHARACTER_POSITIONS: Record<string, CharacterPositions> = {
     },
   },
   zuckerberg: {
-    // Young face, eyes at ~30%
-    hat: {
-      hat_tophat: { top: -12, left: 50, width: 58 },
-      hat_cap: { top: -4, left: 52, width: 62 },
-      hat_cowboy: { top: -8, left: 50, width: 66 },
-      hat_crown: { top: -6, left: 50, width: 48 },
-    },
+    hat: { ...defaultHats },
     glasses: {
       glasses_sun: { top: 28, left: 50, width: 50 },
       glasses_nerd: { top: 26, left: 50, width: 46 },
@@ -127,13 +104,7 @@ export const CHARACTER_POSITIONS: Record<string, CharacterPositions> = {
     },
   },
   musk: {
-    // Similar portrait, eyes at ~33%
-    hat: {
-      hat_tophat: { top: -12, left: 50, width: 58 },
-      hat_cap: { top: -4, left: 52, width: 62 },
-      hat_cowboy: { top: -8, left: 50, width: 66 },
-      hat_crown: { top: -6, left: 50, width: 48 },
-    },
+    hat: { ...defaultHats },
     glasses: {
       glasses_sun: { top: 30, left: 50, width: 50 },
       glasses_nerd: { top: 28, left: 50, width: 46 },
@@ -141,13 +112,7 @@ export const CHARACTER_POSITIONS: Record<string, CharacterPositions> = {
     },
   },
   dalio: {
-    // Similar to buffett, eyes at ~30%
-    hat: {
-      hat_tophat: { top: -14, left: 50, width: 58 },
-      hat_cap: { top: -5, left: 52, width: 62 },
-      hat_cowboy: { top: -9, left: 50, width: 66 },
-      hat_crown: { top: -7, left: 50, width: 48 },
-    },
+    hat: { ...defaultHats },
     glasses: {
       glasses_sun: { top: 28, left: 50, width: 50 },
       glasses_nerd: { top: 26, left: 50, width: 46 },
@@ -155,13 +120,7 @@ export const CHARACTER_POSITIONS: Record<string, CharacterPositions> = {
     },
   },
   bull: {
-    // Full body, eyes at ~25%, horns on top
-    hat: {
-      hat_tophat: { top: -4, left: 50, width: 42 },
-      hat_cap: { top: 2, left: 52, width: 45 },
-      hat_cowboy: { top: -2, left: 50, width: 48 },
-      hat_crown: { top: 0, left: 50, width: 38 },
-    },
+    hat: { ...defaultHats },
     glasses: {
       glasses_sun: { top: 22, left: 50, width: 38 },
       glasses_nerd: { top: 20, left: 50, width: 35 },
@@ -169,13 +128,7 @@ export const CHARACTER_POSITIONS: Record<string, CharacterPositions> = {
     },
   },
   bear: {
-    // Full body, eyes at ~22%
-    hat: {
-      hat_tophat: { top: -2, left: 50, width: 40 },
-      hat_cap: { top: 4, left: 52, width: 44 },
-      hat_cowboy: { top: 0, left: 50, width: 46 },
-      hat_crown: { top: 2, left: 50, width: 36 },
-    },
+    hat: { ...defaultHats },
     glasses: {
       glasses_sun: { top: 20, left: 50, width: 36 },
       glasses_nerd: { top: 18, left: 50, width: 32 },
@@ -183,13 +136,7 @@ export const CHARACTER_POSITIONS: Record<string, CharacterPositions> = {
     },
   },
   unicorn: {
-    // Side view full body, eye at ~28%, horn on top-left
-    hat: {
-      hat_tophat: { top: -2, left: 45, width: 38 },
-      hat_cap: { top: 4, left: 47, width: 42 },
-      hat_cowboy: { top: 0, left: 45, width: 44 },
-      hat_crown: { top: 2, left: 45, width: 35 },
-    },
+    hat: { ...defaultHats },
     glasses: {
       glasses_sun: { top: 24, left: 40, width: 32 },
       glasses_nerd: { top: 22, left: 40, width: 28 },
@@ -197,13 +144,7 @@ export const CHARACTER_POSITIONS: Record<string, CharacterPositions> = {
     },
   },
   whale: {
-    // Sideways body, small eye at ~28%
-    hat: {
-      hat_tophat: { top: 0, left: 42, width: 35 },
-      hat_cap: { top: 6, left: 44, width: 38 },
-      hat_cowboy: { top: 2, left: 42, width: 40 },
-      hat_crown: { top: 4, left: 42, width: 32 },
-    },
+    hat: { ...defaultHats },
     glasses: {
       glasses_sun: { top: 24, left: 38, width: 30 },
       glasses_nerd: { top: 22, left: 38, width: 26 },
@@ -211,13 +152,7 @@ export const CHARACTER_POSITIONS: Record<string, CharacterPositions> = {
     },
   },
   diamond_hands: {
-    // Hands with diamonds, top ~10%
-    hat: {
-      hat_tophat: { top: -8, left: 50, width: 45 },
-      hat_cap: { top: 0, left: 52, width: 48 },
-      hat_cowboy: { top: -4, left: 50, width: 50 },
-      hat_crown: { top: -2, left: 50, width: 40 },
-    },
+    hat: { ...defaultHats },
     glasses: {
       glasses_sun: { top: 18, left: 50, width: 40 },
       glasses_nerd: { top: 16, left: 50, width: 36 },

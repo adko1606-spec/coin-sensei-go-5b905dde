@@ -201,11 +201,11 @@ export const CHARACTER_POSITIONS: Record<string, CharacterPositions> = {
   bull: {
     hat: {
       hat_tophat: { top: -35, left: 12, width: 75 },
-      hat_cap: { top: -30, left: 12, width: 75 },
+      hat_cap: { top: -23, left: 12, width: 65 },
       hat_cowboy: { top: -35, left: 12, width: 75 },
       hat_crown: { top: -42, left: 12, width: 75 },
-      hat_beanie: { top: -48, left: 8, width: 85 },
-      hat_wizard: { top: -40, left: 15, width: 75 },
+      hat_beanie: { top: -40, left: 8, width: 70 },
+      hat_wizard: { top: -38, left: 15, width: 70 },
     },
     glasses: {
       glasses_sun: { top: 22, left: 50, width: 38 },

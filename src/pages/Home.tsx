@@ -7,7 +7,7 @@ import BottomNav from "@/components/BottomNav";
 import CharacterAvatar from "@/components/CharacterAvatar";
 import { ChallengeCard } from "@/components/ChallengeCard";
 import { getTodaysTip } from "@/data/dailyTips";
-import { getTodaysChallenges, getMonthsChallenges, type DailyChallenge, type MonthlyChallenge } from "@/data/dailyChallenges";
+import { getTodaysChallenges, getWeeksChallenges, type DailyChallenge, type WeeklyChallenge } from "@/data/dailyChallenges";
 import logo from "@/assets/logo.png";
 import mascot from "@/assets/mascot.png";
 import { characters } from "@/data/characters";
@@ -17,7 +17,7 @@ const Home = () => {
   const { user, profile, progress, totalXp, loading } = useAuth();
   const [tip] = useState(getTodaysTip());
   const [challenges] = useState<DailyChallenge[]>(getTodaysChallenges());
-  const [monthlyChallenges] = useState<MonthlyChallenge[]>(getMonthsChallenges());
+  const [weeklyChallenges] = useState<WeeklyChallenge[]>(getWeeksChallenges());
 
   const displayName = profile?.display_name || user?.email?.split("@")[0] || "Študent";
   const level = Math.floor(totalXp / 50) + 1;
@@ -39,7 +39,7 @@ const Home = () => {
     loadEquipped();
   }, [user]);
 
-  const calcStatus = (list: (DailyChallenge | MonthlyChallenge)[]) => {
+  const calcStatus = (list: (DailyChallenge | WeeklyChallenge)[]) => {
     const completedLessons = progress.filter((p) => p.completed).length;
     const totalXpEarned = progress.reduce((s, p) => s + p.xp_earned, 0);
     const correctAnswers = progress.reduce((s, p) => Math.round(p.score / 100 * 12), 0);
@@ -58,7 +58,7 @@ const Home = () => {
   };
 
   const challengeStatus = useMemo(() => calcStatus(challenges), [progress, challenges]);
-  const monthlyStatus = useMemo(() => calcStatus(monthlyChallenges), [progress, monthlyChallenges]);
+  const weeklyStatus = useMemo(() => calcStatus(weeklyChallenges), [progress, weeklyChallenges]);
 
   if (loading) {
     return (
@@ -170,18 +170,18 @@ const Home = () => {
         >
           <div className="flex items-center gap-2 mb-3">
             <Calendar className="h-5 w-5 text-accent" />
-            <h3 className="text-lg font-extrabold text-foreground">Mesačné výzvy</h3>
+            <h3 className="text-lg font-extrabold text-foreground">Týždenné výzvy</h3>
             <span className="ml-auto text-[10px] font-bold text-muted-foreground uppercase">
-              {new Date().toLocaleString("sk-SK", { month: "long" })}
+              Týždeň {Math.ceil(((new Date().getTime() - new Date(new Date().getFullYear(), 0, 1).getTime()) / 86400000 + new Date(new Date().getFullYear(), 0, 1).getDay() + 1) / 7)}
             </span>
           </div>
 
           <div className="space-y-3">
-            {monthlyChallenges.map((challenge, idx) => (
+            {weeklyChallenges.map((challenge, idx) => (
               <ChallengeCard
                 key={challenge.id}
                 challenge={challenge}
-                status={monthlyStatus.find((s) => s.id === challenge.id) ?? { current: 0, completed: false }}
+                status={weeklyStatus.find((s) => s.id === challenge.id) ?? { current: 0, completed: false }}
                 index={idx}
                 delayBase={0.5}
               />

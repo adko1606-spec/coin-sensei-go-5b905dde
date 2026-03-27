@@ -121,6 +121,14 @@ const Invest = () => {
       </header>
 
       <main className="mx-auto max-w-lg px-4">
+        {/* Educational disclaimer */}
+        <div className="mt-4 rounded-xl bg-destructive/5 border border-destructive/20 p-3 flex items-start gap-2">
+          <span className="text-base mt-0.5">⚠️</span>
+          <p className="text-xs text-muted-foreground leading-relaxed">
+            <strong>Toto je vzdelávacia hra</strong>, nie skutočné investovanie. V realite sú výnosy nepredvídateľné a môžeš stratiť celú investíciu. Nikdy neinvestuj peniaze, ktoré si nemôžeš dovoliť stratiť.
+          </p>
+        </div>
+
         {/* Portfolio overview */}
         {totalInvested > 0 && (
           <motion.div

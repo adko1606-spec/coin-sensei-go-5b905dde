@@ -41,7 +41,7 @@ const EFFECT_ANIMATIONS: Record<
 > = {
   color_fire: { animate: { scale: [1, 1.08, 1], opacity: [0.85, 1, 0.85] }, duration: 1.5, ease: "easeInOut" },
   color_ice: { animate: { scale: [1, 1.05, 1], opacity: [0.8, 1, 0.8] }, duration: 2, ease: "easeInOut" },
-  color_gold: { animate: { rotate: [1, 360] }, duration: 10, ease: "linear" },
+  color_gold: { animate: { rotate: [0, 500] }, duration: 10, ease: "linear" },
   color_rainbow: { animate: { rotate: [0, 360] }, duration: 8, ease: "linear" },
   color_rays: { animate: { rotate: [0, 360], scale: [0.95, 1.05, 0.95] }, duration: 6, ease: "linear" },
   color_aura: { animate: { scale: [1, 1.12, 1], opacity: [0.6, 1, 0.6] }, duration: 2.5, ease: "easeInOut" },

@@ -173,51 +173,8 @@ const Profile = () => {
           </div>
         </motion.div>
 
-        {/* Stats grid */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mt-4 grid grid-cols-2 gap-3">
-          {[
-            { icon: Zap, label: "Celkové XP", value: totalXp, color: "text-xp", bg: "bg-xp/10" },
-            { icon: Flame, label: "Aktuálna séria", value: `${currentStreak} dní`, color: "text-streak", bg: "bg-streak/10" },
-            { icon: Trophy, label: "Najdlhšia séria", value: `${longestStreak} dní`, color: "text-level", bg: "bg-level/10" },
-            { icon: Coins, label: "Mince", value: coins, color: "text-coin", bg: "bg-coin/10" },
-            { icon: BookOpen, label: "Dokončené lekcie", value: completedLessons, color: "text-primary", bg: "bg-primary/10" },
-            { icon: Target, label: "Priemerné skóre", value: `${avgScore}%`, color: "text-accent", bg: "bg-accent/10" },
-          ].map((stat, idx) => (
-            <div key={idx} className="rounded-2xl bg-card p-4 shadow-card">
-              <div className={`mb-2 flex h-10 w-10 items-center justify-center rounded-xl ${stat.bg}`}>
-                <stat.icon className={`h-5 w-5 ${stat.color}`} />
-              </div>
-              <p className="text-xs font-semibold text-muted-foreground">{stat.label}</p>
-              <p className="text-lg font-extrabold text-foreground">{stat.value}</p>
-            </div>
-          ))}
-        </motion.div>
-
-        {/* Badges */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mt-6">
-          <div className="flex items-center gap-2 mb-3">
-            <Award className="h-5 w-5 text-secondary" />
-            <h3 className="text-lg font-extrabold text-foreground">Odznaky</h3>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            {badges.map((badge) => {
-              const earned = userBadges.includes(badge.id);
-              return (
-                <div key={badge.id} className={`rounded-2xl p-4 transition-all ${earned ? "bg-card shadow-card" : "bg-muted/50 opacity-50"}`}>
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-2xl">{badge.icon}</span>
-                    {earned && <Check className="h-4 w-4 text-primary" />}
-                  </div>
-                  <p className="text-sm font-bold text-foreground">{badge.name}</p>
-                  <p className="text-xs text-muted-foreground">{badge.description}</p>
-                </div>
-              );
-            })}
-          </div>
-        </motion.div>
-
         {/* Character + Shop buttons */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mt-6 mb-4 space-y-3">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }} className="mt-4 space-y-3">
           <button onClick={() => setShowCharacterPicker(true)}
             className="w-full flex items-center justify-between rounded-2xl bg-card p-4 shadow-card hover:bg-muted/50 transition-colors">
             <div className="flex items-center gap-3">
@@ -245,6 +202,49 @@ const Profile = () => {
             </div>
             <ChevronRight className="h-5 w-5 text-muted-foreground" />
           </button>
+        </motion.div>
+
+        {/* Stats grid */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mt-4 grid grid-cols-2 gap-3">
+          {[
+            { icon: Zap, label: "Celkové XP", value: totalXp, color: "text-xp", bg: "bg-xp/10" },
+            { icon: Flame, label: "Aktuálna séria", value: `${currentStreak} dní`, color: "text-streak", bg: "bg-streak/10" },
+            { icon: Trophy, label: "Najdlhšia séria", value: `${longestStreak} dní`, color: "text-level", bg: "bg-level/10" },
+            { icon: Coins, label: "Mince", value: coins, color: "text-coin", bg: "bg-coin/10" },
+            { icon: BookOpen, label: "Dokončené lekcie", value: completedLessons, color: "text-primary", bg: "bg-primary/10" },
+            { icon: Target, label: "Priemerné skóre", value: `${avgScore}%`, color: "text-accent", bg: "bg-accent/10" },
+          ].map((stat, idx) => (
+            <div key={idx} className="rounded-2xl bg-card p-4 shadow-card">
+              <div className={`mb-2 flex h-10 w-10 items-center justify-center rounded-xl ${stat.bg}`}>
+                <stat.icon className={`h-5 w-5 ${stat.color}`} />
+              </div>
+              <p className="text-xs font-semibold text-muted-foreground">{stat.label}</p>
+              <p className="text-lg font-extrabold text-foreground">{stat.value}</p>
+            </div>
+          ))}
+        </motion.div>
+
+        {/* Badges */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mt-6 mb-4">
+          <div className="flex items-center gap-2 mb-3">
+            <Award className="h-5 w-5 text-secondary" />
+            <h3 className="text-lg font-extrabold text-foreground">Odznaky</h3>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            {badges.map((badge) => {
+              const earned = userBadges.includes(badge.id);
+              return (
+                <div key={badge.id} className={`rounded-2xl p-4 transition-all ${earned ? "bg-card shadow-card" : "bg-muted/50 opacity-50"}`}>
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-2xl">{badge.icon}</span>
+                    {earned && <Check className="h-4 w-4 text-primary" />}
+                  </div>
+                  <p className="text-sm font-bold text-foreground">{badge.name}</p>
+                  <p className="text-xs text-muted-foreground">{badge.description}</p>
+                </div>
+              );
+            })}
+          </div>
         </motion.div>
       </main>
 

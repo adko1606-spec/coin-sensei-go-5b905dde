@@ -103,4 +103,7 @@
   .shadow-float {
     box-shadow: var(--shadow-float);
   }
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
 }

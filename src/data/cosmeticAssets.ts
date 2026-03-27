@@ -36,8 +36,8 @@ export const COSMETIC_IMAGES: Record<string, string> = {
 };
 
 export const EFFECT_SCALE_MULTIPLIERS: Record<string, number> = {
-  color_fire: 1.4,
-  color_ice: 1.2,
+  color_fire: 1.1,
+  color_ice: 1.13,
   color_gold: 2.2,
   color_rainbow: 1.2,
   color_rays: 2.2,

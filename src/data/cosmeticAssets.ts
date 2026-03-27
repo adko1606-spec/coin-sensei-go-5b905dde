@@ -3,9 +3,13 @@ import hatTophat from "@/assets/cosmetics/hat_tophat.png";
 import hatCap from "@/assets/cosmetics/hat_cap.png";
 import hatCowboy from "@/assets/cosmetics/hat_cowboy.png";
 import hatCrown from "@/assets/cosmetics/hat_crown.png";
+import hatBeanie from "@/assets/cosmetics/hat_beanie.png";
+import hatWizard from "@/assets/cosmetics/hat_wizard.png";
 import glassesSun from "@/assets/cosmetics/glasses_sun.png";
 import glassesNerd from "@/assets/cosmetics/glasses_nerd.png";
 import glassesMonocle from "@/assets/cosmetics/glasses_monocle.png";
+import glassesAviator from "@/assets/cosmetics/glasses_aviator.png";
+import glassesPixel from "@/assets/cosmetics/glasses_pixel.png";
 
 // Effect image imports
 import fireEffect from "@/assets/effects/fire_effect.png";
@@ -14,15 +18,21 @@ import goldEffect from "@/assets/effects/gold_effect.png";
 import rainbowEffect from "@/assets/effects/rainbow_effect.png";
 import raysEffect from "@/assets/effects/rays_effect.png";
 import auraEffect from "@/assets/effects/aura_effect.png";
+import lightningEffect from "@/assets/effects/lightning_effect.png";
+import sakuraEffect from "@/assets/effects/sakura_effect.png";
 
 export const COSMETIC_IMAGES: Record<string, string> = {
   hat_tophat: hatTophat,
   hat_cap: hatCap,
   hat_cowboy: hatCowboy,
   hat_crown: hatCrown,
+  hat_beanie: hatBeanie,
+  hat_wizard: hatWizard,
   glasses_sun: glassesSun,
   glasses_nerd: glassesNerd,
   glasses_monocle: glassesMonocle,
+  glasses_aviator: glassesAviator,
+  glasses_pixel: glassesPixel,
 };
 
 export const EFFECT_IMAGES: Record<string, string> = {
@@ -32,6 +42,8 @@ export const EFFECT_IMAGES: Record<string, string> = {
   color_rainbow: rainbowEffect,
   color_rays: raysEffect,
   color_aura: auraEffect,
+  color_lightning: lightningEffect,
+  color_sakura: sakuraEffect,
 };
 
 // Per-character positioning for hats and glasses (percentages)

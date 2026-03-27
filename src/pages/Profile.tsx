@@ -113,6 +113,9 @@ const Profile = () => {
 
   const activeCharacter = characters.find((c) => c.id === selectedChar);
   const equippedItems = userCosmetics.filter((uc) => uc.equipped);
+  const equippedCosmeticItems = equippedItems
+    .map((uc) => cosmeticItems.find((i: any) => i.id === uc.item_id))
+    .filter(Boolean) as any[];
   const equippedIcons = equippedItems.map((uc) => cosmeticItems.find((i: any) => i.id === uc.item_id)?.icon).filter(Boolean);
 
   if (loading) {

@@ -146,9 +146,9 @@ const CharacterAvatar = ({
 
       {/* Accessories - small badges */}
       {accessories.length > 0 && (
-        <div className="absolute -bottom-1 -right-1 flex gap-0.5 z-20">
+        <div className="absolute -bottom-1 -left-1 flex gap-0.5 z-20">
           {accessories.map((acc) => (
-            <span key={acc.id} className="text-xs bg-card rounded-full p-0.5 shadow-sm">
+            <span key={acc.id} className="text-xs bg-card rounded-full p-0.5 shadow-sm border border-border/50">
               {acc.icon}
             </span>
           ))}

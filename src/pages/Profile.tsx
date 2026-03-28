@@ -6,7 +6,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import BottomNav from "@/components/BottomNav";
 import { characters, type Character } from "@/data/characters";
 import { supabase } from "@/integrations/supabase/client";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/logo-new.png";
 import { toast } from "sonner";
 import FriendsSection from "@/components/FriendsSection";
 
@@ -341,43 +341,73 @@ const Profile = () => {
                 {cosmeticItems.filter((item: any) => item.category === shopCategory).map((item: any) => {
                   const owned = userCosmetics.some((uc) => uc.item_id === item.id);
                   const equipped = userCosmetics.some((uc) => uc.item_id === item.id && uc.equipped);
-                    return (
-                    <div key={item.id} className={`rounded-2xl p-4 pt-8 transition-all ${equipped ? "bg-primary/10 ring-2 ring-primary" : "bg-muted/50"}`} style={{ overflow: "visible" }}>
-                      <div className="flex justify-center mb-2" style={{ overflow: "visible" }}>
-                        {(item.category === "hat" || item.category === "color") ? (
-                          <CharacterAvatar
-                            characterId={activeCharacter?.id}
-                            characterImage={activeCharacter?.image}
-                            characterName={activeCharacter?.name}
-                            equippedItems={[item]}
-                            size="lg"
-                            effectScale={item.category === "color" ? effectScale : undefined}
-                          />
+                  return (
+                    <motion.div
+                      key={item.id}
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className={`rounded-2xl transition-all relative ${
+                        equipped
+                          ? "bg-primary/10 ring-2 ring-primary shadow-lg"
+                          : owned
+                          ? "bg-card border border-border shadow-sm"
+                          : "bg-muted/40 border border-border/50"
+                      }`}
+                      style={{ overflow: "visible" }}
+                    >
+                      {/* Badge for owned/equipped */}
+                      {equipped && (
+                        <div className="absolute -top-2 -right-2 z-10 bg-primary text-primary-foreground text-[10px] font-bold px-2 py-0.5 rounded-full shadow">
+                          ✓ Aktívne
+                        </div>
+                      )}
+                      {owned && !equipped && (
+                        <div className="absolute -top-2 -right-2 z-10 bg-muted text-foreground text-[10px] font-bold px-2 py-0.5 rounded-full border border-border shadow-sm">
+                          Vlastníš
+                        </div>
+                      )}
+
+                      <div className="p-4 pt-6" style={{ overflow: "visible" }}>
+                        <div className="flex justify-center mb-3" style={{ overflow: "visible" }}>
+                          {(item.category === "hat" || item.category === "color") ? (
+                            <CharacterAvatar
+                              characterId={activeCharacter?.id}
+                              characterImage={activeCharacter?.image}
+                              characterName={activeCharacter?.name}
+                              equippedItems={[item]}
+                              size="lg"
+                              effectScale={item.category === "color" ? effectScale : undefined}
+                            />
+                          ) : (
+                            <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-muted to-muted/50 flex items-center justify-center text-3xl shadow-inner">
+                              {item.icon}
+                            </div>
+                          )}
+                        </div>
+                        <p className="text-sm font-bold text-foreground text-center">{item.name}</p>
+                        <p className="text-[11px] text-muted-foreground text-center mb-3 leading-relaxed">{item.description}</p>
+                        {owned ? (
+                          <button onClick={() => handleToggleEquip(item.id, equipped)}
+                            className={`w-full rounded-xl py-2.5 text-xs font-bold transition-all ${
+                              equipped ? "bg-primary text-primary-foreground shadow-md" : "bg-muted text-foreground hover:bg-accent/20"
+                            }`}>
+                            {equipped ? "Zložiť" : "Nasadiť"}
+                          </button>
                         ) : (
-                          <div className="text-center text-4xl">{item.icon}</div>
+                          <button onClick={() => handleBuyCosmetic(item)}
+                            disabled={coins < item.price}
+                            className={`w-full rounded-xl py-2.5 text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
+                              coins >= item.price
+                                ? "bg-gradient-to-r from-coin/20 to-coin/10 text-coin hover:from-coin/30 hover:to-coin/20 border border-coin/20"
+                                : "bg-muted text-muted-foreground cursor-not-allowed"
+                            }`}>
+                            {coins < item.price && <Lock className="h-3 w-3" />}
+                            <Coins className="h-3.5 w-3.5" />
+                            <span>{item.price}</span>
+                          </button>
                         )}
                       </div>
-                      <p className="text-sm font-bold text-foreground text-center">{item.name}</p>
-                      <p className="text-[11px] text-muted-foreground text-center mb-2">{item.description}</p>
-                      {owned ? (
-                        <button onClick={() => handleToggleEquip(item.id, equipped)}
-                          className={`w-full rounded-xl py-2 text-xs font-bold transition-all ${
-                            equipped ? "bg-primary text-primary-foreground" : "bg-muted text-foreground hover:bg-accent/20"
-                          }`}>
-                          {equipped ? "✓ Nasadené" : "Nasadiť"}
-                        </button>
-                      ) : (
-                        <button onClick={() => handleBuyCosmetic(item)}
-                          disabled={coins < item.price}
-                          className={`w-full rounded-xl py-2 text-xs font-bold transition-all flex items-center justify-center gap-1 ${
-                            coins >= item.price ? "bg-coin/20 text-coin hover:bg-coin/30" : "bg-muted text-muted-foreground cursor-not-allowed"
-                          }`}>
-                          {coins < item.price && <Lock className="h-3 w-3" />}
-                          <Coins className="h-3 w-3" />
-                          {item.price}
-                        </button>
-                      )}
-                    </div>
+                    </motion.div>
                   );
                 })}
               </div>

@@ -271,8 +271,8 @@ const StockDetailModal = ({ stock, investment, onClose, onAction }: StockDetailM
                   </div>
                   <div className="rounded-lg bg-muted/30 border border-border p-3">
                     <p className="text-xs text-muted-foreground leading-relaxed">
-                      <Info className="h-3 w-3 inline mr-1" />
-                      Hodnota sa mení každých 12 hodín. {sectorProfile?.riskLevel === 4
+                       <Info className="h-3 w-3 inline mr-1" />
+                      Hodnota sa mení každú hodinu. {sectorProfile?.riskLevel === 4
                         ? "Krypto je veľmi volatilné – môžeš stratiť väčšinu investície!"
                         : sectorProfile?.riskLevel === 3
                         ? "Táto oblasť je riziková – počítaj s výkyvmi."

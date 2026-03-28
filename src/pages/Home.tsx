@@ -8,7 +8,7 @@ import CharacterAvatar from "@/components/CharacterAvatar";
 import { ChallengeCard } from "@/components/ChallengeCard";
 import { getTodaysTip } from "@/data/dailyTips";
 import { getTodaysChallenges, getWeeksChallenges, type DailyChallenge, type WeeklyChallenge } from "@/data/dailyChallenges";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/logo-new.png";
 import mascot from "@/assets/mascot.png";
 import { characters } from "@/data/characters";
 import { supabase } from "@/integrations/supabase/client";

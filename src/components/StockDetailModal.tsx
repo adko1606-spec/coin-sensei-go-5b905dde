@@ -186,6 +186,9 @@ const StockDetailModal = ({ stock, investment, onClose, onAction }: StockDetailM
           </div>
 
           <div className="p-4 space-y-4">
+            {/* Price chart */}
+            <StockPriceChart stockId={stock.id} currentPrice={stock.current_price} changePercent={stock.price_change_percent} />
+
             {/* Sector risk info */}
             {sectorProfile && (
               <div className={`rounded-xl border p-3 ${riskColors[sectorProfile.riskLevel]}`}>

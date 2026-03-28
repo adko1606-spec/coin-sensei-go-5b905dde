@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { studyContent, type StudyCategory, type StudyTopic } from "@/data/studyContent";
 import { useAuth } from "@/contexts/AuthContext";
 import BottomNav from "@/components/BottomNav";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/logo-new.png";
 import {
   Accordion,
   AccordionContent,

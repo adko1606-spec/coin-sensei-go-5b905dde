@@ -5,7 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import BottomNav from "@/components/BottomNav";
 import { supabase } from "@/integrations/supabase/client";
 import { characters } from "@/data/characters";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/logo-new.png";
 
 type LeaderboardEntry = {
   user_id: string;

@@ -8,7 +8,7 @@ import QuizModal from "@/components/QuizModal";
 import BottomNav from "@/components/BottomNav";
 import { lessons as initialLessons, type Lesson } from "@/data/lessons";
 import { useAuth } from "@/contexts/AuthContext";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/logo-new.png";
 
 const Lessons = () => {
   const { user, profile, totalXp, loading, saveProgress, isLessonCompleted } = useAuth();

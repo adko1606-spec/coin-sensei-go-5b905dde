@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Mail, Lock, User, Eye, EyeOff } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/logo-new.png";
 import mascot from "@/assets/mascot.png";
 
 const Auth = () => {

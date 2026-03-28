@@ -6,7 +6,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import BottomNav from "@/components/BottomNav";
 import { characters, type Character } from "@/data/characters";
 import { supabase } from "@/integrations/supabase/client";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/logo-new.png";
 import { toast } from "sonner";
 import FriendsSection from "@/components/FriendsSection";
 

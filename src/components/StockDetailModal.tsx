@@ -50,7 +50,81 @@ const riskColors: Record<number, string> = {
   4: "border-destructive/30 bg-destructive/5 text-destructive",
 };
 
-const StockDetailModal = ({ stock, investment, onClose, onAction }: StockDetailModalProps) => {
+const StockPriceChart = ({ stockId, currentPrice, changePercent }: { stockId: string; currentPrice: number; changePercent: number }) => {
+  const [data, setData] = useState<{ t: string; p: number }[]>([]);
+
+  useEffect(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    supabase
+      .from("market_events")
+      .select("created_at, price_impact_percent")
+      .eq("stock_id", stockId)
+      .gte("created_at", today.toISOString())
+      .order("created_at", { ascending: true })
+      .limit(24)
+      .then(({ data: events }) => {
+        if (events && events.length > 0) {
+          let price = currentPrice;
+          const impacts = events.map((e) => e.price_impact_percent);
+          for (let i = impacts.length - 1; i >= 0; i--) {
+            price = price / (1 + (impacts[i] ?? 0) / 100);
+          }
+          const points: { t: string; p: number }[] = [{ t: "Start", p: Math.round(price) }];
+          for (let i = 0; i < impacts.length; i++) {
+            price = price * (1 + (impacts[i] ?? 0) / 100);
+            const time = new Date(events[i].created_at);
+            points.push({ t: `${time.getHours()}:${String(time.getMinutes()).padStart(2, "0")}`, p: Math.round(price) });
+          }
+          setData(points);
+        } else {
+          setData([
+            { t: "Start", p: currentPrice },
+            { t: "Teraz", p: currentPrice },
+          ]);
+        }
+      });
+  }, [stockId, currentPrice]);
+
+  const isPositive = changePercent > 0;
+  const isNegative = changePercent < 0;
+  const color = isPositive ? "hsl(145, 72%, 40%)" : isNegative ? "hsl(0, 84%, 60%)" : "hsl(220, 10%, 46%)";
+
+  if (data.length < 2) return null;
+
+  return (
+    <div className="rounded-xl bg-muted/30 border border-border p-3">
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-xs font-bold text-muted-foreground uppercase">Dnešný vývoj</span>
+        <span className={`text-sm font-bold ${isPositive ? "text-primary" : isNegative ? "text-destructive" : "text-muted-foreground"}`}>
+          {isPositive ? "+" : ""}{Math.round(changePercent)}%
+        </span>
+      </div>
+      <div className="h-32">
+        <ResponsiveContainer width="100%" height="100%">
+          <AreaChart data={data}>
+            <defs>
+              <linearGradient id="detailGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor={color} stopOpacity={0.3} />
+                <stop offset="100%" stopColor={color} stopOpacity={0.02} />
+              </linearGradient>
+            </defs>
+            <XAxis dataKey="t" tick={{ fontSize: 10 }} tickLine={false} axisLine={false} />
+            <YAxis hide domain={["dataMin - 5", "dataMax + 5"]} />
+            <Tooltip
+              contentStyle={{ fontSize: 12, borderRadius: 8, border: "none", boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }}
+              formatter={(v: number) => [`${v} 🪙`, "Cena"]}
+            />
+            <Area type="monotone" dataKey="p" stroke={color} fill="url(#detailGrad)" strokeWidth={2} dot={false} />
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
+  );
+};
+
+
   const { user, profile } = useAuth();
   const [investAmount, setInvestAmount] = useState("");
   const [withdrawAmount, setWithdrawAmount] = useState("");

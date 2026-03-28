@@ -124,7 +124,7 @@ const StockPriceChart = ({ stockId, currentPrice, changePercent }: { stockId: st
   );
 };
 
-
+const StockDetailModal = ({ stock, investment, onClose, onAction }: StockDetailModalProps) => {
   const { user, profile } = useAuth();
   const [investAmount, setInvestAmount] = useState("");
   const [withdrawAmount, setWithdrawAmount] = useState("");

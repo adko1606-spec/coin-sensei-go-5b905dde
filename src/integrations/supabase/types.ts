@@ -182,7 +182,10 @@ export type Database = {
           current_streak: number
           display_name: string | null
           id: string
+          lives: number
+          lives_updated_at: string
           longest_streak: number
+          onboarding_completed: boolean
           selected_character: string | null
           updated_at: string
           user_id: string
@@ -194,7 +197,10 @@ export type Database = {
           current_streak?: number
           display_name?: string | null
           id?: string
+          lives?: number
+          lives_updated_at?: string
           longest_streak?: number
+          onboarding_completed?: boolean
           selected_character?: string | null
           updated_at?: string
           user_id: string
@@ -206,7 +212,10 @@ export type Database = {
           current_streak?: number
           display_name?: string | null
           id?: string
+          lives?: number
+          lives_updated_at?: string
           longest_streak?: number
+          onboarding_completed?: boolean
           selected_character?: string | null
           updated_at?: string
           user_id?: string

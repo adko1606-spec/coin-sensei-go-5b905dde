@@ -1,8 +1,11 @@
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence, Reorder } from "framer-motion";
-import { X, CheckCircle2, XCircle, ArrowRight, Trophy, GripVertical, Coins } from "lucide-react";
+import { X, CheckCircle2, XCircle, ArrowRight, Trophy, GripVertical, Coins, Heart, Bot } from "lucide-react";
 import type { Lesson, Question, ChoiceQuestion, TrueFalseQuestion, SliderQuestion, OrderQuestion } from "@/data/lessons";
 import { Progress } from "@/components/ui/progress";
+import { useAuth } from "@/contexts/AuthContext";
+import { useSound } from "@/hooks/useSound";
+import AIQuestionHelper from "@/components/AIQuestionHelper";
 
 interface QuizModalProps {
   lesson: Lesson;
@@ -10,10 +13,7 @@ interface QuizModalProps {
   onComplete: (xp: number, score: number, totalQuestions: number) => void;
 }
 
-/* ─── Choice ─── */
-const ChoiceView = ({
-  question, selectedAnswer, isCorrect, onAnswer,
-}: {
+const ChoiceView = ({ question, selectedAnswer, isCorrect, onAnswer }: {
   question: ChoiceQuestion; selectedAnswer: number | null; isCorrect: boolean | null; onAnswer: (i: number) => void;
 }) => (
   <div className="space-y-3">
@@ -37,10 +37,7 @@ const ChoiceView = ({
   </div>
 );
 
-/* ─── True / False ─── */
-const TrueFalseView = ({
-  question, selectedAnswer, isCorrect, onAnswer,
-}: {
+const TrueFalseView = ({ question, selectedAnswer, isCorrect, onAnswer }: {
   question: TrueFalseQuestion; selectedAnswer: boolean | null; isCorrect: boolean | null; onAnswer: (v: boolean) => void;
 }) => {
   const options = [
@@ -67,10 +64,7 @@ const TrueFalseView = ({
   );
 };
 
-/* ─── Slider ─── */
-const SliderView = ({
-  question, submitted, isCorrect, onSubmit,
-}: {
+const SliderView = ({ question, submitted, isCorrect, onSubmit }: {
   question: SliderQuestion; submitted: boolean; isCorrect: boolean | null; onSubmit: (value: number) => void;
 }) => {
   const mid = Math.round((question.min + question.max) / 2 / question.step) * question.step;
@@ -84,8 +78,7 @@ const SliderView = ({
           onChange={(e) => !submitted && setValue(Number(e.target.value))} disabled={submitted}
           className="w-full h-3 rounded-full appearance-none bg-muted cursor-pointer accent-primary [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-primary [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-primary-foreground [&::-webkit-slider-thumb]:shadow-md disabled:opacity-60" />
         <div className="flex justify-between text-xs text-muted-foreground mt-1">
-          <span>{question.min} {question.unit}</span>
-          <span>{question.max} {question.unit}</span>
+          <span>{question.min} {question.unit}</span><span>{question.max} {question.unit}</span>
         </div>
       </div>
       {!submitted && (
@@ -104,10 +97,7 @@ const SliderView = ({
   );
 };
 
-/* ─── Order (drag) ─── */
-const OrderView = ({
-  question, submitted, isCorrect, onSubmit,
-}: {
+const OrderView = ({ question, submitted, isCorrect, onSubmit }: {
   question: OrderQuestion; submitted: boolean; isCorrect: boolean | null; onSubmit: (order: number[]) => void;
 }) => {
   const [items, setItems] = useState(() => question.items.map((text, i) => ({ id: i, text })));
@@ -145,25 +135,34 @@ const OrderView = ({
   );
 };
 
-/* ═══════════════════════ MAIN MODAL ═══════════════════════ */
-
 const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
+  const { currentLives, loseLife } = useAuth();
+  const { playCorrect, playWrong, playReward } = useSound();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answered, setAnswered] = useState(false);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [score, setScore] = useState(0);
+  const [errors, setErrors] = useState(0);
   const [finished, setFinished] = useState(false);
   const [selectedChoiceIdx, setSelectedChoiceIdx] = useState<number | null>(null);
   const [selectedTF, setSelectedTF] = useState<boolean | null>(null);
+  const [showAIHelp, setShowAIHelp] = useState(false);
 
   const question: Question = lesson.questions[currentIndex];
-  const progress = ((currentIndex + (answered ? 1 : 0)) / lesson.questions.length) * 100;
+  const progressVal = ((currentIndex + (answered ? 1 : 0)) / lesson.questions.length) * 100;
 
   const markCorrect = useCallback((correct: boolean) => {
     setAnswered(true);
     setIsCorrect(correct);
-    if (correct) setScore((s) => s + 1);
-  }, []);
+    if (correct) {
+      setScore((s) => s + 1);
+      playCorrect();
+    } else {
+      setErrors((e) => e + 1);
+      playWrong();
+    }
+    setShowAIHelp(false);
+  }, [playCorrect, playWrong]);
 
   const handleChoiceAnswer = useCallback((index: number) => {
     if (answered) return;
@@ -194,14 +193,37 @@ const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
       setIsCorrect(null);
       setSelectedChoiceIdx(null);
       setSelectedTF(null);
+      setShowAIHelp(false);
     } else {
       setFinished(true);
+      // Lose life if more than 3 errors
+      if (errors > 3) loseLife();
+      playReward();
     }
   };
 
   const earnedXp = Math.round((score / lesson.questions.length) * lesson.xp);
   const coinsEarned = Math.round(earnedXp / 2);
   const isPerfect = score === lesson.questions.length;
+
+  // No lives = can't play
+  if (currentLives <= 0 && !finished) {
+    return (
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+        className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/50 p-4">
+        <motion.div initial={{ scale: 0.8 }} animate={{ scale: 1 }}
+          className="w-full max-w-md rounded-3xl bg-card p-8 text-center shadow-float">
+          <Heart className="h-16 w-16 text-destructive mx-auto mb-4" />
+          <h2 className="text-2xl font-extrabold text-foreground mb-2">Žiadne životy!</h2>
+          <p className="text-muted-foreground mb-6">Počkaj na regeneráciu alebo sa vráť neskôr.</p>
+          <button onClick={onClose}
+            className="w-full rounded-2xl gradient-primary px-6 py-4 font-bold text-primary-foreground shadow-button">
+            Zavrieť
+          </button>
+        </motion.div>
+      </motion.div>
+    );
+  }
 
   if (finished) {
     return (
@@ -213,27 +235,20 @@ const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
             className={`mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full ${isPerfect ? "gradient-gold" : "gradient-primary"}`}>
             <Trophy className="h-10 w-10 text-primary-foreground" />
           </motion.div>
-
-          <h2 className="mb-2 text-2xl font-extrabold text-foreground">
-            {isPerfect ? "Perfektné! ⭐" : "Výborne! 🎉"}
-          </h2>
-          <p className="mb-1 text-muted-foreground">
-            Správne odpovede: {score}/{lesson.questions.length}
-          </p>
-          <div className="flex items-center justify-center gap-4 mb-6">
+          <h2 className="mb-2 text-2xl font-extrabold text-foreground">{isPerfect ? "Perfektné! ⭐" : "Výborne! 🎉"}</h2>
+          <p className="mb-1 text-muted-foreground">Správne odpovede: {score}/{lesson.questions.length}</p>
+          <div className="flex items-center justify-center gap-4 mb-4">
             <p className="text-lg font-bold text-xp">+{earnedXp} XP</p>
             <div className="flex items-center gap-1">
-              <Coins className="h-5 w-5 text-coin" />
-              <p className="text-lg font-bold text-coin">+{coinsEarned}</p>
+              <Coins className="h-5 w-5 text-coin" /><p className="text-lg font-bold text-coin">+{coinsEarned}</p>
             </div>
           </div>
-
-          {!isPerfect && (
-            <p className="text-sm text-destructive mb-4">
-              Lekcia bude označená červenou, kým ju nesplníš bez chyby.
+          {errors > 3 && (
+            <p className="text-sm text-destructive mb-2 flex items-center justify-center gap-1">
+              <Heart className="h-4 w-4" /> Stratil si život ({errors} chýb)
             </p>
           )}
-
+          {!isPerfect && <p className="text-sm text-destructive mb-4">Lekcia bude označená červenou, kým ju nesplníš bez chyby.</p>}
           <button onClick={() => onComplete(earnedXp, score, lesson.questions.length)}
             className="w-full rounded-2xl gradient-primary px-6 py-4 font-bold text-primary-foreground shadow-button transition-all hover:opacity-90 active:scale-95">
             Pokračovať
@@ -244,10 +259,7 @@ const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
   }
 
   const typeBadge = {
-    choice: "📝 Výber",
-    truefalse: "✅❌ Pravda/Nepravda",
-    slider: "🎚️ Odhad",
-    order: "↕️ Zoraď",
+    choice: "📝 Výber", truefalse: "✅❌ Pravda/Nepravda", slider: "🎚️ Odhad", order: "↕️ Zoraď",
   }[question.type];
 
   return (
@@ -257,22 +269,29 @@ const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
         className="w-full max-w-md rounded-3xl bg-card p-6 shadow-float max-h-[90vh] overflow-y-auto">
         <div className="mb-4 flex items-center justify-between">
           <h3 className="font-bold text-foreground">{lesson.title}</h3>
-          <button onClick={onClose} className="rounded-full p-2 text-muted-foreground hover:bg-muted transition-colors">
-            <X className="h-5 w-5" />
-          </button>
+          <div className="flex items-center gap-2">
+            {/* Lives in quiz */}
+            <div className="flex items-center gap-1 text-destructive">
+              <Heart className="h-4 w-4 fill-destructive" />
+              <span className="text-xs font-bold">{currentLives}</span>
+            </div>
+            <button onClick={onClose} className="rounded-full p-2 text-muted-foreground hover:bg-muted transition-colors">
+              <X className="h-5 w-5" />
+            </button>
+          </div>
         </div>
 
-        <Progress value={progress} className="mb-4 h-3" />
+        <Progress value={progressVal} className="mb-4 h-3" />
 
         <div className="mb-4 flex items-center gap-2">
           <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-bold text-primary">{typeBadge}</span>
           <span className="text-xs text-muted-foreground">{currentIndex + 1}/{lesson.questions.length}</span>
+          {errors > 0 && <span className="text-xs text-destructive font-bold ml-auto">{errors} chýb</span>}
         </div>
 
         <AnimatePresence mode="wait">
           <motion.div key={question.id} initial={{ x: 30, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: -30, opacity: 0 }}>
             <p className="mb-6 text-lg font-bold text-foreground">{question.text}</p>
-
             {question.type === "choice" && <ChoiceView question={question} selectedAnswer={selectedChoiceIdx} isCorrect={isCorrect} onAnswer={handleChoiceAnswer} />}
             {question.type === "truefalse" && <TrueFalseView question={question} selectedAnswer={selectedTF} isCorrect={isCorrect} onAnswer={handleTFAnswer} />}
             {question.type === "slider" && <SliderView question={question} submitted={answered} isCorrect={isCorrect} onSubmit={handleSliderSubmit} />}
@@ -284,6 +303,20 @@ const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
                 <p className="text-sm font-semibold text-foreground">{isCorrect ? "✅ Správne!" : "❌ Nesprávne"}</p>
                 <p className="mt-1 text-sm text-muted-foreground">{question.explanation}</p>
               </motion.div>
+            )}
+
+            {/* AI Help after answer */}
+            {answered && (
+              <div className="mt-3">
+                {!showAIHelp ? (
+                  <button onClick={() => setShowAIHelp(true)}
+                    className="flex items-center gap-2 text-sm text-accent hover:text-accent/80 font-semibold transition-colors">
+                    <Bot className="h-4 w-4" /> Opýtaj sa AI na vysvetlenie
+                  </button>
+                ) : (
+                  <AIQuestionHelper questionText={question.text} explanation={question.explanation} onClose={() => setShowAIHelp(false)} />
+                )}
+              </div>
             )}
           </motion.div>
         </AnimatePresence>

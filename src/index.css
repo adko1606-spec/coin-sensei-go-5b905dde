@@ -8,35 +8,25 @@
   :root {
     --background: 150 20% 97%;
     --foreground: 220 25% 12%;
-
     --card: 0 0% 100%;
     --card-foreground: 220 25% 12%;
-
     --popover: 0 0% 100%;
     --popover-foreground: 220 25% 12%;
-
     --primary: 145 72% 40%;
     --primary-foreground: 0 0% 100%;
-
     --secondary: 38 92% 55%;
     --secondary-foreground: 0 0% 100%;
-
     --muted: 150 15% 92%;
     --muted-foreground: 220 10% 46%;
-
     --accent: 205 100% 50%;
     --accent-foreground: 0 0% 100%;
-
     --destructive: 0 72% 55%;
     --destructive-foreground: 0 0% 100%;
-
     --border: 150 15% 88%;
     --input: 150 15% 88%;
     --ring: 145 65% 42%;
-
     --radius: 1rem;
 
-    /* Custom tokens */
     --xp-gold: 45 93% 58%;
     --streak-blue: 205 100% 50%;
     --level-purple: 270 60% 58%;
@@ -62,6 +52,51 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 222 20% 8%;
+    --foreground: 0 0% 95%;
+    --card: 222 18% 12%;
+    --card-foreground: 0 0% 95%;
+    --popover: 222 18% 12%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 145 72% 42%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 38 92% 55%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 222 15% 18%;
+    --muted-foreground: 220 10% 55%;
+    --accent: 205 100% 55%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 72% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 222 15% 20%;
+    --input: 222 15% 20%;
+    --ring: 145 65% 42%;
+
+    --xp-gold: 45 93% 58%;
+    --streak-blue: 205 100% 55%;
+    --level-purple: 270 60% 62%;
+    --coin-yellow: 48 96% 53%;
+
+    --gradient-primary: linear-gradient(135deg, hsl(145 72% 42%), hsl(155 65% 48%));
+    --gradient-blue: linear-gradient(135deg, hsl(205 100% 55%), hsl(215 90% 60%));
+    --gradient-gold: linear-gradient(135deg, hsl(45 93% 58%), hsl(38 92% 55%));
+    --gradient-hero: linear-gradient(180deg, hsl(222 20% 8%) 0%, hsl(222 25% 10%) 100%);
+
+    --shadow-card: 0 4px 20px -4px hsl(0 0% 0% / 0.3);
+    --shadow-button: 0 4px 14px -3px hsl(145 65% 42% / 0.25);
+    --shadow-float: 0 8px 30px -6px hsl(0 0% 0% / 0.4);
+
+    --sidebar-background: 222 18% 12%;
+    --sidebar-foreground: 0 0% 90%;
+    --sidebar-primary: 0 0% 95%;
+    --sidebar-primary-foreground: 222 18% 12%;
+    --sidebar-accent: 222 15% 18%;
+    --sidebar-accent-foreground: 0 0% 90%;
+    --sidebar-border: 222 15% 20%;
+    --sidebar-ring: 145 65% 42%;
   }
 }
 
@@ -107,4 +142,3 @@
     padding-bottom: env(safe-area-inset-bottom);
   }
 }
-

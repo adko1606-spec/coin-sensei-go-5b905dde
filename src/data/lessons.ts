@@ -68,7 +68,7 @@ export const lessons: Lesson[] = [
     description: "Nauč sa základy o peniazoch a ich funkciách",
     icon: "💵",
     category: "basics",
-    xp: 20,
+    xp: 200,
     completed: false,
     locked: false,
     questions: [
@@ -92,7 +92,7 @@ export const lessons: Lesson[] = [
     description: "Ako fungujú banky a bankové účty",
     icon: "🏦",
     category: "basics",
-    xp: 25,
+    xp: 250,
     completed: false,
     locked: false,
     questions: [
@@ -118,7 +118,7 @@ export const lessons: Lesson[] = [
     description: "Ako začať šetriť aj s malým vreckovým",
     icon: "🐷",
     category: "saving",
-    xp: 25,
+    xp: 250,
     completed: false,
     locked: false,
     questions: [
@@ -142,7 +142,7 @@ export const lessons: Lesson[] = [
     description: "Kedy sa oplatí požičať a kedy nie",
     icon: "⚠️",
     category: "saving",
-    xp: 30,
+    xp: 300,
     completed: false,
     locked: true,
     questions: [
@@ -168,7 +168,7 @@ export const lessons: Lesson[] = [
     description: "Vytvor si svoj prvý osobný rozpočet",
     icon: "📊",
     category: "budgeting",
-    xp: 30,
+    xp: 300,
     completed: false,
     locked: true,
     questions: [
@@ -192,7 +192,7 @@ export const lessons: Lesson[] = [
     description: "Ako robiť lepšie nákupné rozhodnutia",
     icon: "🛒",
     category: "budgeting",
-    xp: 25,
+    xp: 250,
     completed: false,
     locked: true,
     questions: [
@@ -218,7 +218,7 @@ export const lessons: Lesson[] = [
     description: "Zisti ako môžu peniaze pracovať za teba",
     icon: "📈",
     category: "investing",
-    xp: 35,
+    xp: 350,
     completed: false,
     locked: true,
     questions: [
@@ -242,7 +242,7 @@ export const lessons: Lesson[] = [
     description: "Sila času a úrokov – 8. div sveta",
     icon: "🔄",
     category: "investing",
-    xp: 40,
+    xp: 400,
     completed: false,
     locked: true,
     questions: [
@@ -266,7 +266,7 @@ export const lessons: Lesson[] = [
     description: "Pochop vzťah medzi rizikom a ziskom",
     icon: "⚖️",
     category: "investing",
-    xp: 35,
+    xp: 350,
     completed: false,
     locked: true,
     questions: [
@@ -290,7 +290,7 @@ export const lessons: Lesson[] = [
     description: "S&P 500, NASDAQ a ďalšie indexy",
     icon: "🏛️",
     category: "investing",
-    xp: 35,
+    xp: 350,
     completed: false,
     locked: true,
     questions: [
@@ -316,7 +316,7 @@ export const lessons: Lesson[] = [
     description: "Základy Bitcoinu a blockchainu",
     icon: "₿",
     category: "crypto",
-    xp: 35,
+    xp: 350,
     completed: false,
     locked: true,
     questions: [
@@ -340,7 +340,7 @@ export const lessons: Lesson[] = [
     description: "Ethereum, stablecoiny a ďalšie kryptomeny",
     icon: "🪙",
     category: "crypto",
-    xp: 35,
+    xp: 350,
     completed: false,
     locked: true,
     questions: [
@@ -364,7 +364,7 @@ export const lessons: Lesson[] = [
     description: "Na čo si dávať pozor vo svete krypta",
     icon: "🚨",
     category: "crypto",
-    xp: 40,
+    xp: 400,
     completed: false,
     locked: true,
     questions: [
@@ -390,7 +390,7 @@ export const lessons: Lesson[] = [
     description: "Prečo platíme dane a aké druhy existujú",
     icon: "🏛️",
     category: "taxes",
-    xp: 30,
+    xp: 300,
     completed: false,
     locked: true,
     questions: [
@@ -414,7 +414,7 @@ export const lessons: Lesson[] = [
     description: "Ako zdaňovať zisky z akcií a krypta",
     icon: "💼",
     category: "taxes",
-    xp: 40,
+    xp: 400,
     completed: false,
     locked: true,
     questions: [
@@ -438,7 +438,7 @@ export const lessons: Lesson[] = [
     description: "Ako legálne ušetriť na daniach",
     icon: "💡",
     category: "taxes",
-    xp: 35,
+    xp: 350,
     completed: false,
     locked: true,
     questions: [
@@ -464,7 +464,7 @@ export const lessons: Lesson[] = [
     description: "Tvoje práva pri nákupoch a reklamáciách",
     icon: "🛡️",
     category: "legal",
-    xp: 30,
+    xp: 300,
     completed: false,
     locked: true,
     questions: [
@@ -488,7 +488,7 @@ export const lessons: Lesson[] = [
     description: "Na čo si dávať pozor pri podpisovaní zmlúv",
     icon: "📝",
     category: "legal",
-    xp: 35,
+    xp: 350,
     completed: false,
     locked: true,
     questions: [
@@ -512,7 +512,7 @@ export const lessons: Lesson[] = [
     description: "Ako rozpoznať a vyhnúť sa podvodom",
     icon: "🚫",
     category: "legal",
-    xp: 40,
+    xp: 400,
     completed: false,
     locked: true,
     questions: [
@@ -536,7 +536,7 @@ export const lessons: Lesson[] = [
     description: "GDPR a tvoje práva v digitálnom finančnom svete",
     icon: "🔒",
     category: "legal",
-    xp: 35,
+    xp: 350,
     completed: false,
     locked: true,
     questions: [
@@ -562,7 +562,7 @@ export const lessons: Lesson[] = [
     description: "Prečo sa poistiť a aké typy poistenia existujú",
     icon: "🛡️",
     category: "insurance",
-    xp: 30,
+    xp: 300,
     completed: false,
     locked: true,
     questions: [
@@ -586,7 +586,7 @@ export const lessons: Lesson[] = [
     description: "PZP, havarijné poistenie a poistenie domácnosti",
     icon: "🚗",
     category: "insurance",
-    xp: 35,
+    xp: 350,
     completed: false,
     locked: true,
     questions: [
@@ -610,7 +610,7 @@ export const lessons: Lesson[] = [
     description: "Ako funguje systém poistenia na Slovensku",
     icon: "🏥",
     category: "insurance",
-    xp: 35,
+    xp: 350,
     completed: false,
     locked: true,
     questions: [

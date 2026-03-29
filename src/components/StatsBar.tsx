@@ -19,7 +19,7 @@ const StatsBar = ({ xp, streak, level }: StatsBarProps) => {
           <Flame className="h-5 w-5 text-streak" />
         </div>
         <div>
-          <p className="text-xs font-semibold text-muted-foreground">Séria</p>
+          <p className="text-xs font-semibold text-muted-foreground">Streak</p>
           <p className="text-lg font-extrabold text-foreground">{streak}</p>
         </div>
       </div>

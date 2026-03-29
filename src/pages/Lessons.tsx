@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
-import { BookOpen, Coins } from "lucide-react";
+import { BookOpen, Coins, Heart } from "lucide-react";
 import LessonCard from "@/components/LessonCard";
 import CategoryFilter from "@/components/CategoryFilter";
 import QuizModal from "@/components/QuizModal";
@@ -11,7 +11,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import logo from "@/assets/logo-new.png";
 
 const Lessons = () => {
-  const { user, profile, totalXp, loading, saveProgress, isLessonCompleted } = useAuth();
+  const { user, profile, totalXp, loading, saveProgress, isLessonCompleted, currentLives } = useAuth();
 
   const [searchParams] = useSearchParams();
   const [lessons, setLessons] = useState<Lesson[]>(initialLessons);
@@ -23,16 +23,9 @@ const Lessons = () => {
   useEffect(() => {
     if (!loading && user) {
       setLessons((prev) => {
-        const updated = prev.map((l) => ({
-          ...l,
-          completed: isLessonCompleted(l.id),
-        }));
+        const updated = prev.map((l) => ({ ...l, completed: isLessonCompleted(l.id) }));
         for (let i = 0; i < updated.length; i++) {
-          if (i === 0) {
-            updated[i].locked = false;
-          } else {
-            updated[i].locked = !updated[i - 1].completed;
-          }
+          updated[i].locked = i === 0 ? false : !updated[i - 1].completed;
         }
         return updated;
       });
@@ -40,33 +33,22 @@ const Lessons = () => {
   }, [loading, user, isLessonCompleted]);
 
   const completedCount = lessons.filter((l) => l.completed).length;
-
-  const filteredLessons = selectedCategory
-    ? lessons.filter((l) => l.category === selectedCategory)
-    : lessons;
+  const filteredLessons = selectedCategory ? lessons.filter((l) => l.category === selectedCategory) : lessons;
 
   const handleComplete = async (earnedXp: number, score: number, totalQuestions: number) => {
     if (!activeLesson) return;
     await saveProgress(activeLesson.id, score, earnedXp, activeLesson.questions.length);
     setLessons((prev) => {
-      const updated = prev.map((l) =>
-        l.id === activeLesson.id ? { ...l, completed: true } : l
-      );
+      const updated = prev.map((l) => l.id === activeLesson.id ? { ...l, completed: true } : l);
       const currentIdx = updated.findIndex((l) => l.id === activeLesson.id);
-      if (currentIdx < updated.length - 1) {
-        updated[currentIdx + 1] = { ...updated[currentIdx + 1], locked: false };
-      }
+      if (currentIdx < updated.length - 1) updated[currentIdx + 1] = { ...updated[currentIdx + 1], locked: false };
       return updated;
     });
     setActiveLesson(null);
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen gradient-hero flex items-center justify-center">
-        <div className="animate-pulse text-primary font-bold text-xl">Načítavam...</div>
-      </div>
-    );
+    return (<div className="min-h-screen gradient-hero flex items-center justify-center"><div className="animate-pulse text-primary font-bold text-xl">Načítavam...</div></div>);
   }
 
   return (
@@ -78,11 +60,13 @@ const Lessons = () => {
             <h1 className="text-2xl font-extrabold text-primary">FinAp</h1>
           </div>
           <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 rounded-full bg-destructive/10 px-3 py-1">
+              <Heart className="h-4 w-4 text-destructive fill-destructive" />
+              <span className="text-sm font-bold text-destructive">{currentLives}</span>
+            </div>
             <div className="flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1">
               <BookOpen className="h-4 w-4 text-primary" />
-              <span className="text-sm font-bold text-primary">
-                {completedCount}/{lessons.length}
-              </span>
+              <span className="text-sm font-bold text-primary">{completedCount}/{lessons.length}</span>
             </div>
             <div className="flex items-center gap-1 rounded-full bg-coin/10 px-3 py-1">
               <Coins className="h-4 w-4 text-coin" />
@@ -93,30 +77,14 @@ const Lessons = () => {
       </header>
 
       <main className="mx-auto max-w-lg px-4 pb-8">
-        <div className="mt-6">
-          <CategoryFilter selected={selectedCategory} onSelect={setSelectedCategory} />
-        </div>
-
+        <div className="mt-6"><CategoryFilter selected={selectedCategory} onSelect={setSelectedCategory} /></div>
         <div className="mt-8 flex flex-col items-center gap-6">
-          {filteredLessons.map((lesson, index) => (
-            <LessonCard
-              key={lesson.id}
-              lesson={lesson}
-              index={index}
-              onStart={setActiveLesson}
-            />
-          ))}
+          {filteredLessons.map((lesson, index) => (<LessonCard key={lesson.id} lesson={lesson} index={index} onStart={setActiveLesson} />))}
         </div>
       </main>
 
       <AnimatePresence>
-        {activeLesson && (
-          <QuizModal
-            lesson={activeLesson}
-            onClose={() => setActiveLesson(null)}
-            onComplete={handleComplete}
-          />
-        )}
+        {activeLesson && (<QuizModal lesson={activeLesson} onClose={() => setActiveLesson(null)} onComplete={handleComplete} />)}
       </AnimatePresence>
 
       <BottomNav />

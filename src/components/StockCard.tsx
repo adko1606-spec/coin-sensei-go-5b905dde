@@ -161,7 +161,7 @@ const StockCard = ({ stock, investment, index, onSelect }: StockCardProps) => {
             <div className="mt-3 pt-3 border-t border-border/50 flex items-center justify-between">
               <div className="text-xs">
                 <span className="text-muted-foreground">Vložené: </span>
-                <span className="font-bold text-foreground">{investment.invested_coins} 🪙</span>
+                <span className="font-bold text-foreground">{investment.invested_coins} F</span>
               </div>
               <div className="text-xs">
                 <span className="text-muted-foreground">Teraz: </span>
@@ -172,7 +172,7 @@ const StockCard = ({ stock, investment, index, onSelect }: StockCardProps) => {
                       : "text-destructive"
                   }`}
                 >
-                  {Math.round(investment.current_value)} 🪙
+                  {Math.round(investment.current_value)} F
                 </span>
               </div>
               <ArrowRight className="h-4 w-4 text-muted-foreground" />

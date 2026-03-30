@@ -137,7 +137,7 @@ const OrderView = ({ question, submitted, isCorrect, onSubmit }: {
 
 const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
   const { currentLives, loseLife } = useAuth();
-  const { playCorrect, playWrong, playReward } = useSound();
+  const { playCorrect, playWrongMild, playWrongSerious, playReward, playLifeLost } = useSound();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answered, setAnswered] = useState(false);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
@@ -158,11 +158,16 @@ const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
       setScore((s) => s + 1);
       playCorrect();
     } else {
-      setErrors((e) => e + 1);
-      playWrong();
+      const newErrors = errors + 1;
+      setErrors(newErrors);
+      if (newErrors >= 3) {
+        playWrongSerious();
+      } else {
+        playWrongMild();
+      }
     }
     setShowAIHelp(false);
-  }, [playCorrect, playWrong]);
+  }, [playCorrect, playWrongMild, playWrongSerious, errors]);
 
   const handleChoiceAnswer = useCallback((index: number) => {
     if (answered) return;
@@ -196,8 +201,10 @@ const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
       setShowAIHelp(false);
     } else {
       setFinished(true);
-      // Lose life if more than 3 errors
-      if (errors > 3) loseLife();
+      if (errors > 3) {
+        loseLife();
+        playLifeLost();
+      }
       playReward();
     }
   };
@@ -240,7 +247,7 @@ const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
           <div className="flex items-center justify-center gap-4 mb-4">
             <p className="text-lg font-bold text-xp">+{earnedXp} XP</p>
             <div className="flex items-center gap-1">
-              <Coins className="h-5 w-5 text-coin" /><p className="text-lg font-bold text-coin">+{coinsEarned}</p>
+              <span className="text-lg">🪙</span><p className="text-lg font-bold text-coin">+{coinsEarned} F</p>
             </div>
           </div>
           {errors > 3 && (
@@ -266,7 +273,7 @@ const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
       className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/50 p-4">
       <motion.div initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
-        className="w-full max-w-md rounded-3xl bg-card p-6 shadow-float max-h-[90vh] overflow-y-auto">
+        className="w-full max-w-md rounded-3xl bg-card p-6 shadow-float max-h-[85vh] overflow-y-auto pb-8">
         <div className="mb-4 flex items-center justify-between">
           <h3 className="font-bold text-foreground">{lesson.title}</h3>
           <div className="flex items-center gap-2">

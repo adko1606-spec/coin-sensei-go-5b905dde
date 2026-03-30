@@ -9,9 +9,9 @@ export interface MarketScenario {
 export interface SectorProfile {
   label: string;
   risk: "nízke" | "stredné" | "vysoké" | "veľmi vysoké";
-  riskLevel: 1 | 2 | 3 | 4; // 1=low, 4=very high
+  riskLevel: 1 | 2 | 3 | 4;
   description: string;
-  avgReturn: string; // historical average annual return description
+  avgReturn: string;
 }
 
 export const sectorProfiles: Record<string, SectorProfile> = {
@@ -71,7 +71,29 @@ export const sectorProfiles: Record<string, SectorProfile> = {
     description: "Závisí od hitov. Jeden úspech môže zdvojnásobiť cenu, neúspech ju zničiť.",
     avgReturn: "Variabilné: -20 % až +40 %",
   },
+  commodity: {
+    label: "Komodity",
+    risk: "stredné",
+    riskLevel: 2,
+    description: "Zlato, striebro, ropa – tradičné aktíva ovplyvnené geopolitikou.",
+    avgReturn: "2–8 % ročne",
+  },
+  funds: {
+    label: "Fondy",
+    risk: "nízke",
+    riskLevel: 1,
+    description: "Indexové a dlhopisové fondy – najnižšie riziko, diverzifikovaná investícia.",
+    avgReturn: "4–10 % ročne (historicky)",
+  },
 };
+
+// Category groupings for UI
+export const investmentCategories = [
+  { id: "stocks", label: "📈 Akcie", sectors: ["technology", "consumer", "entertainment", "healthcare"] },
+  { id: "crypto", label: "⛓️ Krypto", sectors: ["crypto"] },
+  { id: "funds", label: "📊 Fondy", sectors: ["finance", "real_estate", "funds"] },
+  { id: "commodities", label: "🥇 Komodity", sectors: ["energy", "commodity"] },
+];
 
 export const marketScenarios: Record<string, MarketScenario[]> = {
   technology: [
@@ -141,6 +163,22 @@ export const marketScenarios: Record<string, MarketScenario[]> = {
     { text: "🎬 Filmová adaptácia hry oznámená", impactRange: [2, 7], sentiment: "positive" },
     { text: "👥 Kľúčový vývojár odišiel z tímu", impactRange: [-6, -2], sentiment: "negative" },
     { text: "🕹️ E-sports turnaj prilákal milióny divákov", impactRange: [2, 6], sentiment: "positive" },
+  ],
+  commodity: [
+    { text: "🥇 Centrálne banky nakupujú zlato – cena rastie", impactRange: [2, 5], sentiment: "positive" },
+    { text: "🛢️ OPEC znížil produkciu ropy – ceny hore", impactRange: [3, 7], sentiment: "positive" },
+    { text: "📉 Silný dolár tlačí komodity nadol", impactRange: [-4, -1], sentiment: "negative" },
+    { text: "🌍 Geopolitické napätie zvyšuje dopyt po bezpečných aktívach", impactRange: [2, 6], sentiment: "positive" },
+    { text: "📊 Priemyselný dopyt po kove klesol", impactRange: [-3, -1], sentiment: "negative" },
+    { text: "⛏️ Nové ložisko objavené – obavy z ponuky", impactRange: [-2, 1], sentiment: "neutral" },
+  ],
+  funds: [
+    { text: "📈 Globálne trhy rastú – fondy profitujú", impactRange: [1, 3], sentiment: "positive" },
+    { text: "🏛️ Fed oznámil stabilnú politiku – trhy spokojné", impactRange: [1, 2], sentiment: "positive" },
+    { text: "📉 Mierna korekcia na trhoch", impactRange: [-2, -1], sentiment: "negative" },
+    { text: "💰 Dlhopisy prinášajú stabilný výnos", impactRange: [0, 2], sentiment: "positive" },
+    { text: "🌐 Diverzifikácia fondov sa vyplatila", impactRange: [1, 3], sentiment: "positive" },
+    { text: "📊 Kvartálny report ukazuje mierny rast", impactRange: [1, 2], sentiment: "positive" },
   ],
 };
 

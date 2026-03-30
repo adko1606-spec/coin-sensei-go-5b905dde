@@ -17,6 +17,7 @@ const Settings = () => {
   const { enabled: soundEnabled, volume, setEnabled: setSoundEnabled, setVolume } = useSound();
   const [notifications, setNotifications] = useState(true);
   const [showResetConfirm, setShowResetConfirm] = useState(false);
+  const [resetting, setResetting] = useState(false);
   const [displayName, setDisplayName] = useState(profile?.display_name || "");
   const [editingName, setEditingName] = useState(false);
 
@@ -30,11 +31,31 @@ const Settings = () => {
 
   const handleResetProgress = async () => {
     if (!user) return;
-    await supabase.from("user_progress").delete().eq("user_id", user.id);
-    await supabase.from("profiles").update({ coins: 0, current_streak: 0, longest_streak: 0 } as any).eq("user_id", user.id);
-    await refreshProfile();
-    setShowResetConfirm(false);
-    toast.success("Progres resetovaný!");
+    setResetting(true);
+    try {
+      // Delete all user data
+      await Promise.all([
+        supabase.from("user_progress").delete().eq("user_id", user.id),
+        supabase.from("user_investments").delete().eq("user_id", user.id),
+        supabase.from("investment_transactions").delete().eq("user_id", user.id),
+        supabase.from("user_badges").delete().eq("user_id", user.id),
+        supabase.from("user_cosmetics").delete().eq("user_id", user.id),
+      ]);
+      // Reset profile stats
+      await supabase.from("profiles").update({
+        coins: 0,
+        current_streak: 0,
+        longest_streak: 0,
+        lives: 6,
+        lives_updated_at: new Date().toISOString(),
+      } as any).eq("user_id", user.id);
+      await refreshProfile();
+      setShowResetConfirm(false);
+      toast.success("Progres kompletne resetovaný!");
+    } catch {
+      toast.error("Chyba pri resetovaní");
+    }
+    setResetting(false);
   };
 
   return (
@@ -147,7 +168,8 @@ const Settings = () => {
           </div>
           <div className="flex gap-2">
             <button className="flex-1 rounded-xl py-2.5 gradient-primary text-primary-foreground text-sm font-bold">🇸🇰 Slovenčina</button>
-            <button className="flex-1 rounded-xl py-2.5 bg-muted text-muted-foreground text-sm font-bold cursor-not-allowed opacity-50">🇬🇧 English (čoskoro)</button>
+            <button className="flex-1 rounded-xl py-2.5 bg-muted text-muted-foreground text-sm font-bold cursor-not-allowed opacity-50">🇬🇧 English</button>
+            <button className="flex-1 rounded-xl py-2.5 bg-muted text-muted-foreground text-sm font-bold cursor-not-allowed opacity-50">🇺🇦 Українська</button>
           </div>
         </motion.div>
 
@@ -157,6 +179,7 @@ const Settings = () => {
             <RotateCcw className="h-5 w-5 text-destructive" />
             <h3 className="font-bold text-foreground">Reset progresu</h3>
           </div>
+          <p className="text-xs text-muted-foreground mb-3">Vymaže sa: progres lekcií, investície, odznaky, kozmetika, Fince, XP, streak a rebríček.</p>
           {!showResetConfirm ? (
             <button onClick={() => setShowResetConfirm(true)}
               className="w-full rounded-xl py-2.5 bg-destructive/10 text-destructive text-sm font-bold hover:bg-destructive/20 transition-colors">
@@ -167,7 +190,9 @@ const Settings = () => {
               <p className="text-sm text-destructive font-semibold">Si si istý? Toto sa nedá vrátiť!</p>
               <div className="flex gap-2">
                 <button onClick={() => setShowResetConfirm(false)} className="flex-1 rounded-xl py-2.5 bg-muted text-foreground text-sm font-bold">Zrušiť</button>
-                <button onClick={handleResetProgress} className="flex-1 rounded-xl py-2.5 bg-destructive text-destructive-foreground text-sm font-bold">Potvrdiť</button>
+                <button onClick={handleResetProgress} disabled={resetting} className="flex-1 rounded-xl py-2.5 bg-destructive text-destructive-foreground text-sm font-bold">
+                  {resetting ? "Resetujem..." : "Potvrdiť"}
+                </button>
               </div>
             </div>
           )}

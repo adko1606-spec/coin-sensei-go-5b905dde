@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Lightbulb, Target, Coins, Flame, Calendar, Heart, Clock } from "lucide-react";
+import { Lightbulb, Target, Flame, Calendar, Heart, Clock, BookOpen, GraduationCap, TrendingUp, Trophy, User } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import StatsBar from "@/components/StatsBar";
 import BottomNav from "@/components/BottomNav";
@@ -20,6 +21,7 @@ const formatCountdown = (ms: number) => {
 };
 
 const Home = () => {
+  const navigate = useNavigate();
   const { user, profile, progress, totalXp, loading, currentLives, nextLifeIn } = useAuth();
   const [tip] = useState(getTodaysTip());
   const [challenges] = useState<DailyChallenge[]>(getTodaysChallenges());
@@ -34,7 +36,6 @@ const Home = () => {
   const selectedChar = characters.find((c) => c.id === (profile as any)?.selected_character);
   const [equippedCosmeticItems, setEquippedCosmeticItems] = useState<any[]>([]);
 
-  // Update reset timers
   useEffect(() => {
     const update = () => {
       const now = Date.now();
@@ -59,11 +60,9 @@ const Home = () => {
     loadEquipped();
   }, [user]);
 
-  // Filter progress by today for daily challenges
   const todayStr = new Date().toDateString();
   const todayProgress = progress.filter((p) => p.completed_at && new Date(p.completed_at).toDateString() === todayStr);
 
-  // Filter progress by current week (Monday-Sunday) for weekly
   const now = new Date();
   const dayOfWeek = now.getDay();
   const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
@@ -108,13 +107,18 @@ const Home = () => {
             <h1 className="text-2xl font-extrabold text-primary">FinAp</h1>
           </div>
           <div className="flex items-center gap-2">
-            {/* Lives */}
-            <div className="flex items-center gap-1 rounded-full bg-destructive/10 px-3 py-1">
+            {/* Lives with regen timer */}
+            <div className="flex items-center gap-1 rounded-full bg-destructive/10 px-3 py-1 relative group">
               <Heart className="h-4 w-4 text-destructive fill-destructive" />
               <span className="text-sm font-bold text-destructive">{currentLives}</span>
+              {currentLives < 6 && nextLifeIn && (
+                <span className="text-[9px] text-destructive/70 ml-0.5">
+                  {formatCountdown(nextLifeIn)}
+                </span>
+              )}
             </div>
             <div className="flex items-center gap-1 rounded-full bg-coin/10 px-3 py-1">
-              <Coins className="h-4 w-4 text-coin" />
+              <span className="text-sm">🪙</span>
               <span className="text-sm font-bold text-coin">{coins}</span>
             </div>
           </div>
@@ -122,15 +126,6 @@ const Home = () => {
       </header>
 
       <main className="mx-auto max-w-lg px-4">
-        {/* Lives regeneration */}
-        {currentLives < 6 && nextLifeIn && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-            className="mt-3 flex items-center gap-2 rounded-xl bg-destructive/5 border border-destructive/20 px-3 py-2 text-sm">
-            <Clock className="h-4 w-4 text-destructive" />
-            <span className="text-muted-foreground">Ďalší život za <strong className="text-foreground">{formatCountdown(nextLifeIn)}</strong></span>
-          </motion.div>
-        )}
-
         {/* Welcome */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mt-6 flex items-center gap-4">
           <div className="relative" style={{ overflow: "visible" }}>
@@ -150,8 +145,38 @@ const Home = () => {
           <StatsBar xp={totalXp} streak={currentStreak} level={level} />
         </div>
 
+        {/* Main action - Lessons button */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mt-6">
+          <button
+            onClick={() => navigate("/lessons")}
+            className="w-full rounded-2xl gradient-primary p-5 shadow-button transition-all hover:opacity-90 active:scale-[0.98] flex items-center justify-center gap-3"
+          >
+            <BookOpen className="h-7 w-7 text-primary-foreground" />
+            <span className="text-xl font-extrabold text-primary-foreground">Lekcie</span>
+          </button>
+        </motion.div>
+
+        {/* Quick nav grid */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="mt-4 grid grid-cols-4 gap-2">
+          {[
+            { path: "/study", icon: GraduationCap, label: "Učivo", color: "text-accent" },
+            { path: "/invest", icon: TrendingUp, label: "Investície", color: "text-primary" },
+            { path: "/leaderboard", icon: Trophy, label: "Rebríček", color: "text-level" },
+            { path: "/profile", icon: User, label: "Profil", color: "text-secondary" },
+          ].map((item) => (
+            <button
+              key={item.path}
+              onClick={() => navigate(item.path)}
+              className="flex flex-col items-center gap-1.5 rounded-2xl bg-card p-3 shadow-card hover:bg-muted/50 transition-all active:scale-95"
+            >
+              <item.icon className={`h-6 w-6 ${item.color}`} />
+              <span className="text-[11px] font-bold text-foreground">{item.label}</span>
+            </button>
+          ))}
+        </motion.div>
+
         {/* Daily Tip */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
           className="mt-6 rounded-2xl bg-accent/10 border border-accent/20 p-4">
           <div className="flex items-center gap-2 mb-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-accent/20">
@@ -163,7 +188,7 @@ const Home = () => {
         </motion.div>
 
         {/* Daily Challenges */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="mt-6">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mt-6">
           <div className="flex items-center gap-2 mb-3">
             <Target className="h-5 w-5 text-primary" />
             <h3 className="text-lg font-extrabold text-foreground">Denné výzvy</h3>
@@ -181,7 +206,7 @@ const Home = () => {
         </motion.div>
 
         {/* Weekly Challenges */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="mt-6">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="mt-6">
           <div className="flex items-center gap-2 mb-3">
             <Calendar className="h-5 w-5 text-accent" />
             <h3 className="text-lg font-extrabold text-foreground">Týždenné výzvy</h3>

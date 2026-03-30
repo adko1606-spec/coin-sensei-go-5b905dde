@@ -73,9 +73,9 @@ const BADGE_RULES: { id: string; check: (ctx: { completedLessons: number; totalX
   { id: "knowledge_seeker", check: (c) => c.completedLessons >= 5 },
   { id: "finance_master", check: (c) => c.completedLessons >= 10 },
   { id: "perfect_score", check: (c) => c.hasPerfect },
-  { id: "xp_hunter", check: (c) => c.totalXp >= 5000 },
-  { id: "rich_mind", check: (c) => c.totalXp >= 10000 },
-  { id: "coin_collector", check: (c) => c.coins >= 1000 },
+  { id: "xp_hunter", check: (c) => c.totalXp >= 50000 },
+  { id: "rich_mind", check: (c) => c.totalXp >= 100000 },
+  { id: "coin_collector", check: (c) => c.coins >= 10000 },
   { id: "week_warrior", check: (c) => c.streak >= 7 },
   { id: "unstoppable", check: (c) => c.streak >= 30 },
 ];
@@ -90,7 +90,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const totalXp = progress.reduce((sum, p) => sum + p.xp_earned, 0);
 
-  // Recompute lives every 10 seconds
   useEffect(() => {
     if (!profile) return;
     const update = () => setLivesInfo(computeLives(profile.lives, profile.lives_updated_at));
@@ -183,7 +182,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const refreshProfile = async () => {
-    if (user) await loadProfile(user.id);
+    if (user) {
+      await loadProfile(user.id);
+      await loadProgress(user.id);
+    }
   };
 
   const loseLife = async () => {
@@ -258,11 +260,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       })();
       setProgress(newProgress);
 
-      // Award coins
+      // Award Fince
       const newCoins = (profile?.coins ?? 0) + coinsEarned;
       await supabase.from("profiles").update({ coins: newCoins } as any).eq("user_id", user.id);
       setProfile((p) => p ? { ...p, coins: newCoins } : p);
-      if (coinsEarned > 0) toast(`🪙 +${coinsEarned} mincí!`, { duration: 3000 });
+      if (coinsEarned > 0) toast(`🪙 +${coinsEarned} Fincov!`, { duration: 3000 });
 
       // Streak logic
       const today = new Date().toDateString();

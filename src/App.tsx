@@ -1,3 +1,4 @@
+import { useState, useCallback } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -7,6 +8,7 @@ import { ThemeProvider } from "next-themes";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { SoundProvider } from "@/hooks/useSound";
 import AIChatBot from "@/components/AIChatBot";
+import LoadingScreen from "@/components/LoadingScreen";
 import Home from "./pages/Home";
 import Study from "./pages/Study";
 import Lessons from "./pages/Lessons";
@@ -66,22 +68,28 @@ const AppContent = () => {
   );
 };
 
-const App = () => (
-  <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <SoundProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <AuthProvider>
-              <AppContent />
-            </AuthProvider>
-          </BrowserRouter>
-        </SoundProvider>
-      </TooltipProvider>
-    </QueryClientProvider>
-  </ThemeProvider>
-);
+const App = () => {
+  const [showLoading, setShowLoading] = useState(true);
+  const handleLoadingDone = useCallback(() => setShowLoading(false), []);
+
+  return (
+    <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <SoundProvider>
+            <Toaster />
+            <Sonner />
+            {showLoading && <LoadingScreen onDone={handleLoadingDone} />}
+            <BrowserRouter>
+              <AuthProvider>
+                <AppContent />
+              </AuthProvider>
+            </BrowserRouter>
+          </SoundProvider>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </ThemeProvider>
+  );
+};
 
 export default App;

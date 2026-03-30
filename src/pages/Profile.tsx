@@ -61,7 +61,7 @@ const Profile = () => {
 
   const handleBuyCosmetic = async (item: any) => {
     if (!user || !profile) return;
-    if (coins < item.price) { toast.error("Nemáš dosť mincí!"); return; }
+    if (coins < item.price) { toast.error("Nemáš dosť Fincov!"); return; }
     const newCoins = coins - item.price;
     await supabase.from("profiles").update({ coins: newCoins } as any).eq("user_id", user.id);
     await supabase.from("user_cosmetics").insert({ user_id: user.id, item_id: item.id } as any);
@@ -162,7 +162,7 @@ const Profile = () => {
             { icon: Zap, label: "Celkové XP", value: totalXp, color: "text-xp", bg: "bg-xp/10" },
             { icon: Flame, label: "Aktuálny streak", value: `${currentStreak} dní`, color: "text-streak", bg: "bg-streak/10" },
             { icon: Trophy, label: "Najdlhší streak", value: `${longestStreak} dní`, color: "text-level", bg: "bg-level/10" },
-            { icon: Coins, label: "Mince", value: coins, color: "text-coin", bg: "bg-coin/10" },
+            { icon: Coins, label: "Fince", value: coins, color: "text-coin", bg: "bg-coin/10" },
             { icon: Heart, label: "Životy", value: `${currentLives}/6`, color: "text-destructive", bg: "bg-destructive/10" },
             { icon: BookOpen, label: "Dokončené lekcie", value: completedLessons, color: "text-primary", bg: "bg-primary/10" },
             { icon: Target, label: "Priemerné skóre", value: `${avgScore}%`, color: "text-accent", bg: "bg-accent/10" },

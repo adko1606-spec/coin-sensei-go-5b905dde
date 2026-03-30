@@ -2,12 +2,12 @@ import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import {
   TrendingUp,
-  Coins,
   PiggyBank,
   GraduationCap,
-  RefreshCw,
   BarChart3,
   Briefcase,
+  Heart,
+  Clock,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import BottomNav from "@/components/BottomNav";
@@ -16,7 +16,7 @@ import StockDetailModal from "@/components/StockDetailModal";
 import InvestmentDemo from "@/components/InvestmentDemo";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
+import { investmentCategories } from "@/data/marketScenarios";
 
 interface Stock {
   id: string;
@@ -34,14 +34,21 @@ interface UserInvestment {
   current_value: number;
 }
 
+const formatCountdown = (ms: number) => {
+  const h = Math.floor(ms / 3600000);
+  const m = Math.floor((ms % 3600000) / 60000);
+  return `${h}h ${m}m`;
+};
+
 const Invest = () => {
-  const { user, profile, refreshProfile } = useAuth();
+  const { user, profile, refreshProfile, currentLives, nextLifeIn } = useAuth();
   const [stocks, setStocks] = useState<Stock[]>([]);
   const [investments, setInvestments] = useState<UserInvestment[]>([]);
   const [selectedStock, setSelectedStock] = useState<Stock | null>(null);
   const [showDemo, setShowDemo] = useState(false);
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState<"market" | "portfolio">("market");
+  const [categoryFilter, setCategoryFilter] = useState<string>("all");
 
   const coins = (profile as any)?.coins ?? 0;
 
@@ -65,30 +72,16 @@ const Invest = () => {
     await loadData();
   };
 
-  // Trigger market update (client-side simulation for responsiveness)
-  const handleRefreshMarket = async () => {
-    try {
-      const url = `https://${import.meta.env.VITE_SUPABASE_PROJECT_ID}.supabase.co/functions/v1/process-investments`;
-      const res = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        },
-      });
-      if (res.ok) {
-        toast.success("📊 Trh bol aktualizovaný!");
-        await loadData();
-        await refreshProfile();
-      }
-    } catch {
-      // Silent fail - market updates happen automatically
-    }
-  };
-
   const totalInvested = investments.reduce((s, i) => s + i.invested_coins, 0);
   const totalValue = investments.reduce((s, i) => s + i.current_value, 0);
   const totalProfit = totalValue - totalInvested;
+
+  const filteredStocks = categoryFilter === "all"
+    ? stocks
+    : stocks.filter((s) => {
+        const cat = investmentCategories.find((c) => c.id === categoryFilter);
+        return cat ? cat.sectors.includes(s.sector) : true;
+      });
 
   const portfolioStocks = stocks.filter((s) =>
     investments.some((i) => i.stock_id === s.id && i.current_value > 0)
@@ -104,7 +97,6 @@ const Invest = () => {
 
   return (
     <div className="min-h-screen gradient-hero pb-20">
-      {/* Header */}
       <header className="sticky top-0 z-40 border-b border-border bg-card/80 backdrop-blur-xl">
         <div className="mx-auto flex max-w-lg items-center justify-between px-4 py-3">
           <div className="flex items-center gap-2">
@@ -112,8 +104,15 @@ const Invest = () => {
             <h1 className="text-xl font-extrabold text-foreground">Investície</h1>
           </div>
           <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 rounded-full bg-destructive/10 px-2.5 py-1">
+              <Heart className="h-3.5 w-3.5 text-destructive fill-destructive" />
+              <span className="text-xs font-bold text-destructive">{currentLives}</span>
+              {currentLives < 6 && nextLifeIn && (
+                <span className="text-[9px] text-destructive/70">{formatCountdown(nextLifeIn)}</span>
+              )}
+            </div>
             <div className="flex items-center gap-1 rounded-full bg-coin/10 px-3 py-1">
-              <Coins className="h-4 w-4 text-coin" />
+              <span className="text-sm">🪙</span>
               <span className="text-sm font-bold text-coin">{coins}</span>
             </div>
           </div>
@@ -125,7 +124,7 @@ const Invest = () => {
         <div className="mt-4 rounded-xl bg-destructive/5 border border-destructive/20 p-3 flex items-start gap-2">
           <span className="text-base mt-0.5">⚠️</span>
           <p className="text-xs text-muted-foreground leading-relaxed">
-            <strong>Toto je vzdelávacia hra</strong>, nie skutočné investovanie. V realite sú výnosy nepredvídateľné a môžeš stratiť celú investíciu. Nikdy neinvestuj peniaze, ktoré si nemôžeš dovoliť stratiť.
+            <strong>Toto je vzdelávacia hra</strong>, nie skutočné investovanie. V realite sú výnosy nepredvídateľné a môžeš stratiť celú investíciu.
           </p>
         </div>
 
@@ -151,13 +150,8 @@ const Invest = () => {
               </div>
               <div className="text-center">
                 <p className="text-xs text-muted-foreground">Zisk/Strata</p>
-                <p
-                  className={`text-lg font-bold ${
-                    totalProfit >= 0 ? "text-primary" : "text-destructive"
-                  }`}
-                >
-                  {totalProfit >= 0 ? "+" : ""}
-                  {Math.round(totalProfit)}
+                <p className={`text-lg font-bold ${totalProfit >= 0 ? "text-primary" : "text-destructive"}`}>
+                  {totalProfit >= 0 ? "+" : ""}{Math.round(totalProfit)}
                 </p>
               </div>
             </div>
@@ -207,16 +201,33 @@ const Invest = () => {
             animate={{ opacity: 1 }}
             className="mt-4 space-y-3"
           >
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-bold text-muted-foreground uppercase">
-                Dostupné akcie
-              </h3>
-              <Button variant="ghost" size="sm" onClick={handleRefreshMarket}>
-                <RefreshCw className="h-3.5 w-3.5 mr-1" />
-                Aktualizovať
+            {/* Category filter */}
+            <div className="flex gap-1.5 overflow-x-auto pb-1 -mx-1 px-1">
+              <Button
+                variant={categoryFilter === "all" ? "default" : "outline"}
+                size="sm"
+                className="shrink-0 text-xs"
+                onClick={() => setCategoryFilter("all")}
+              >
+                🌐 Všetko
               </Button>
+              {investmentCategories.map((cat) => (
+                <Button
+                  key={cat.id}
+                  variant={categoryFilter === cat.id ? "default" : "outline"}
+                  size="sm"
+                  className="shrink-0 text-xs"
+                  onClick={() => setCategoryFilter(cat.id)}
+                >
+                  {cat.label}
+                </Button>
+              ))}
             </div>
-            {stocks.map((stock, idx) => (
+
+            <h3 className="text-sm font-bold text-muted-foreground uppercase">
+              {categoryFilter === "all" ? "Všetky inštrumenty" : investmentCategories.find((c) => c.id === categoryFilter)?.label}
+            </h3>
+            {filteredStocks.map((stock, idx) => (
               <StockCard
                 key={stock.id}
                 stock={stock}
@@ -225,6 +236,9 @@ const Invest = () => {
                 onSelect={setSelectedStock}
               />
             ))}
+            {filteredStocks.length === 0 && (
+              <p className="text-center py-8 text-muted-foreground text-sm">Žiadne inštrumenty v tejto kategórii</p>
+            )}
           </motion.div>
         )}
 

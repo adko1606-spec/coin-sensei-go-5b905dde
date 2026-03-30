@@ -19,6 +19,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import { sectorProfiles } from "@/data/marketScenarios";
+import { useSound } from "@/hooks/useSound";
 
 interface Stock {
   id: string;
@@ -114,7 +115,7 @@ const StockPriceChart = ({ stockId, currentPrice, changePercent }: { stockId: st
             <YAxis hide domain={["dataMin - 5", "dataMax + 5"]} />
             <Tooltip
               contentStyle={{ fontSize: 12, borderRadius: 8, border: "none", boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }}
-              formatter={(v: number) => [`${v} 🪙`, "Cena"]}
+              formatter={(v: number) => [`${v} F`, "Cena"]}
             />
             <Area type="monotone" dataKey="p" stroke={color} fill="url(#detailGrad)" strokeWidth={2} dot={false} />
           </AreaChart>
@@ -126,6 +127,7 @@ const StockPriceChart = ({ stockId, currentPrice, changePercent }: { stockId: st
 
 const StockDetailModal = ({ stock, investment, onClose, onAction }: StockDetailModalProps) => {
   const { user, profile } = useAuth();
+  const { playInvest, playWithdraw } = useSound();
   const [investAmount, setInvestAmount] = useState("");
   const [withdrawAmount, setWithdrawAmount] = useState("");
   const [tab, setTab] = useState<"invest" | "withdraw" | "history">("invest");
@@ -189,10 +191,11 @@ const StockDetailModal = ({ stock, investment, onClose, onAction }: StockDetailM
 
       await supabase.from("investment_transactions").insert({
         user_id: user!.id, stock_id: stock.id, type: "invest", amount,
-        balance_after: newValue, event_text: `Investoval si ${amount} mincí`,
+        balance_after: newValue, event_text: `Investoval si ${amount} Fincov`,
       } as any);
 
-      toast.success(`📈 Investoval si ${amount} mincí do ${stock.name}!`);
+      playInvest();
+      toast.success(`📈 Investoval si ${amount} Fincov do ${stock.name}!`);
       setInvestAmount("");
       onAction();
     } catch { toast.error("Chyba pri investovaní"); }
@@ -224,10 +227,11 @@ const StockDetailModal = ({ stock, investment, onClose, onAction }: StockDetailM
 
       await supabase.from("investment_transactions").insert({
         user_id: user!.id, stock_id: stock.id, type: "withdraw", amount: -amount,
-        balance_after: newValue, event_text: `Vybral si ${amount} mincí`,
+        balance_after: newValue, event_text: `Vybral si ${amount} Fincov`,
       } as any);
 
-      toast.success(`💰 Vybral si ${amount} mincí z ${stock.name}!`);
+      playWithdraw();
+      toast.success(`💰 Vybral si ${amount} Fincov z ${stock.name}!`);
       setWithdrawAmount("");
       onAction();
     } catch { toast.error("Chyba pri výbere"); }
@@ -281,13 +285,13 @@ const StockDetailModal = ({ stock, investment, onClose, onAction }: StockDetailM
               <div className="rounded-xl bg-muted/50 p-4">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm text-muted-foreground">Vložené</span>
-                  <span className="font-bold text-foreground">{investedCoins} 🪙</span>
+                  <span className="font-bold text-foreground">{investedCoins} F</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">Aktuálne</span>
                   <span className={`font-bold flex items-center gap-1 ${profitLoss >= 0 ? "text-primary" : "text-destructive"}`}>
                     {profitLoss >= 0 ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
-                    {Math.round(currentInvestment)} 🪙
+                    {Math.round(currentInvestment)} F
                     <span className="text-xs font-normal">
                       ({profitLoss >= 0 ? "+" : ""}{Math.round(profitPercent)}%)
                     </span>
@@ -318,7 +322,7 @@ const StockDetailModal = ({ stock, investment, onClose, onAction }: StockDetailM
             {tab === "invest" && (
               <div className="space-y-3">
                 <div className="text-xs text-muted-foreground flex items-center gap-1">
-                  Tvoje mince: <span className="font-bold text-coin">{coins} 🪙</span>
+                  Tvoje Fince: <span className="font-bold text-coin">{coins} F</span>
                 </div>
                 <Input
                   type="number" placeholder="Koľko mincí investuješ?"
@@ -336,7 +340,7 @@ const StockDetailModal = ({ stock, investment, onClose, onAction }: StockDetailM
                 <Button className="w-full" onClick={handleInvest}
                   disabled={processing || !investAmount || parseInt(investAmount) <= 0}>
                   <ArrowDownCircle className="h-4 w-4 mr-2" />
-                  Investovať {investAmount || "0"} 🪙
+                  Investovať {investAmount || "0"} F
                 </Button>
 
                 {/* Educational warnings */}
@@ -367,7 +371,7 @@ const StockDetailModal = ({ stock, investment, onClose, onAction }: StockDetailM
                 {currentInvestment > 0 ? (
                   <>
                     <div className="text-xs text-muted-foreground">
-                      Na výber: <span className="font-bold text-foreground">{Math.floor(currentInvestment)} 🪙</span>
+                      Na výber: <span className="font-bold text-foreground">{Math.floor(currentInvestment)} F</span>
                     </div>
                     <Input
                       type="number" placeholder="Koľko mincí chceš vybrať?"
@@ -385,7 +389,7 @@ const StockDetailModal = ({ stock, investment, onClose, onAction }: StockDetailM
                     <Button className="w-full" variant="secondary" onClick={handleWithdraw}
                       disabled={processing || !withdrawAmount || parseInt(withdrawAmount) <= 0}>
                       <ArrowUpCircle className="h-4 w-4 mr-2" />
-                      Vybrať {withdrawAmount || "0"} 🪙
+                      Vybrať {withdrawAmount || "0"} F
                     </Button>
                   </>
                 ) : (

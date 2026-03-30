@@ -69,7 +69,7 @@ const Lessons = () => {
               <span className="text-sm font-bold text-primary">{completedCount}/{lessons.length}</span>
             </div>
             <div className="flex items-center gap-1 rounded-full bg-coin/10 px-3 py-1">
-              <Coins className="h-4 w-4 text-coin" />
+              <span className="text-sm">🪙</span>
               <span className="text-sm font-bold text-coin">{coins}</span>
             </div>
           </div>

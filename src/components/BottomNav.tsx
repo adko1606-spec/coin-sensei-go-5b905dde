@@ -1,18 +1,20 @@
 import { Home, BookOpen, GraduationCap, Trophy, User, TrendingUp } from "lucide-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-
-const tabs = [
-  { path: "/", label: "Domov", icon: Home },
-  { path: "/study", label: "Učivo", icon: GraduationCap },
-  { path: "/lessons", label: "Lekcie", icon: BookOpen },
-  { path: "/invest", label: "Invest", icon: TrendingUp },
-  { path: "/leaderboard", label: "Rebríček", icon: Trophy },
-  { path: "/profile", label: "Profil", icon: User },
-];
+import { useI18n } from "@/contexts/I18nContext";
 
 const BottomNav = () => {
   const location = useLocation();
+  const { t } = useI18n();
+
+  const tabs = [
+    { path: "/", label: t("nav.home"), icon: Home },
+    { path: "/study", label: t("nav.study"), icon: GraduationCap },
+    { path: "/lessons", label: t("nav.lessons"), icon: BookOpen },
+    { path: "/invest", label: t("nav.invest"), icon: TrendingUp },
+    { path: "/leaderboard", label: t("nav.leaderboard"), icon: Trophy },
+    { path: "/profile", label: t("nav.profile"), icon: User },
+  ];
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-card/95 backdrop-blur-xl safe-bottom">

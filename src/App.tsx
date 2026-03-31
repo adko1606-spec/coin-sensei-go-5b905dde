@@ -75,20 +75,22 @@ const App = () => {
 
   return (
     <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <SoundProvider>
-            <Toaster />
-            <Sonner />
-            {showLoading && <LoadingScreen onDone={handleLoadingDone} />}
-            <BrowserRouter>
-              <AuthProvider>
-                <AppContent />
-              </AuthProvider>
-            </BrowserRouter>
-          </SoundProvider>
-        </TooltipProvider>
-      </QueryClientProvider>
+      <I18nProvider>
+        <QueryClientProvider client={queryClient}>
+          <TooltipProvider>
+            <SoundProvider>
+              <Toaster />
+              <Sonner />
+              {showLoading && <LoadingScreen onDone={handleLoadingDone} />}
+              <BrowserRouter>
+                <AuthProvider>
+                  <AppContent />
+                </AuthProvider>
+              </BrowserRouter>
+            </SoundProvider>
+          </TooltipProvider>
+        </QueryClientProvider>
+      </I18nProvider>
     </ThemeProvider>
   );
 };

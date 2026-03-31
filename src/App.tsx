@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "next-themes";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
+import { I18nProvider } from "@/contexts/I18nContext";
 import { SoundProvider } from "@/hooks/useSound";
 import AIChatBot from "@/components/AIChatBot";
 import LoadingScreen from "@/components/LoadingScreen";

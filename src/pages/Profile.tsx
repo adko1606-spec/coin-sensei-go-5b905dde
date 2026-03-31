@@ -17,6 +17,21 @@ const COSMETIC_CATEGORIES = [
   { id: "color", label: "🎨 Effects" },
 ];
 
+// Daily discount: 20% off 5 random items, seeded by today's date
+function getDailyDiscountIds(items: any[]): string[] {
+  const today = new Date().toDateString();
+  let hash = 0;
+  for (let i = 0; i < today.length; i++) {
+    hash = ((hash << 5) - hash) + today.charCodeAt(i);
+    hash |= 0;
+  }
+  const shuffled = [...items].sort((a, b) => {
+    const ha = ((hash * 31 + a.id.charCodeAt(0)) | 0) - ((hash * 31 + b.id.charCodeAt(0)) | 0);
+    return ha;
+  });
+  return shuffled.slice(0, 5).map((i: any) => i.id);
+}
+
 const Profile = () => {
   const { user, profile, progress, totalXp, loading, signOut, addCoins, refreshProfile, currentLives } = useAuth();
   const navigate = useNavigate();

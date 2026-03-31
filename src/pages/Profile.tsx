@@ -270,16 +270,24 @@ const Profile = () => {
                   </button>
                 ))}
               </div>
+              {/* Daily discount banner */}
+              <div className="rounded-xl bg-accent/10 border border-accent/20 p-3 mb-4">
+                <p className="text-xs font-bold text-accent">🏷️ Denná zľava 20% na vybrané položky!</p>
+              </div>
               <div className="grid grid-cols-2 gap-3" style={{ overflow: "visible" }}>
                 {cosmeticItems.filter((item: any) => item.category === shopCategory).map((item: any) => {
                   const owned = userCosmetics.some((uc) => uc.item_id === item.id);
                   const equipped = userCosmetics.some((uc) => uc.item_id === item.id && uc.equipped);
+                  const discountIds = getDailyDiscountIds(cosmeticItems);
+                  const hasDiscount = !owned && discountIds.includes(item.id);
+                  const finalPrice = hasDiscount ? Math.round(item.price * 0.8) : item.price;
                   return (
                     <motion.div key={item.id} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
                       className={`rounded-2xl transition-all relative ${equipped ? "bg-primary/10 ring-2 ring-primary shadow-lg" : owned ? "bg-card border border-border shadow-sm" : "bg-muted/40 border border-border/50"}`}
                       style={{ overflow: "visible" }}>
                       {equipped && (<div className="absolute -top-2 -right-2 z-10 bg-primary text-primary-foreground text-[10px] font-bold px-2 py-0.5 rounded-full shadow">✓ Active</div>)}
                       {owned && !equipped && (<div className="absolute -top-2 -right-2 z-10 bg-muted text-foreground text-[10px] font-bold px-2 py-0.5 rounded-full border border-border shadow-sm">Owned</div>)}
+                      {hasDiscount && !owned && (<div className="absolute -top-2 -left-2 z-10 bg-accent text-accent-foreground text-[10px] font-bold px-2 py-0.5 rounded-full shadow">-20%</div>)}
                       <div className="p-4 pt-6" style={{ overflow: "visible" }}>
                         <div className="flex justify-center mb-3" style={{ overflow: "visible" }}>
                           {(item.category === "hat" || item.category === "color") ? (
@@ -296,10 +304,15 @@ const Profile = () => {
                             {equipped ? "Unequip" : "Equip"}
                           </button>
                         ) : (
-                          <button onClick={() => handleBuyCosmetic(item)} disabled={coins < item.price}
-                            className={`w-full rounded-xl py-2.5 text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${coins >= item.price ? "bg-gradient-to-r from-coin/20 to-coin/10 text-coin hover:from-coin/30 hover:to-coin/20 border border-coin/20" : "bg-muted text-muted-foreground cursor-not-allowed"}`}>
-                            {coins < item.price && <Lock className="h-3 w-3" />}
-                            <Coins className="h-3.5 w-3.5" /><span>{item.price}</span>
+                          <button onClick={() => handleBuyCosmetic({ ...item, price: finalPrice })} disabled={coins < finalPrice}
+                            className={`w-full rounded-xl py-2.5 text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${coins >= finalPrice ? "bg-gradient-to-r from-coin/20 to-coin/10 text-coin hover:from-coin/30 hover:to-coin/20 border border-coin/20" : "bg-muted text-muted-foreground cursor-not-allowed"}`}>
+                            {coins < finalPrice && <Lock className="h-3 w-3" />}
+                            <Coins className="h-3.5 w-3.5" />
+                            {hasDiscount ? (
+                              <span><span className="line-through text-muted-foreground mr-1">{item.price}</span>{finalPrice}</span>
+                            ) : (
+                              <span>{finalPrice}</span>
+                            )}
                           </button>
                         )}
                       </div>

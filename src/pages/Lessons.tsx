@@ -55,9 +55,9 @@ const Lessons = () => {
     <div className="min-h-screen gradient-hero pb-20">
       <header className="sticky top-0 z-40 border-b border-border bg-card/80 backdrop-blur-xl">
         <div className="mx-auto flex max-w-lg items-center justify-between px-4 py-3">
-          <div className="flex items-center gap-3">
-            <img src={logo} alt="FinAp logo" className="h-20 w-20" />
-            <h1 className="text-2xl font-extrabold text-primary">FinAp</h1>
+          <div className="flex items-center gap-2">
+            <img src={logo} alt="FinAp logo" className="h-8 w-8" />
+            <h1 className="text-lg font-extrabold text-primary">FinAp</h1>
           </div>
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-1 rounded-full bg-destructive/10 px-3 py-1">

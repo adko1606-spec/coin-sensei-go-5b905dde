@@ -2,7 +2,19 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import logo from "@/assets/logo-new.png";
 
-const EMOJIS = ["💰", "📈", "🏦", "💳", "🪙", "📊", "💎", "🎯", "🔥", "⭐", "🚀", "🏆"];
+const EMOJIS = ["💰", "📈", "🏦", "💳", "🪙", "📊", "💎", "🎯", "🔥", "⭐", "🚀", "🏆", "📉", "🏠", "💵", "🥇", "🛢️", "🌾", "🎮", "⛓️"];
+
+// Grid positions to evenly distribute emojis across the screen
+const GRID = EMOJIS.map((_, i) => {
+  const cols = 5;
+  const rows = 4;
+  const col = i % cols;
+  const row = Math.floor(i / cols) % rows;
+  return {
+    x: (col + 0.5) * (100 / cols),
+    y: (row + 0.5) * (100 / rows),
+  };
+});
 
 function playJingle() {
   try {
@@ -44,26 +56,28 @@ const LoadingScreen = ({ onDone }: { onDone: () => void }) => {
           transition={{ duration: 0.5 }}
           className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-background overflow-hidden"
         >
-          {/* Floating emojis background */}
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {/* Evenly distributed floating emojis */}
+          <div className="absolute inset-0 pointer-events-none">
             {EMOJIS.map((emoji, i) => (
               <motion.span
                 key={i}
-                className="absolute text-3xl opacity-10"
-                initial={{
-                  x: `${(i * 37) % 100}%`,
-                  y: `${(i * 23 + 10) % 100}%`,
-                  scale: 0.5 + (i % 3) * 0.3,
+                className="absolute text-2xl sm:text-3xl"
+                style={{
+                  left: `${GRID[i].x}%`,
+                  top: `${GRID[i].y}%`,
+                  transform: "translate(-50%, -50%)",
                 }}
+                initial={{ opacity: 0, scale: 0.5 }}
                 animate={{
-                  y: [`${(i * 23 + 10) % 100}%`, `${((i * 23 + 10) % 100) - 15}%`],
-                  opacity: [0.08, 0.15, 0.08],
+                  opacity: [0.06, 0.15, 0.06],
+                  y: [0, -12, 0],
+                  scale: [0.7 + (i % 3) * 0.15, 0.85 + (i % 3) * 0.15, 0.7 + (i % 3) * 0.15],
                 }}
                 transition={{
-                  duration: 2 + (i % 3),
+                  duration: 2.5 + (i % 3) * 0.5,
                   repeat: Infinity,
                   ease: "easeInOut",
-                  delay: i * 0.15,
+                  delay: i * 0.1,
                 }}
               >
                 {emoji}

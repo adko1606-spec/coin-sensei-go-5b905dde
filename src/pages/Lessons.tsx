@@ -8,10 +8,12 @@ import QuizModal from "@/components/QuizModal";
 import BottomNav from "@/components/BottomNav";
 import { lessons as initialLessons, type Lesson } from "@/data/lessons";
 import { useAuth } from "@/contexts/AuthContext";
+import { useI18n } from "@/contexts/I18nContext";
 import logo from "@/assets/logo-new.png";
 
 const Lessons = () => {
   const { user, profile, totalXp, loading, saveProgress, isLessonCompleted, currentLives } = useAuth();
+  const { t } = useI18n();
 
   const [searchParams] = useSearchParams();
   const [lessons, setLessons] = useState<Lesson[]>(initialLessons);
@@ -48,7 +50,7 @@ const Lessons = () => {
   };
 
   if (loading) {
-    return (<div className="min-h-screen gradient-hero flex items-center justify-center"><div className="animate-pulse text-primary font-bold text-xl">Načítavam...</div></div>);
+    return (<div className="min-h-screen gradient-hero flex items-center justify-center"><div className="animate-pulse text-primary font-bold text-xl">{t("common.loading")}</div></div>);
   }
 
   return (

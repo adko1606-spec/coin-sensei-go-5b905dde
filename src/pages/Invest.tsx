@@ -7,9 +7,9 @@ import {
   BarChart3,
   Briefcase,
   Heart,
-  Clock,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useI18n } from "@/contexts/I18nContext";
 import BottomNav from "@/components/BottomNav";
 import StockCard from "@/components/StockCard";
 import StockDetailModal from "@/components/StockDetailModal";
@@ -42,6 +42,7 @@ const formatCountdown = (ms: number) => {
 
 const Invest = () => {
   const { user, profile, refreshProfile, currentLives, nextLifeIn } = useAuth();
+  const { t } = useI18n();
   const [stocks, setStocks] = useState<Stock[]>([]);
   const [investments, setInvestments] = useState<UserInvestment[]>([]);
   const [selectedStock, setSelectedStock] = useState<Stock | null>(null);
@@ -90,7 +91,7 @@ const Invest = () => {
   if (loading) {
     return (
       <div className="min-h-screen gradient-hero flex items-center justify-center">
-        <div className="animate-pulse text-primary font-bold text-xl">Načítavam trh...</div>
+        <div className="animate-pulse text-primary font-bold text-xl">{t("invest.loadingMarket")}</div>
       </div>
     );
   }
@@ -101,7 +102,7 @@ const Invest = () => {
         <div className="mx-auto flex max-w-lg items-center justify-between px-4 py-3">
           <div className="flex items-center gap-2">
             <TrendingUp className="h-6 w-6 text-primary" />
-            <h1 className="text-xl font-extrabold text-foreground">Investície</h1>
+            <h1 className="text-xl font-extrabold text-foreground">{t("invest.title")}</h1>
           </div>
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-1 rounded-full bg-destructive/10 px-2.5 py-1">
@@ -124,32 +125,28 @@ const Invest = () => {
         <div className="mt-4 rounded-xl bg-destructive/5 border border-destructive/20 p-3 flex items-start gap-2">
           <span className="text-base mt-0.5">⚠️</span>
           <p className="text-xs text-muted-foreground leading-relaxed">
-            <strong>Toto je vzdelávacia hra</strong>, nie skutočné investovanie. V realite sú výnosy nepredvídateľné a môžeš stratiť celú investíciu.
+            <strong>{t("invest.warning").split(".")[0]}.</strong> {t("invest.warning").split(".").slice(1).join(".")}
           </p>
         </div>
 
         {/* Portfolio overview */}
         {totalInvested > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mt-4 rounded-2xl bg-card border border-border p-4"
-          >
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mt-4 rounded-2xl bg-card border border-border p-4">
             <div className="flex items-center gap-2 mb-3">
               <PiggyBank className="h-5 w-5 text-primary" />
-              <h3 className="font-bold text-foreground">Tvoje portfólio</h3>
+              <h3 className="font-bold text-foreground">{t("invest.yourPortfolio")}</h3>
             </div>
             <div className="grid grid-cols-3 gap-3">
               <div className="text-center">
-                <p className="text-xs text-muted-foreground">Investované</p>
+                <p className="text-xs text-muted-foreground">{t("invest.invested")}</p>
                 <p className="text-lg font-bold text-foreground">{totalInvested}</p>
               </div>
               <div className="text-center">
-                <p className="text-xs text-muted-foreground">Hodnota</p>
+                <p className="text-xs text-muted-foreground">{t("invest.value")}</p>
                 <p className="text-lg font-bold text-foreground">{Math.round(totalValue)}</p>
               </div>
               <div className="text-center">
-                <p className="text-xs text-muted-foreground">Zisk/Strata</p>
+                <p className="text-xs text-muted-foreground">{t("invest.profitLoss")}</p>
                 <p className={`text-lg font-bold ${totalProfit >= 0 ? "text-primary" : "text-destructive"}`}>
                   {totalProfit >= 0 ? "+" : ""}{Math.round(totalProfit)}
                 </p>
@@ -160,29 +157,13 @@ const Invest = () => {
 
         {/* Tabs: Market / Portfolio */}
         <div className="mt-4 flex gap-2">
-          <Button
-            variant={view === "market" ? "default" : "outline"}
-            size="sm"
-            className="flex-1"
-            onClick={() => setView("market")}
-          >
-            <BarChart3 className="h-4 w-4 mr-1" />
-            Trh
+          <Button variant={view === "market" ? "default" : "outline"} size="sm" className="flex-1" onClick={() => setView("market")}>
+            <BarChart3 className="h-4 w-4 mr-1" />{t("invest.market")}
           </Button>
-          <Button
-            variant={view === "portfolio" ? "default" : "outline"}
-            size="sm"
-            className="flex-1"
-            onClick={() => setView("portfolio")}
-          >
-            <Briefcase className="h-4 w-4 mr-1" />
-            Portfólio
+          <Button variant={view === "portfolio" ? "default" : "outline"} size="sm" className="flex-1" onClick={() => setView("portfolio")}>
+            <Briefcase className="h-4 w-4 mr-1" />{t("invest.portfolio")}
           </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setShowDemo(!showDemo)}
-          >
+          <Button variant="outline" size="sm" onClick={() => setShowDemo(!showDemo)}>
             <GraduationCap className="h-4 w-4" />
           </Button>
         </div>
@@ -196,98 +177,54 @@ const Invest = () => {
 
         {/* Market View */}
         {view === "market" && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="mt-4 space-y-3"
-          >
-            {/* Category filter */}
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-4 space-y-3">
             <div className="flex gap-1.5 overflow-x-auto pb-1 -mx-1 px-1">
-              <Button
-                variant={categoryFilter === "all" ? "default" : "outline"}
-                size="sm"
-                className="shrink-0 text-xs"
-                onClick={() => setCategoryFilter("all")}
-              >
-                🌐 Všetko
+              <Button variant={categoryFilter === "all" ? "default" : "outline"} size="sm" className="shrink-0 text-xs" onClick={() => setCategoryFilter("all")}>
+                🌐 {t("invest.all")}
               </Button>
               {investmentCategories.map((cat) => (
-                <Button
-                  key={cat.id}
-                  variant={categoryFilter === cat.id ? "default" : "outline"}
-                  size="sm"
-                  className="shrink-0 text-xs"
-                  onClick={() => setCategoryFilter(cat.id)}
-                >
-                  {cat.label}
+                <Button key={cat.id} variant={categoryFilter === cat.id ? "default" : "outline"} size="sm" className="shrink-0 text-xs" onClick={() => setCategoryFilter(cat.id)}>
+                  {cat.icon} {t(`invest.${cat.id}`) || cat.label}
                 </Button>
               ))}
             </div>
 
             <h3 className="text-sm font-bold text-muted-foreground uppercase">
-              {categoryFilter === "all" ? "Všetky inštrumenty" : investmentCategories.find((c) => c.id === categoryFilter)?.label}
+              {categoryFilter === "all" ? t("invest.allInstruments") : investmentCategories.find((c) => c.id === categoryFilter)?.label}
             </h3>
             {filteredStocks.map((stock, idx) => (
-              <StockCard
-                key={stock.id}
-                stock={stock}
-                investment={investments.find((i) => i.stock_id === stock.id)}
-                index={idx}
-                onSelect={setSelectedStock}
-              />
+              <StockCard key={stock.id} stock={stock} investment={investments.find((i) => i.stock_id === stock.id)} index={idx} onSelect={setSelectedStock} />
             ))}
             {filteredStocks.length === 0 && (
-              <p className="text-center py-8 text-muted-foreground text-sm">Žiadne inštrumenty v tejto kategórii</p>
+              <p className="text-center py-8 text-muted-foreground text-sm">{t("invest.noInstruments")}</p>
             )}
           </motion.div>
         )}
 
         {/* Portfolio View */}
         {view === "portfolio" && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="mt-4 space-y-3"
-          >
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-4 space-y-3">
             {portfolioStocks.length > 0 ? (
               <>
-                <h3 className="text-sm font-bold text-muted-foreground uppercase">
-                  Tvoje investície
-                </h3>
+                <h3 className="text-sm font-bold text-muted-foreground uppercase">{t("invest.yourInvestments")}</h3>
                 {portfolioStocks.map((stock, idx) => (
-                  <StockCard
-                    key={stock.id}
-                    stock={stock}
-                    investment={investments.find((i) => i.stock_id === stock.id)}
-                    index={idx}
-                    onSelect={setSelectedStock}
-                  />
+                  <StockCard key={stock.id} stock={stock} investment={investments.find((i) => i.stock_id === stock.id)} index={idx} onSelect={setSelectedStock} />
                 ))}
               </>
             ) : (
               <div className="text-center py-12">
                 <PiggyBank className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
-                <p className="text-muted-foreground font-medium">Zatiaľ nemáš žiadne investície</p>
-                <p className="text-xs text-muted-foreground mt-1">
-                  Prejdi na trh a začni investovať!
-                </p>
-                <Button className="mt-4" onClick={() => setView("market")}>
-                  Prejsť na trh
-                </Button>
+                <p className="text-muted-foreground font-medium">{t("invest.noInvestments")}</p>
+                <p className="text-xs text-muted-foreground mt-1">{t("invest.startInvesting")}</p>
+                <Button className="mt-4" onClick={() => setView("market")}>{t("invest.goToMarket")}</Button>
               </div>
             )}
           </motion.div>
         )}
       </main>
 
-      {/* Stock Detail Modal */}
       {selectedStock && (
-        <StockDetailModal
-          stock={selectedStock}
-          investment={investments.find((i) => i.stock_id === selectedStock.id)}
-          onClose={() => setSelectedStock(null)}
-          onAction={handleAction}
-        />
+        <StockDetailModal stock={selectedStock} investment={investments.find((i) => i.stock_id === selectedStock.id)} onClose={() => setSelectedStock(null)} onAction={handleAction} />
       )}
 
       <BottomNav />

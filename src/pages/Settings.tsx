@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Volume2, VolumeX, Sun, Moon, Bell, Shield, Languages, RotateCcw, LogOut, User } from "lucide-react";
+import { ArrowLeft, Volume2, VolumeX, Sun, Moon, Bell, Shield, Languages, RotateCcw, LogOut, User, Lock, BarChart3, Users, Eye } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "next-themes";
 import { useAuth } from "@/contexts/AuthContext";
@@ -10,6 +10,8 @@ import { Switch } from "@/components/ui/switch";
 import BottomNav from "@/components/BottomNav";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+
+const ADMIN_PASSWORD = "invest123";
 
 const Settings = () => {
   const navigate = useNavigate();
@@ -22,6 +24,10 @@ const Settings = () => {
   const [resetting, setResetting] = useState(false);
   const [displayName, setDisplayName] = useState(profile?.display_name || "");
   const [editingName, setEditingName] = useState(false);
+  const [showAdminLogin, setShowAdminLogin] = useState(false);
+  const [adminPassword, setAdminPassword] = useState("");
+  const [showAdmin, setShowAdmin] = useState(false);
+  const [adminStats, setAdminStats] = useState<any>(null);
 
   const handleSaveName = async () => {
     if (!user || !displayName.trim()) return;
@@ -56,6 +62,34 @@ const Settings = () => {
       toast.error(t("settings.resetError"));
     }
     setResetting(false);
+  };
+
+  const handleAdminLogin = async () => {
+    if (adminPassword !== ADMIN_PASSWORD) {
+      toast.error("Nesprávne heslo");
+      return;
+    }
+    setShowAdminLogin(false);
+    setShowAdmin(true);
+    // Load stats
+    const [profilesRes, progressRes] = await Promise.all([
+      supabase.from("profiles").select("user_id, display_name, coins, current_streak, created_at"),
+      supabase.from("user_progress").select("user_id, completed, xp_earned"),
+    ]);
+    const profiles = profilesRes.data || [];
+    const progressData = progressRes.data || [];
+    const totalUsers = profiles.length;
+    const activeUsers = new Set(progressData.map((p: any) => p.user_id)).size;
+    const totalLessonsCompleted = progressData.filter((p: any) => p.completed).length;
+    const totalXpAll = progressData.reduce((s: number, p: any) => s + p.xp_earned, 0);
+    
+    setAdminStats({
+      totalUsers,
+      activeUsers,
+      totalLessonsCompleted,
+      totalXpAll,
+      profiles: profiles.sort((a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()).slice(0, 20),
+    });
   };
 
   return (
@@ -125,15 +159,11 @@ const Settings = () => {
           </div>
           <div className="flex gap-2">
             <button onClick={() => setTheme("light")}
-              className={`flex-1 flex items-center justify-center gap-2 rounded-xl py-3 font-bold text-sm transition-all ${
-                theme === "light" ? "gradient-primary text-primary-foreground" : "bg-muted text-foreground"
-              }`}>
+              className={`flex-1 flex items-center justify-center gap-2 rounded-xl py-3 font-bold text-sm transition-all ${theme === "light" ? "gradient-primary text-primary-foreground" : "bg-muted text-foreground"}`}>
               <Sun className="h-4 w-4" /> {t("settings.light")}
             </button>
             <button onClick={() => setTheme("dark")}
-              className={`flex-1 flex items-center justify-center gap-2 rounded-xl py-3 font-bold text-sm transition-all ${
-                theme === "dark" ? "gradient-blue text-primary-foreground" : "bg-muted text-foreground"
-              }`}>
+              className={`flex-1 flex items-center justify-center gap-2 rounded-xl py-3 font-bold text-sm transition-all ${theme === "dark" ? "gradient-blue text-primary-foreground" : "bg-muted text-foreground"}`}>
               <Moon className="h-4 w-4" /> {t("settings.dark")}
             </button>
           </div>
@@ -169,15 +199,15 @@ const Settings = () => {
           <div className="flex gap-2">
             <button onClick={() => setLanguage("sk")}
               className={`flex-1 rounded-xl py-2.5 text-sm font-bold transition-all ${language === "sk" ? "gradient-primary text-primary-foreground" : "bg-muted text-foreground hover:bg-muted/80"}`}>
-              🇸🇰 Slovenčina
+              🇸🇰 SK
             </button>
             <button onClick={() => setLanguage("en")}
               className={`flex-1 rounded-xl py-2.5 text-sm font-bold transition-all ${language === "en" ? "gradient-primary text-primary-foreground" : "bg-muted text-foreground hover:bg-muted/80"}`}>
-              🇬🇧 English
+              🇬🇧 EN
             </button>
             <button onClick={() => setLanguage("ua")}
               className={`flex-1 rounded-xl py-2.5 text-sm font-bold transition-all ${language === "ua" ? "gradient-primary text-primary-foreground" : "bg-muted text-foreground hover:bg-muted/80"}`}>
-              🇺🇦 Українська
+              🇺🇦 UA
             </button>
           </div>
         </motion.div>
@@ -214,6 +244,76 @@ const Settings = () => {
             <LogOut className="h-5 w-5" /> {t("settings.signOut")}
           </button>
         </motion.div>
+
+        {/* Admin button - small and subtle */}
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} className="flex justify-center pt-4 pb-2">
+          <button onClick={() => setShowAdminLogin(true)} className="text-[10px] text-muted-foreground/30 hover:text-muted-foreground/60 transition-colors">
+            •••
+          </button>
+        </motion.div>
+
+        {/* Admin login */}
+        {showAdminLogin && (
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="rounded-2xl bg-card p-4 shadow-card border border-border">
+            <div className="flex items-center gap-2 mb-3">
+              <Lock className="h-4 w-4 text-muted-foreground" />
+              <h3 className="text-sm font-bold text-foreground">{t("settings.admin")}</h3>
+            </div>
+            <div className="flex gap-2">
+              <input type="password" value={adminPassword} onChange={(e) => setAdminPassword(e.target.value)} placeholder="Heslo"
+                className="flex-1 rounded-xl border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary" />
+              <button onClick={handleAdminLogin} className="rounded-xl gradient-primary px-4 py-2 text-sm font-bold text-primary-foreground">OK</button>
+              <button onClick={() => { setShowAdminLogin(false); setAdminPassword(""); }} className="rounded-xl bg-muted px-3 py-2 text-sm text-foreground">✕</button>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Admin stats panel */}
+        {showAdmin && adminStats && (
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="rounded-2xl bg-card p-4 shadow-card border-2 border-primary/30 space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <BarChart3 className="h-5 w-5 text-primary" />
+                <h3 className="font-bold text-foreground">{t("settings.admin")}</h3>
+              </div>
+              <button onClick={() => setShowAdmin(false)} className="text-xs text-muted-foreground">✕</button>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="rounded-xl bg-primary/10 p-3 text-center">
+                <Users className="h-4 w-4 text-primary mx-auto mb-1" />
+                <p className="text-xs text-muted-foreground">Používatelia</p>
+                <p className="text-xl font-bold text-foreground">{adminStats.totalUsers}</p>
+              </div>
+              <div className="rounded-xl bg-accent/10 p-3 text-center">
+                <Eye className="h-4 w-4 text-accent mx-auto mb-1" />
+                <p className="text-xs text-muted-foreground">Aktívni</p>
+                <p className="text-xl font-bold text-foreground">{adminStats.activeUsers}</p>
+              </div>
+              <div className="rounded-xl bg-xp/10 p-3 text-center">
+                <p className="text-xs text-muted-foreground">Lekcie celkom</p>
+                <p className="text-xl font-bold text-foreground">{adminStats.totalLessonsCompleted}</p>
+              </div>
+              <div className="rounded-xl bg-coin/10 p-3 text-center">
+                <p className="text-xs text-muted-foreground">XP celkom</p>
+                <p className="text-xl font-bold text-foreground">{adminStats.totalXpAll}</p>
+              </div>
+            </div>
+            <div>
+              <h4 className="text-xs font-bold text-muted-foreground uppercase mb-2">Poslední používatelia</h4>
+              <div className="space-y-1.5 max-h-48 overflow-y-auto">
+                {adminStats.profiles.map((p: any) => (
+                  <div key={p.user_id} className="flex items-center justify-between rounded-lg bg-muted/30 p-2 text-xs">
+                    <span className="font-bold text-foreground truncate max-w-[150px]">{p.display_name || "—"}</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-coin">🪙 {p.coins}</span>
+                      <span className="text-muted-foreground">{new Date(p.created_at).toLocaleDateString("sk-SK")}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        )}
       </main>
 
       <BottomNav />

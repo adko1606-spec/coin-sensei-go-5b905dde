@@ -89,10 +89,10 @@ export const sectorProfiles: Record<string, SectorProfile> = {
 
 // Category groupings for UI
 export const investmentCategories = [
-  { id: "stocks", label: "📈 Akcie", sectors: ["technology", "consumer", "entertainment", "healthcare", "energy"] },
-  { id: "crypto", label: "⛓️ Krypto", sectors: ["crypto"] },
-  { id: "funds", label: "📊 Fondy", sectors: ["finance", "real_estate", "funds"] },
-  { id: "commodities", label: "🥇 Komodity", sectors: ["commodity"] },
+  { id: "stocks", label: "Akcie", icon: "📈", sectors: ["technology", "consumer", "entertainment", "healthcare", "energy"] },
+  { id: "crypto", label: "Krypto", icon: "⛓️", sectors: ["crypto"] },
+  { id: "funds", label: "Fondy", icon: "📊", sectors: ["finance", "real_estate", "funds"] },
+  { id: "commodities", label: "Komodity", icon: "🥇", sectors: ["commodity"] },
 ];
 
 export const marketScenarios: Record<string, MarketScenario[]> = {

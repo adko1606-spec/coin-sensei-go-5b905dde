@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Lightbulb, Target, Flame, Calendar, Heart, Clock, BookOpen, GraduationCap, TrendingUp, Trophy, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useI18n } from "@/contexts/I18nContext";
 import StatsBar from "@/components/StatsBar";
 import BottomNav from "@/components/BottomNav";
 import CharacterAvatar from "@/components/CharacterAvatar";
@@ -23,6 +24,7 @@ const formatCountdown = (ms: number) => {
 const Home = () => {
   const navigate = useNavigate();
   const { user, profile, progress, totalXp, loading, currentLives, nextLifeIn } = useAuth();
+  const { t } = useI18n();
   const [tip] = useState(getTodaysTip());
   const [challenges] = useState<DailyChallenge[]>(getTodaysChallenges());
   const [weeklyChallenges] = useState<WeeklyChallenge[]>(getWeeksChallenges());
@@ -93,7 +95,7 @@ const Home = () => {
   if (loading) {
     return (
       <div className="min-h-screen gradient-hero flex items-center justify-center">
-        <div className="animate-pulse text-primary font-bold text-xl">Načítavam...</div>
+        <div className="animate-pulse text-primary font-bold text-xl">{t("common.loading")}</div>
       </div>
     );
   }
@@ -107,7 +109,6 @@ const Home = () => {
             <h1 className="text-lg font-extrabold text-primary">FinAp</h1>
           </div>
           <div className="flex items-center gap-2">
-            {/* Lives with regen timer */}
             <div className="flex items-center gap-1 rounded-full bg-destructive/10 px-3 py-1 relative group">
               <Heart className="h-4 w-4 text-destructive fill-destructive" />
               <span className="text-sm font-bold text-destructive">{currentLives}</span>
@@ -136,8 +137,8 @@ const Home = () => {
             )}
           </div>
           <div>
-            <h2 className="text-2xl font-extrabold text-foreground">Ahoj, {displayName}! 👋</h2>
-            <p className="text-muted-foreground">Nauč sa ovládať svoje financie</p>
+            <h2 className="text-2xl font-extrabold text-foreground">{t("home.hello")}, {displayName}! 👋</h2>
+            <p className="text-muted-foreground">{t("home.subtitle")}</p>
           </div>
         </motion.div>
 
@@ -152,17 +153,17 @@ const Home = () => {
             className="w-full rounded-2xl gradient-primary p-5 shadow-button transition-all hover:opacity-90 active:scale-[0.98] flex items-center justify-center gap-3"
           >
             <BookOpen className="h-7 w-7 text-primary-foreground" />
-            <span className="text-xl font-extrabold text-primary-foreground">Lekcie</span>
+            <span className="text-xl font-extrabold text-primary-foreground">{t("home.lessons")}</span>
           </button>
         </motion.div>
 
         {/* Quick nav grid */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="mt-4 grid grid-cols-4 gap-2">
           {[
-            { path: "/study", icon: GraduationCap, label: "Učivo", color: "text-accent" },
-            { path: "/invest", icon: TrendingUp, label: "Investície", color: "text-primary" },
-            { path: "/leaderboard", icon: Trophy, label: "Rebríček", color: "text-level" },
-            { path: "/profile", icon: User, label: "Profil", color: "text-secondary" },
+            { path: "/study", icon: GraduationCap, label: t("home.studyMaterial"), color: "text-accent" },
+            { path: "/invest", icon: TrendingUp, label: t("home.investments"), color: "text-primary" },
+            { path: "/leaderboard", icon: Trophy, label: t("home.leaderboard"), color: "text-level" },
+            { path: "/profile", icon: User, label: t("home.profile"), color: "text-secondary" },
           ].map((item) => (
             <button
               key={item.path}
@@ -182,7 +183,7 @@ const Home = () => {
             <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-accent/20">
               <Lightbulb className="h-4 w-4 text-accent" />
             </div>
-            <h3 className="text-sm font-bold text-accent">Tip dňa</h3>
+            <h3 className="text-sm font-bold text-accent">{t("home.dailyTip")}</h3>
           </div>
           <p className="text-sm text-foreground leading-relaxed">{tip}</p>
         </motion.div>
@@ -191,10 +192,10 @@ const Home = () => {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mt-6">
           <div className="flex items-center gap-2 mb-3">
             <Target className="h-5 w-5 text-primary" />
-            <h3 className="text-lg font-extrabold text-foreground">Denné výzvy</h3>
+            <h3 className="text-lg font-extrabold text-foreground">{t("home.dailyChallenges")}</h3>
             <div className="ml-auto flex items-center gap-1 text-xs font-bold text-muted-foreground">
               <Clock className="h-3 w-3" />
-              <span>Reset: {dailyReset}</span>
+              <span>{t("home.reset")}: {dailyReset}</span>
             </div>
           </div>
           <div className="space-y-3">
@@ -209,10 +210,10 @@ const Home = () => {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="mt-6">
           <div className="flex items-center gap-2 mb-3">
             <Calendar className="h-5 w-5 text-accent" />
-            <h3 className="text-lg font-extrabold text-foreground">Týždenné výzvy</h3>
+            <h3 className="text-lg font-extrabold text-foreground">{t("home.weeklyChallenges")}</h3>
             <div className="ml-auto flex items-center gap-1 text-xs font-bold text-muted-foreground">
               <Clock className="h-3 w-3" />
-              <span>Reset: {weeklyReset}</span>
+              <span>{t("home.reset")}: {weeklyReset}</span>
             </div>
           </div>
           <div className="space-y-3">

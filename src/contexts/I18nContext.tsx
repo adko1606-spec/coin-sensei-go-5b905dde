@@ -103,7 +103,7 @@ const translations: Translations = {
   "profile.friends": { sk: "Priatelia", en: "Friends", ua: "Друзі" },
   "profile.addFriend": { sk: "Pridať", en: "Add", ua: "Додати" },
   "profile.noFriends": { sk: "Zatiaľ žiadni priatelia", en: "No friends yet", ua: "Поки немає друзів" },
-  "profile.noFriendsHint": { sk: "Použi tlačidlo „Pridať" a nájdi kamarátov", en: "Use the \"Add\" button to find friends", ua: "Використай кнопку \"Додати\" щоб знайти друзів" },
+  "profile.noFriendsHint": { sk: "Použi tlačidlo Pridať a nájdi kamarátov", en: "Use the Add button to find friends", ua: "Використай кнопку Додати щоб знайти друзів" },
   "profile.searchByName": { sk: "Hľadaj podľa mena...", en: "Search by name...", ua: "Пошук за ім'ям..." },
   "profile.search": { sk: "Hľadaj", en: "Search", ua: "Пошук" },
   "profile.searching": { sk: "Hľadám...", en: "Searching...", ua: "Пошук..." },

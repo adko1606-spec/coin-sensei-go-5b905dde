@@ -243,8 +243,8 @@ const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
             className={`mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full ${isPerfect ? "gradient-gold" : "gradient-primary"}`}>
             <Trophy className="h-10 w-10 text-primary-foreground" />
           </motion.div>
-          <h2 className="mb-2 text-2xl font-extrabold text-foreground">{isPerfect ? "Perfektné! ⭐" : "Výborne! 🎉"}</h2>
-          <p className="mb-1 text-muted-foreground">Správne odpovede: {score}/{lesson.questions.length}</p>
+          <h2 className="mb-2 text-2xl font-extrabold text-foreground">{isPerfect ? t("quiz.perfect") : t("quiz.excellent")}</h2>
+          <p className="mb-1 text-muted-foreground">{t("quiz.correctAnswers")}: {score}/{lesson.questions.length}</p>
           <div className="flex items-center justify-center gap-4 mb-4">
             <p className="text-lg font-bold text-xp">+{earnedXp} XP</p>
             <div className="flex items-center gap-1">
@@ -253,13 +253,13 @@ const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
           </div>
           {errors > 3 && (
             <p className="text-sm text-destructive mb-2 flex items-center justify-center gap-1">
-              <Heart className="h-4 w-4" /> Stratil si život ({errors} chýb)
+              <Heart className="h-4 w-4" /> {t("quiz.lostLife")} ({errors} {t("quiz.errors")})
             </p>
           )}
-          {!isPerfect && <p className="text-sm text-destructive mb-4">Lekcia bude označená červenou, kým ju nesplníš bez chyby.</p>}
+          {!isPerfect && <p className="text-sm text-destructive mb-4">{t("quiz.notPerfectHint")}</p>}
           <button onClick={() => onComplete(earnedXp, score, lesson.questions.length)}
             className="w-full rounded-2xl gradient-primary px-6 py-4 font-bold text-primary-foreground shadow-button transition-all hover:opacity-90 active:scale-95">
-            Pokračovať
+            {t("quiz.continue")}
           </button>
         </motion.div>
       </motion.div>

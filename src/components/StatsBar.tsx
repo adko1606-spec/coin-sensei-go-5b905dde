@@ -1,5 +1,6 @@
 import { Flame, Zap, Trophy } from "lucide-react";
 import { motion } from "framer-motion";
+import { useI18n } from "@/contexts/I18nContext";
 
 interface StatsBarProps {
   xp: number;
@@ -8,6 +9,7 @@ interface StatsBarProps {
 }
 
 const StatsBar = ({ xp, streak, level }: StatsBarProps) => {
+  const { t } = useI18n();
   return (
     <motion.div
       initial={{ y: -20, opacity: 0 }}
@@ -19,7 +21,7 @@ const StatsBar = ({ xp, streak, level }: StatsBarProps) => {
           <Flame className="h-5 w-5 text-streak" />
         </div>
         <div>
-          <p className="text-xs font-semibold text-muted-foreground">Streak</p>
+          <p className="text-xs font-semibold text-muted-foreground">{t("leaderboard.streak")}</p>
           <p className="text-lg font-extrabold text-foreground">{streak}</p>
         </div>
       </div>
@@ -39,7 +41,7 @@ const StatsBar = ({ xp, streak, level }: StatsBarProps) => {
           <Trophy className="h-5 w-5 text-level" />
         </div>
         <div>
-          <p className="text-xs font-semibold text-muted-foreground">Level</p>
+          <p className="text-xs font-semibold text-muted-foreground">{t("common.level")}</p>
           <p className="text-lg font-extrabold text-foreground">{level}</p>
         </div>
       </div>

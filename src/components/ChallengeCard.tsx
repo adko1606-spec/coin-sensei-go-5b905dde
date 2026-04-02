@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { Check, Calendar } from "lucide-react";
+import { Check } from "lucide-react";
+import { useI18n } from "@/contexts/I18nContext";
 import type { DailyChallenge, WeeklyChallenge } from "@/data/dailyChallenges";
 
 interface ChallengeCardProps {
@@ -15,18 +16,15 @@ const tierColors: Record<string, { bg: string; border: string; badge: string; ba
   gold: { bg: "bg-yellow-500/10", border: "border-yellow-400/40", badge: "bg-yellow-400/20", badgeText: "text-yellow-500" },
 };
 
-const tierLabels: Record<string, string> = {
-  bronze: "🥉 Bronzová",
-  silver: "🥈 Strieborná",
-  gold: "🥇 Zlatá",
-};
-
 export function ChallengeCard({ challenge, status, index, delayBase = 0.3 }: ChallengeCardProps) {
+  const { t } = useI18n();
   const isCompleted = status.completed;
   const current = status.current;
-  const isMonthly = "tier" in challenge;
-  const tier = isMonthly ? (challenge as WeeklyChallenge).tier : null;
+  const isWeekly = "tier" in challenge;
+  const tier = isWeekly ? (challenge as WeeklyChallenge).tier : null;
   const colors = tier ? tierColors[tier] : null;
+
+  const tierLabel = tier ? t(`challenge.${tier}`) : null;
 
   return (
     <motion.div
@@ -37,16 +35,12 @@ export function ChallengeCard({ challenge, status, index, delayBase = 0.3 }: Cha
       className={`flex items-center gap-3 rounded-2xl p-4 shadow-card transition-all ${
         isCompleted
           ? "bg-primary/10 border-2 border-primary"
-          : isMonthly && colors
+          : isWeekly && colors
           ? `${colors.bg} border ${colors.border}`
           : "bg-card"
       }`}
     >
-      <div
-        className={`flex h-12 w-12 items-center justify-center rounded-xl text-2xl ${
-          isCompleted ? "bg-primary/20" : "bg-primary/10"
-        }`}
-      >
+      <div className={`flex h-12 w-12 items-center justify-center rounded-xl text-2xl ${isCompleted ? "bg-primary/20" : "bg-primary/10"}`}>
         {isCompleted ? <Check className="h-6 w-6 text-primary" /> : challenge.icon}
       </div>
       <div className="flex-1">
@@ -56,28 +50,23 @@ export function ChallengeCard({ challenge, status, index, delayBase = 0.3 }: Cha
           </p>
           {tier && colors && (
             <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${colors.badge} ${colors.badgeText}`}>
-              {tierLabels[tier]}
+              {tierLabel}
             </span>
           )}
         </div>
         <p className="text-xs text-muted-foreground">{challenge.description}</p>
         {!isCompleted && (
           <div className="mt-1.5 h-1.5 w-full rounded-full bg-muted overflow-hidden">
-            <div
-              className="h-full rounded-full bg-primary transition-all"
-              style={{ width: `${Math.min((current / challenge.target) * 100, 100)}%` }}
-            />
+            <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${Math.min((current / challenge.target) * 100, 100)}%` }} />
           </div>
         )}
         {!isCompleted && (
-          <p className="text-[10px] text-muted-foreground mt-0.5">
-            {current}/{challenge.target}
-          </p>
+          <p className="text-[10px] text-muted-foreground mt-0.5">{current}/{challenge.target}</p>
         )}
       </div>
       <div className="flex flex-col items-end gap-0.5">
         {isCompleted ? (
-          <span className="text-xs font-bold text-primary">Splnené ✓</span>
+          <span className="text-xs font-bold text-primary">{t("challenge.completed")}</span>
         ) : (
           <>
             <span className="text-xs font-bold text-xp">+{challenge.reward.xp} XP</span>

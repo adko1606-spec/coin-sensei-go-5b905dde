@@ -2,33 +2,23 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ArrowLeft, Check } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useI18n } from "@/contexts/I18nContext";
 import { characters } from "@/data/characters";
 import logo from "@/assets/logo-new.png";
 
-const steps = [
-  {
-    title: "Koľko máš rokov?",
-    options: ["14–17", "18–24", "25–34", "35+"],
-  },
-  {
-    title: "Aké sú tvoje finančné znalosti?",
-    options: ["Začiatočník 🌱", "Mierne pokročilý 📚", "Pokročilý 🎓", "Expert 💎"],
-  },
-  {
-    title: "Aká je tvoja pracovná situácia?",
-    options: ["Študent 📖", "Zamestnaný 💼", "Podnikateľ 🚀", "Iné"],
-  },
-  {
-    title: "Čo ťa najviac zaujíma?",
-    options: ["Šetrenie peňazí 🐷", "Investovanie 📈", "Rozpočtovanie 💰", "Všetko 🌟"],
-  },
-];
-
 const Onboarding = () => {
   const { completeOnboarding } = useAuth();
+  const { t } = useI18n();
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<string[]>([]);
   const [selectedChar, setSelectedChar] = useState<string | null>(null);
+
+  const steps = [
+    { title: t("onboarding.howOld"), options: ["14–17", "18–24", "25–34", "35+"] },
+    { title: t("onboarding.knowledge"), options: [t("onboarding.beginner"), t("onboarding.intermediate"), t("onboarding.advanced"), t("onboarding.expert")] },
+    { title: t("onboarding.work"), options: [t("onboarding.student"), t("onboarding.employed"), t("onboarding.entrepreneur"), t("onboarding.other")] },
+    { title: t("onboarding.interest"), options: [t("onboarding.savingMoney"), t("onboarding.investingMoney"), t("onboarding.budgeting"), t("onboarding.everything")] },
+  ];
 
   const isQuizStep = step < steps.length;
   const isCharStep = step === steps.length;
@@ -55,13 +45,12 @@ const Onboarding = () => {
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md">
         <div className="flex flex-col items-center mb-6">
           <img src={logo} alt="FinAp" className="h-20 w-20 mb-2" />
-          <h1 className="text-2xl font-extrabold text-foreground">Vitaj vo FinAp!</h1>
-          <p className="text-muted-foreground text-sm">Povieme si o tebe niečo 😊</p>
+          <h1 className="text-2xl font-extrabold text-foreground">{t("onboarding.welcome")}</h1>
+          <p className="text-muted-foreground text-sm">{t("onboarding.tellUsAbout")}</p>
         </div>
 
-        {/* Progress dots */}
         <div className="flex items-center justify-center gap-2 mb-6">
-          {[...steps, { title: "Postava" }].map((_, i) => (
+          {[...steps, { title: t("onboarding.character") }].map((_, i) => (
             <div key={i} className={`h-2 rounded-full transition-all ${i === step ? "w-8 bg-primary" : i < step ? "w-2 bg-primary/50" : "w-2 bg-muted"}`} />
           ))}
         </div>
@@ -83,10 +72,9 @@ const Onboarding = () => {
                 </div>
               </motion.div>
             )}
-
             {isCharStep && (
               <motion.div key="char" initial={{ x: 30, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: -30, opacity: 0 }}>
-                <h2 className="text-xl font-extrabold text-foreground mb-4">Vyber si postavu 🎭</h2>
+                <h2 className="text-xl font-extrabold text-foreground mb-4">{t("onboarding.chooseCharacter")}</h2>
                 <div className="grid grid-cols-2 gap-3 max-h-[50vh] overflow-y-auto">
                   {characters.map((char) => (
                     <button key={char.id} onClick={() => setSelectedChar(char.id)}
@@ -112,13 +100,13 @@ const Onboarding = () => {
             {isQuizStep && (
               <button onClick={handleNext} disabled={!answers[step]}
                 className="flex-1 flex items-center justify-center gap-2 rounded-2xl gradient-primary px-6 py-3 font-bold text-primary-foreground shadow-button disabled:opacity-50">
-                Ďalej <ArrowRight className="h-5 w-5" />
+                {t("onboarding.next")} <ArrowRight className="h-5 w-5" />
               </button>
             )}
             {isCharStep && (
               <button onClick={handleFinish} disabled={!selectedChar}
                 className="flex-1 flex items-center justify-center gap-2 rounded-2xl gradient-primary px-6 py-3 font-bold text-primary-foreground shadow-button disabled:opacity-50">
-                Začať hrať! <Check className="h-5 w-5" />
+                {t("onboarding.startPlaying")} <Check className="h-5 w-5" />
               </button>
             )}
           </div>

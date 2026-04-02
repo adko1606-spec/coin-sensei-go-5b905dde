@@ -308,7 +308,7 @@ const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
             {answered && (
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
                 className={`mt-4 rounded-2xl p-4 ${isCorrect ? "bg-primary/10" : "bg-destructive/10"}`}>
-                <p className="text-sm font-semibold text-foreground">{isCorrect ? "✅ Správne!" : "❌ Nesprávne"}</p>
+                <p className="text-sm font-semibold text-foreground">{isCorrect ? t("quiz.correct") : t("quiz.incorrect")}</p>
                 <p className="mt-1 text-sm text-muted-foreground">{question.explanation}</p>
               </motion.div>
             )}

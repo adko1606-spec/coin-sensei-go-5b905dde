@@ -267,7 +267,7 @@ const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
   }
 
   const typeBadge = {
-    choice: "📝 Výber", truefalse: "✅❌ Pravda/Nepravda", slider: "🎚️ Odhad", order: "↕️ Zoraď",
+    choice: t("quiz.choice"), truefalse: t("quiz.trueFalse"), slider: t("quiz.slider"), order: t("quiz.order"),
   }[question.type];
 
   return (

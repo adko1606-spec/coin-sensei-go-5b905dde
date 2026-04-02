@@ -222,11 +222,11 @@ const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
         <motion.div initial={{ scale: 0.8 }} animate={{ scale: 1 }}
           className="w-full max-w-md rounded-3xl bg-card p-8 text-center shadow-float">
           <Heart className="h-16 w-16 text-destructive mx-auto mb-4" />
-          <h2 className="text-2xl font-extrabold text-foreground mb-2">Žiadne životy!</h2>
-          <p className="text-muted-foreground mb-6">Počkaj na regeneráciu alebo sa vráť neskôr.</p>
+          <h2 className="text-2xl font-extrabold text-foreground mb-2">{t("quiz.noLives")}</h2>
+          <p className="text-muted-foreground mb-6">{t("quiz.waitForLives")}</p>
           <button onClick={onClose}
             className="w-full rounded-2xl gradient-primary px-6 py-4 font-bold text-primary-foreground shadow-button">
-            Zavrieť
+            {t("common.close")}
           </button>
         </motion.div>
       </motion.div>

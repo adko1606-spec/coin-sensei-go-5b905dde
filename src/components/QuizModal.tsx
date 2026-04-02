@@ -294,7 +294,7 @@ const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
         <div className="mb-4 flex items-center gap-2">
           <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-bold text-primary">{typeBadge}</span>
           <span className="text-xs text-muted-foreground">{currentIndex + 1}/{lesson.questions.length}</span>
-          {errors > 0 && <span className="text-xs text-destructive font-bold ml-auto">{errors} chýb</span>}
+          {errors > 0 && <span className="text-xs text-destructive font-bold ml-auto">{errors} {t("quiz.errors")}</span>}
         </div>
 
         <AnimatePresence mode="wait">

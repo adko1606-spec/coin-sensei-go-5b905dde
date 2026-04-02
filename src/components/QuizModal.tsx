@@ -4,7 +4,7 @@ import { X, CheckCircle2, XCircle, ArrowRight, Trophy, GripVertical, Coins, Hear
 import type { Lesson, Question, ChoiceQuestion, TrueFalseQuestion, SliderQuestion, OrderQuestion } from "@/data/lessons";
 import { Progress } from "@/components/ui/progress";
 import { useAuth } from "@/contexts/AuthContext";
-import { useSound } from "@/hooks/useSound";
+import { useI18n } from "@/contexts/I18nContext";
 import AIQuestionHelper from "@/components/AIQuestionHelper";
 
 interface QuizModalProps {

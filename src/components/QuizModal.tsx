@@ -41,8 +41,8 @@ const TrueFalseView = ({ question, selectedAnswer, isCorrect, onAnswer }: {
   question: TrueFalseQuestion; selectedAnswer: boolean | null; isCorrect: boolean | null; onAnswer: (v: boolean) => void;
 }) => {
   const options = [
-    { label: "Pravda", emoji: "✅", value: true },
-    { label: "Nepravda", emoji: "❌", value: false },
+    { label: "✅", emoji: "✅", value: true },
+    { label: "❌", emoji: "❌", value: false },
   ];
   return (
     <div className="grid grid-cols-2 gap-3">

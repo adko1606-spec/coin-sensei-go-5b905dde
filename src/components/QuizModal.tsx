@@ -83,8 +83,8 @@ const SliderView = ({ question, submitted, isCorrect, onSubmit }: {
       </div>
       {!submitted && (
         <motion.button initial={{ opacity: 0 }} animate={{ opacity: 1 }} whileTap={{ scale: 0.98 }} onClick={() => onSubmit(value)}
-          className="w-full rounded-2xl gradient-gold px-6 py-4 font-bold text-primary-foreground shadow-button transition-all hover:opacity-90 active:scale-95">
-          Potvrdiť odpoveď
+          className="w-full rounded-2xl gradient-gold px-6 py-4 font-bold text-primary-foreground shadow-button transition-all hover:opacity-90 active:scale-95" data-i18n="quiz.confirmAnswer">
+          Potvrdiť
         </motion.button>
       )}
       {submitted && (

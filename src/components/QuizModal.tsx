@@ -137,6 +137,7 @@ const OrderView = ({ question, submitted, isCorrect, onSubmit }: {
 
 const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
   const { currentLives, loseLife } = useAuth();
+  const { t } = useI18n();
   const { playCorrect, playWrongMild, playWrongSerious, playReward, playLifeLost } = useSound();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answered, setAnswered] = useState(false);

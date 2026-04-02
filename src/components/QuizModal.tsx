@@ -319,7 +319,7 @@ const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
                 {!showAIHelp ? (
                   <button onClick={() => setShowAIHelp(true)}
                     className="flex items-center gap-2 text-sm text-accent hover:text-accent/80 font-semibold transition-colors">
-                    <Bot className="h-4 w-4" /> Opýtaj sa AI na vysvetlenie
+                    <Bot className="h-4 w-4" /> {t("quiz.askAI")}
                   </button>
                 ) : (
                   <AIQuestionHelper questionText={question.text} explanation={question.explanation} onClose={() => setShowAIHelp(false)} />

@@ -4,7 +4,7 @@ import { X, CheckCircle2, XCircle, ArrowRight, Trophy, GripVertical, Coins, Hear
 import type { Lesson, Question, ChoiceQuestion, TrueFalseQuestion, SliderQuestion, OrderQuestion } from "@/data/lessons";
 import { Progress } from "@/components/ui/progress";
 import { useAuth } from "@/contexts/AuthContext";
-import { useSound } from "@/hooks/useSound";
+import { useI18n } from "@/contexts/I18nContext";
 import AIQuestionHelper from "@/components/AIQuestionHelper";
 
 interface QuizModalProps {
@@ -41,8 +41,8 @@ const TrueFalseView = ({ question, selectedAnswer, isCorrect, onAnswer }: {
   question: TrueFalseQuestion; selectedAnswer: boolean | null; isCorrect: boolean | null; onAnswer: (v: boolean) => void;
 }) => {
   const options = [
-    { label: "Pravda", emoji: "✅", value: true },
-    { label: "Nepravda", emoji: "❌", value: false },
+    { label: "✅", emoji: "✅", value: true },
+    { label: "❌", emoji: "❌", value: false },
   ];
   return (
     <div className="grid grid-cols-2 gap-3">
@@ -83,8 +83,8 @@ const SliderView = ({ question, submitted, isCorrect, onSubmit }: {
       </div>
       {!submitted && (
         <motion.button initial={{ opacity: 0 }} animate={{ opacity: 1 }} whileTap={{ scale: 0.98 }} onClick={() => onSubmit(value)}
-          className="w-full rounded-2xl gradient-gold px-6 py-4 font-bold text-primary-foreground shadow-button transition-all hover:opacity-90 active:scale-95">
-          Potvrdiť odpoveď
+          className="w-full rounded-2xl gradient-gold px-6 py-4 font-bold text-primary-foreground shadow-button transition-all hover:opacity-90 active:scale-95" data-i18n="quiz.confirmAnswer">
+          Potvrdiť
         </motion.button>
       )}
       {submitted && (
@@ -137,6 +137,7 @@ const OrderView = ({ question, submitted, isCorrect, onSubmit }: {
 
 const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
   const { currentLives, loseLife } = useAuth();
+  const { t } = useI18n();
   const { playCorrect, playWrongMild, playWrongSerious, playReward, playLifeLost } = useSound();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answered, setAnswered] = useState(false);
@@ -221,11 +222,11 @@ const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
         <motion.div initial={{ scale: 0.8 }} animate={{ scale: 1 }}
           className="w-full max-w-md rounded-3xl bg-card p-8 text-center shadow-float">
           <Heart className="h-16 w-16 text-destructive mx-auto mb-4" />
-          <h2 className="text-2xl font-extrabold text-foreground mb-2">Žiadne životy!</h2>
-          <p className="text-muted-foreground mb-6">Počkaj na regeneráciu alebo sa vráť neskôr.</p>
+          <h2 className="text-2xl font-extrabold text-foreground mb-2">{t("quiz.noLives")}</h2>
+          <p className="text-muted-foreground mb-6">{t("quiz.waitForLives")}</p>
           <button onClick={onClose}
             className="w-full rounded-2xl gradient-primary px-6 py-4 font-bold text-primary-foreground shadow-button">
-            Zavrieť
+            {t("common.close")}
           </button>
         </motion.div>
       </motion.div>
@@ -242,8 +243,8 @@ const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
             className={`mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full ${isPerfect ? "gradient-gold" : "gradient-primary"}`}>
             <Trophy className="h-10 w-10 text-primary-foreground" />
           </motion.div>
-          <h2 className="mb-2 text-2xl font-extrabold text-foreground">{isPerfect ? "Perfektné! ⭐" : "Výborne! 🎉"}</h2>
-          <p className="mb-1 text-muted-foreground">Správne odpovede: {score}/{lesson.questions.length}</p>
+          <h2 className="mb-2 text-2xl font-extrabold text-foreground">{isPerfect ? t("quiz.perfect") : t("quiz.excellent")}</h2>
+          <p className="mb-1 text-muted-foreground">{t("quiz.correctAnswers")}: {score}/{lesson.questions.length}</p>
           <div className="flex items-center justify-center gap-4 mb-4">
             <p className="text-lg font-bold text-xp">+{earnedXp} XP</p>
             <div className="flex items-center gap-1">
@@ -252,13 +253,13 @@ const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
           </div>
           {errors > 3 && (
             <p className="text-sm text-destructive mb-2 flex items-center justify-center gap-1">
-              <Heart className="h-4 w-4" /> Stratil si život ({errors} chýb)
+              <Heart className="h-4 w-4" /> {t("quiz.lostLife")} ({errors} {t("quiz.errors")})
             </p>
           )}
-          {!isPerfect && <p className="text-sm text-destructive mb-4">Lekcia bude označená červenou, kým ju nesplníš bez chyby.</p>}
+          {!isPerfect && <p className="text-sm text-destructive mb-4">{t("quiz.notPerfectHint")}</p>}
           <button onClick={() => onComplete(earnedXp, score, lesson.questions.length)}
             className="w-full rounded-2xl gradient-primary px-6 py-4 font-bold text-primary-foreground shadow-button transition-all hover:opacity-90 active:scale-95">
-            Pokračovať
+            {t("quiz.continue")}
           </button>
         </motion.div>
       </motion.div>
@@ -266,7 +267,7 @@ const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
   }
 
   const typeBadge = {
-    choice: "📝 Výber", truefalse: "✅❌ Pravda/Nepravda", slider: "🎚️ Odhad", order: "↕️ Zoraď",
+    choice: t("quiz.choice"), truefalse: t("quiz.trueFalse"), slider: t("quiz.slider"), order: t("quiz.order"),
   }[question.type];
 
   return (
@@ -293,7 +294,7 @@ const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
         <div className="mb-4 flex items-center gap-2">
           <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-bold text-primary">{typeBadge}</span>
           <span className="text-xs text-muted-foreground">{currentIndex + 1}/{lesson.questions.length}</span>
-          {errors > 0 && <span className="text-xs text-destructive font-bold ml-auto">{errors} chýb</span>}
+          {errors > 0 && <span className="text-xs text-destructive font-bold ml-auto">{errors} {t("quiz.errors")}</span>}
         </div>
 
         <AnimatePresence mode="wait">
@@ -307,7 +308,7 @@ const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
             {answered && (
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
                 className={`mt-4 rounded-2xl p-4 ${isCorrect ? "bg-primary/10" : "bg-destructive/10"}`}>
-                <p className="text-sm font-semibold text-foreground">{isCorrect ? "✅ Správne!" : "❌ Nesprávne"}</p>
+                <p className="text-sm font-semibold text-foreground">{isCorrect ? t("quiz.correct") : t("quiz.incorrect")}</p>
                 <p className="mt-1 text-sm text-muted-foreground">{question.explanation}</p>
               </motion.div>
             )}
@@ -318,7 +319,7 @@ const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
                 {!showAIHelp ? (
                   <button onClick={() => setShowAIHelp(true)}
                     className="flex items-center gap-2 text-sm text-accent hover:text-accent/80 font-semibold transition-colors">
-                    <Bot className="h-4 w-4" /> Opýtaj sa AI na vysvetlenie
+                    <Bot className="h-4 w-4" /> {t("quiz.askAI")}
                   </button>
                 ) : (
                   <AIQuestionHelper questionText={question.text} explanation={question.explanation} onClose={() => setShowAIHelp(false)} />
@@ -331,7 +332,7 @@ const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
         {answered && (
           <motion.button initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} onClick={handleNext}
             className="mt-6 flex w-full items-center justify-center gap-2 rounded-2xl gradient-primary px-6 py-4 font-bold text-primary-foreground shadow-button transition-all hover:opacity-90 active:scale-95">
-            {currentIndex < lesson.questions.length - 1 ? (<>Ďalšia otázka <ArrowRight className="h-5 w-5" /></>) : "Dokončiť"}
+            {currentIndex < lesson.questions.length - 1 ? (<>{t("quiz.nextQuestion")} <ArrowRight className="h-5 w-5" /></>) : t("quiz.finish")}
           </motion.button>
         )}
       </motion.div>

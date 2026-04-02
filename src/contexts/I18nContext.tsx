@@ -12,7 +12,7 @@ const translations: Translations = {
   "nav.invest": { sk: "Investície", en: "Invest", ua: "Інвестиції" },
   "nav.leaderboard": { sk: "Rebríček", en: "Leaderboard", ua: "Рейтинг" },
   "nav.profile": { sk: "Profil", en: "Profile", ua: "Профіль" },
-  
+
   // Home
   "home.hello": { sk: "Ahoj", en: "Hello", ua: "Привіт" },
   "home.subtitle": { sk: "Nauč sa ovládať svoje financie", en: "Learn to master your finances", ua: "Навчись керувати своїми фінансами" },
@@ -25,7 +25,7 @@ const translations: Translations = {
   "home.investments": { sk: "Investície", en: "Invest", ua: "Інвестиції" },
   "home.leaderboard": { sk: "Rebríček", en: "Leaderboard", ua: "Рейтинг" },
   "home.profile": { sk: "Profil", en: "Profile", ua: "Профіль" },
-  
+
   // Lessons
   "lessons.title": { sk: "Lekcie", en: "Lessons", ua: "Уроки" },
   "lessons.loading": { sk: "Načítavam...", en: "Loading...", ua: "Завантаження..." },
@@ -34,7 +34,7 @@ const translations: Translations = {
   "lessons.correct": { sk: "Správne!", en: "Correct!", ua: "Правильно!" },
   "lessons.incorrect": { sk: "Nesprávne!", en: "Incorrect!", ua: "Неправильно!" },
   "lessons.completed": { sk: "Lekcia dokončená!", en: "Lesson completed!", ua: "Урок завершено!" },
-  
+
   // Invest
   "invest.title": { sk: "Investície", en: "Investments", ua: "Інвестиції" },
   "invest.market": { sk: "Trh", en: "Market", ua: "Ринок" },
@@ -74,7 +74,20 @@ const translations: Translations = {
   "invest.marketNews": { sk: "Trhové správy", en: "Market News", ua: "Ринкові новини" },
   "invest.yourTransactions": { sk: "Tvoje transakcie", en: "Your Transactions", ua: "Твої транзакції" },
   "invest.noTransactions": { sk: "Žiadne transakcie", en: "No transactions", ua: "Немає транзакцій" },
-  
+  "invest.enterValidAmount": { sk: "Zadaj platnú sumu", en: "Enter a valid amount", ua: "Введіть дійсну суму" },
+  "invest.notEnoughCoins": { sk: "Nemáš dostatok mincí", en: "Not enough coins", ua: "Недостатньо монет" },
+  "invest.notEnoughInvested": { sk: "Nemáš toľko investovaných mincí", en: "Not enough invested coins", ua: "Недостатньо інвестованих монет" },
+  "invest.investedMsg": { sk: "Investoval si", en: "You invested", ua: "Ви інвестували" },
+  "invest.withdrawnMsg": { sk: "Vybral si", en: "You withdrew", ua: "Ви вивели" },
+  "invest.finceInto": { sk: "Fincov do", en: "Fince into", ua: "Fince в" },
+  "invest.finceFrom": { sk: "Fincov z", en: "Fince from", ua: "Fince з" },
+  "invest.investError": { sk: "Chyba pri investovaní", en: "Error investing", ua: "Помилка інвестування" },
+  "invest.withdrawError": { sk: "Chyba pri výbere", en: "Error withdrawing", ua: "Помилка виведення" },
+  "invest.valueChanges": { sk: "Hodnota sa mení každú hodinu.", en: "Value changes every hour.", ua: "Вартість змінюється щогодини." },
+  "invest.cryptoVolatile": { sk: "Krypto je veľmi volatilné – môžeš stratiť väčšinu investície!", en: "Crypto is very volatile – you can lose most of your investment!", ua: "Крипто дуже волатильне – ви можете втратити більшу частину інвестиції!" },
+  "invest.riskyArea": { sk: "Táto oblasť je riziková – počítaj s výkyvmi.", en: "This area is risky – expect fluctuations.", ua: "Ця область ризикована – очікуйте коливання." },
+  "invest.stableArea": { sk: "Stabilnejšie oblasti rastú pomalšie, ale sú bezpečnejšie.", en: "More stable areas grow slower but are safer.", ua: "Стабільніші області зростають повільніше, але безпечніші." },
+
   // Profile
   "profile.changeName": { sk: "Zmeniť postavu", en: "Change Character", ua: "Змінити персонажа" },
   "profile.shop": { sk: "Obchod s doplnkami", en: "Cosmetics Shop", ua: "Магазин косметики" },
@@ -90,8 +103,11 @@ const translations: Translations = {
   "profile.friends": { sk: "Priatelia", en: "Friends", ua: "Друзі" },
   "profile.addFriend": { sk: "Pridať", en: "Add", ua: "Додати" },
   "profile.noFriends": { sk: "Zatiaľ žiadni priatelia", en: "No friends yet", ua: "Поки немає друзів" },
+  "profile.noFriendsHint": { sk: "Použi tlačidlo Pridať a nájdi kamarátov", en: "Use the Add button to find friends", ua: "Використай кнопку Додати щоб знайти друзів" },
   "profile.searchByName": { sk: "Hľadaj podľa mena...", en: "Search by name...", ua: "Пошук за ім'ям..." },
   "profile.search": { sk: "Hľadaj", en: "Search", ua: "Пошук" },
+  "profile.searching": { sk: "Hľadám...", en: "Searching...", ua: "Пошук..." },
+  "profile.noResults": { sk: "Žiadne výsledky", en: "No results", ua: "Немає результатів" },
   "profile.selectCharacter": { sk: "Vyber si postavu", en: "Choose Character", ua: "Обери персонажа" },
   "profile.shopTitle": { sk: "Obchod", en: "Shop", ua: "Магазин" },
   "profile.dailyDiscount": { sk: "Denná zľava 20% na vybrané položky!", en: "Daily 20% discount on selected items!", ua: "Щоденна знижка 20% на вибрані товари!" },
@@ -104,7 +120,19 @@ const translations: Translations = {
   "profile.hats": { sk: "🎩 Klobúky", en: "🎩 Hats", ua: "🎩 Капелюхи" },
   "profile.accessories": { sk: "💼 Doplnky", en: "💼 Accessories", ua: "💼 Аксесуари" },
   "profile.effects": { sk: "🎨 Efekty", en: "🎨 Effects", ua: "🎨 Ефекти" },
-  
+  "profile.friendsAlready": { sk: "Priatelia ✓", en: "Friends ✓", ua: "Друзі ✓" },
+  "profile.pending": { sk: "Čaká sa...", en: "Pending...", ua: "Очікується..." },
+  "profile.addFriendBtn": { sk: "+ Pridať", en: "+ Add", ua: "+ Додати" },
+  "profile.friendRequests": { sk: "Žiadosti o priateľstvo", en: "Friend Requests", ua: "Запити на дружбу" },
+  "profile.wantsToBeFriend": { sk: "Chce byť tvoj priateľ", en: "Wants to be your friend", ua: "Хоче бути твоїм другом" },
+  "profile.requestSent": { sk: "Žiadosť o priateľstvo odoslaná! 🤝", en: "Friend request sent! 🤝", ua: "Запит на дружбу відправлено! 🤝" },
+  "profile.requestAlreadySent": { sk: "Žiadosť už bola odoslaná", en: "Request already sent", ua: "Запит вже відправлено" },
+  "profile.requestError": { sk: "Chyba pri odoslaní žiadosti", en: "Error sending request", ua: "Помилка відправки запиту" },
+  "profile.friendAccepted": { sk: "Priateľstvo prijaté! 🎉", en: "Friendship accepted! 🎉", ua: "Дружбу прийнято! 🎉" },
+  "profile.requestDeclined": { sk: "Žiadosť odmietnutá", en: "Request declined", ua: "Запит відхилено" },
+  "profile.friendRemoved": { sk: "Priateľ odstránený", en: "Friend removed", ua: "Друга видалено" },
+  "profile.player": { sk: "Hráč", en: "Player", ua: "Гравець" },
+
   // Leaderboard
   "leaderboard.title": { sk: "Rebríček", en: "Leaderboard", ua: "Рейтинг" },
   "leaderboard.subtitle": { sk: "Súťaž s ostatnými hráčmi", en: "Compete with other players", ua: "Змагайся з іншими гравцями" },
@@ -122,7 +150,7 @@ const translations: Translations = {
   "leaderboard.daysUnit": { sk: "dní", en: "days", ua: "днів" },
   "leaderboard.lessonsUnit": { sk: "lekcií", en: "lessons", ua: "уроків" },
   "leaderboard.viewProfile": { sk: "Zobraziť profil", en: "View Profile", ua: "Переглянути профіль" },
-  
+
   // Study
   "study.title": { sk: "Učivo", en: "Study Material", ua: "Навчальний матеріал" },
   "study.subtitle": { sk: "Nauč sa základy pred lekciami", en: "Learn the basics before lessons", ua: "Вивчіть основи перед уроками" },
@@ -134,7 +162,7 @@ const translations: Translations = {
   "study.example": { sk: "Príklad", en: "Example", ua: "Приклад" },
   "study.tip": { sk: "Tip", en: "Tip", ua: "Порада" },
   "study.goToLessonsArea": { sk: "Prejsť na lekcie z tejto oblasti", en: "Go to lessons from this area", ua: "Перейти до уроків з цієї області" },
-  
+
   // Settings
   "settings.title": { sk: "Nastavenia", en: "Settings", ua: "Налаштування" },
   "settings.profile": { sk: "Profil", en: "Profile", ua: "Профіль" },
@@ -165,15 +193,142 @@ const translations: Translations = {
   "settings.resetError": { sk: "Chyba pri resetovaní", en: "Error resetting", ua: "Помилка скидання" },
   "settings.signOut": { sk: "Odhlásiť sa", en: "Sign Out", ua: "Вийти" },
   "settings.admin": { sk: "Administrácia", en: "Administration", ua: "Адміністрація" },
-  
+  "settings.wrongPassword": { sk: "Nesprávne heslo", en: "Wrong password", ua: "Невірний пароль" },
+  "settings.users": { sk: "Používatelia", en: "Users", ua: "Користувачі" },
+  "settings.active": { sk: "Aktívni", en: "Active", ua: "Активні" },
+  "settings.totalLessons": { sk: "Lekcie celkom", en: "Total Lessons", ua: "Уроків загалом" },
+  "settings.totalXp": { sk: "XP celkom", en: "Total XP", ua: "XP загалом" },
+  "settings.recentUsers": { sk: "Poslední používatelia", en: "Recent Users", ua: "Останні користувачі" },
+
+  // Quiz
+  "quiz.noLives": { sk: "Žiadne životy!", en: "No lives!", ua: "Немає життів!" },
+  "quiz.waitForLives": { sk: "Počkaj na regeneráciu alebo sa vráť neskôr.", en: "Wait for regeneration or come back later.", ua: "Зачекайте на відновлення або поверніться пізніше." },
+  "quiz.perfect": { sk: "Perfektné! ⭐", en: "Perfect! ⭐", ua: "Ідеально! ⭐" },
+  "quiz.excellent": { sk: "Výborne! 🎉", en: "Excellent! 🎉", ua: "Чудово! 🎉" },
+  "quiz.correctAnswers": { sk: "Správne odpovede", en: "Correct answers", ua: "Правильні відповіді" },
+  "quiz.lostLife": { sk: "Stratil si život", en: "You lost a life", ua: "Ви втратили життя" },
+  "quiz.errors": { sk: "chýb", en: "errors", ua: "помилок" },
+  "quiz.notPerfectHint": { sk: "Lekcia bude označená červenou, kým ju nesplníš bez chyby.", en: "Lesson will be marked red until you complete it without errors.", ua: "Урок буде позначений червоним, доки не пройдете без помилок." },
+  "quiz.continue": { sk: "Pokračovať", en: "Continue", ua: "Продовжити" },
+  "quiz.confirmAnswer": { sk: "Potvrdiť odpoveď", en: "Confirm answer", ua: "Підтвердити відповідь" },
+  "quiz.correctAnswer": { sk: "Správna odpoveď", en: "Correct answer", ua: "Правильна відповідь" },
+  "quiz.confirmOrder": { sk: "Potvrdiť poradie", en: "Confirm order", ua: "Підтвердити порядок" },
+  "quiz.dragHint": { sk: "Pretiahni položky do správneho poradia ↕️", en: "Drag items into the correct order ↕️", ua: "Перетягніть елементи у правильному порядку ↕️" },
+  "quiz.nextQuestion": { sk: "Ďalšia otázka", en: "Next Question", ua: "Наступне питання" },
+  "quiz.finish": { sk: "Dokončiť", en: "Finish", ua: "Завершити" },
+  "quiz.correct": { sk: "✅ Správne!", en: "✅ Correct!", ua: "✅ Правильно!" },
+  "quiz.incorrect": { sk: "❌ Nesprávne", en: "❌ Incorrect", ua: "❌ Неправильно" },
+  "quiz.askAI": { sk: "Opýtaj sa AI na vysvetlenie", en: "Ask AI for explanation", ua: "Запитайте AI пояснення" },
+  "quiz.choice": { sk: "📝 Výber", en: "📝 Choice", ua: "📝 Вибір" },
+  "quiz.trueFalse": { sk: "✅❌ Pravda/Nepravda", en: "✅❌ True/False", ua: "✅❌ Правда/Неправда" },
+  "quiz.slider": { sk: "🎚️ Odhad", en: "🎚️ Estimate", ua: "🎚️ Оцінка" },
+  "quiz.order": { sk: "↕️ Zoraď", en: "↕️ Sort", ua: "↕️ Сортуй" },
+  "quiz.true": { sk: "Pravda", en: "True", ua: "Правда" },
+  "quiz.false": { sk: "Nepravda", en: "False", ua: "Неправда" },
+
+  // Auth
+  "auth.login": { sk: "Prihlásenie", en: "Login", ua: "Вхід" },
+  "auth.register": { sk: "Registrácia", en: "Register", ua: "Реєстрація" },
+  "auth.name": { sk: "Meno", en: "Name", ua: "Ім'я" },
+  "auth.email": { sk: "Email", en: "Email", ua: "Email" },
+  "auth.password": { sk: "Heslo", en: "Password", ua: "Пароль" },
+  "auth.signIn": { sk: "Prihlásiť sa", en: "Sign In", ua: "Увійти" },
+  "auth.signUp": { sk: "Zaregistrovať sa", en: "Sign Up", ua: "Зареєструватися" },
+  "auth.loading": { sk: "Načítavam...", en: "Loading...", ua: "Завантаження..." },
+  "auth.or": { sk: "ALEBO", en: "OR", ua: "АБО" },
+  "auth.googleContinue": { sk: "Pokračovať cez Google", en: "Continue with Google", ua: "Продовжити з Google" },
+  "auth.appleContinue": { sk: "Pokračovať cez Apple", en: "Continue with Apple", ua: "Продовжити з Apple" },
+  "auth.subtitle": { sk: "Nauč sa ovládať svoje financie", en: "Learn to master your finances", ua: "Навчись керувати своїми фінансами" },
+  "auth.registerSuccess": { sk: "Registrácia úspešná! Skontroluj si email na potvrdenie.", en: "Registration successful! Check your email for confirmation.", ua: "Реєстрація успішна! Перевірте email для підтвердження." },
+
+  // Onboarding
+  "onboarding.welcome": { sk: "Vitaj vo FinAp!", en: "Welcome to FinAp!", ua: "Ласкаво просимо до FinAp!" },
+  "onboarding.tellUsAbout": { sk: "Povieme si o tebe niečo 😊", en: "Tell us something about yourself 😊", ua: "Розкажіть нам про себе 😊" },
+  "onboarding.howOld": { sk: "Koľko máš rokov?", en: "How old are you?", ua: "Скільки вам років?" },
+  "onboarding.knowledge": { sk: "Aké sú tvoje finančné znalosti?", en: "What's your financial knowledge?", ua: "Які ваші фінансові знання?" },
+  "onboarding.work": { sk: "Aká je tvoja pracovná situácia?", en: "What's your work situation?", ua: "Яка ваша робоча ситуація?" },
+  "onboarding.interest": { sk: "Čo ťa najviac zaujíma?", en: "What interests you the most?", ua: "Що вас найбільше цікавить?" },
+  "onboarding.beginner": { sk: "Začiatočník 🌱", en: "Beginner 🌱", ua: "Початківець 🌱" },
+  "onboarding.intermediate": { sk: "Mierne pokročilý 📚", en: "Intermediate 📚", ua: "Середній рівень 📚" },
+  "onboarding.advanced": { sk: "Pokročilý 🎓", en: "Advanced 🎓", ua: "Просунутий 🎓" },
+  "onboarding.expert": { sk: "Expert 💎", en: "Expert 💎", ua: "Експерт 💎" },
+  "onboarding.student": { sk: "Študent 📖", en: "Student 📖", ua: "Студент 📖" },
+  "onboarding.employed": { sk: "Zamestnaný 💼", en: "Employed 💼", ua: "Працюючий 💼" },
+  "onboarding.entrepreneur": { sk: "Podnikateľ 🚀", en: "Entrepreneur 🚀", ua: "Підприємець 🚀" },
+  "onboarding.other": { sk: "Iné", en: "Other", ua: "Інше" },
+  "onboarding.savingMoney": { sk: "Šetrenie peňazí 🐷", en: "Saving money 🐷", ua: "Заощадження грошей 🐷" },
+  "onboarding.investingMoney": { sk: "Investovanie 📈", en: "Investing 📈", ua: "Інвестування 📈" },
+  "onboarding.budgeting": { sk: "Rozpočtovanie 💰", en: "Budgeting 💰", ua: "Бюджетування 💰" },
+  "onboarding.everything": { sk: "Všetko 🌟", en: "Everything 🌟", ua: "Все 🌟" },
+  "onboarding.chooseCharacter": { sk: "Vyber si postavu 🎭", en: "Choose a character 🎭", ua: "Обери персонажа 🎭" },
+  "onboarding.next": { sk: "Ďalej", en: "Next", ua: "Далі" },
+  "onboarding.startPlaying": { sk: "Začať hrať!", en: "Start playing!", ua: "Почати гру!" },
+  "onboarding.character": { sk: "Postava", en: "Character", ua: "Персонаж" },
+
+  // Challenges
+  "challenge.completed": { sk: "Splnené ✓", en: "Completed ✓", ua: "Виконано ✓" },
+  "challenge.bronze": { sk: "🥉 Bronzová", en: "🥉 Bronze", ua: "🥉 Бронзова" },
+  "challenge.silver": { sk: "🥈 Strieborná", en: "🥈 Silver", ua: "🥈 Срібна" },
+  "challenge.gold": { sk: "🥇 Zlatá", en: "🥇 Gold", ua: "🥇 Золота" },
+
+  // Daily tips (keys for localized tips)
+  "tip.5030201": { sk: "Pravidlo 50/30/20: 50 % príjmu na potreby, 30 % na želania, 20 % na úspory a investície.", en: "The 50/30/20 rule: 50% of income for needs, 30% for wants, 20% for savings and investments.", ua: "Правило 50/30/20: 50% доходу на потреби, 30% на бажання, 20% на заощадження та інвестиції." },
+
+  // AI Chat
+  "ai.help": { sk: "AI Pomoc", en: "AI Help", ua: "AI Допомога" },
+  "ai.explainQuestion": { sk: "Vysvetli túto otázku", en: "Explain this question", ua: "Поясніть це питання" },
+  "ai.whyCorrect": { sk: "Prečo je to správna odpoveď?", en: "Why is this the correct answer?", ua: "Чому це правильна відповідь?" },
+  "ai.realExample": { sk: "Daj mi príklad z praxe", en: "Give me a real-world example", ua: "Наведіть приклад з практики" },
+  "ai.askPlaceholder": { sk: "Opýtaj sa...", en: "Ask...", ua: "Запитайте..." },
+  "ai.connectionError": { sk: "Nepodarilo sa spojiť s AI.", en: "Failed to connect to AI.", ua: "Не вдалося з'єднатися з AI." },
+  "ai.chatGreeting": { sk: "Ahoj! 👋 Som FinAp AI asistent. Opýtaj sa ma čokoľvek o financiách! 💰", en: "Hi! 👋 I'm the FinAp AI assistant. Ask me anything about finance! 💰", ua: "Привіт! 👋 Я FinAp AI асистент. Запитайте мене будь-що про фінанси! 💰" },
+  "ai.writeMsgPlaceholder": { sk: "Napíš správu...", en: "Write a message...", ua: "Напишіть повідомлення..." },
+  "ai.systemPrompt": { sk: "Pomáhaš študentovi pochopiť finančnú otázku z kvízu.", en: "You are helping a student understand a financial quiz question.", ua: "Ви допомагаєте студенту зрозуміти фінансове питання з вікторини." },
+
+  // Investment Demo
+  "demo.title": { sk: "Demo investovanie", en: "Demo Investment", ua: "Демо інвестування" },
+  "demo.subtitle": { sk: "Pozri sa, ako funguje zložené úročenie. Pohybuj posuvníkmi a sleduj, ako rastie tvoja investícia!", en: "See how compound interest works. Move the sliders and watch your investment grow!", ua: "Подивіться, як працюють складні відсотки. Рухайте повзунки та спостерігайте, як зростають ваші інвестиції!" },
+  "demo.finalValue": { sk: "Konečná hodnota", en: "Final Value", ua: "Кінцева вартість" },
+  "demo.totalInvested": { sk: "Investované", en: "Invested", ua: "Інвестовано" },
+  "demo.profit": { sk: "Zisk", en: "Profit", ua: "Прибуток" },
+  "demo.duration": { sk: "Dĺžka investície", en: "Investment Duration", ua: "Тривалість інвестиції" },
+  "demo.years": { sk: "rokov", en: "years", ua: "років" },
+  "demo.monthlyAmount": { sk: "Mesačná suma", en: "Monthly Amount", ua: "Місячна сума" },
+  "demo.annualReturn": { sk: "Ročný výnos", en: "Annual Return", ua: "Річний дохід" },
+  "demo.compoundTip": { sk: "Zložené úročenie je najsilnejší nástroj investora. Tvoje zisky generujú ďalšie zisky, a tak investícia rastie exponenciálne. Čím skôr začneš investovať, tým viac na tom zarobíš!", en: "Compound interest is the most powerful tool for investors. Your profits generate more profits, so your investment grows exponentially. The sooner you start investing, the more you'll earn!", ua: "Складні відсотки – найпотужніший інструмент інвестора. Ваші прибутки генерують нові прибутки, тому інвестиція зростає експоненціально. Чим раніше почнете інвестувати, тим більше заробите!" },
+  "demo.year": { sk: "Rok", en: "Year", ua: "Рік" },
+  "demo.value": { sk: "Hodnota", en: "Value", ua: "Вартість" },
+
+  // Categories (for lessons filter)
+  "cat.all": { sk: "Všetko", en: "All", ua: "Все" },
+  "cat.basics": { sk: "Základy", en: "Basics", ua: "Основи" },
+  "cat.saving": { sk: "Šetrenie", en: "Saving", ua: "Заощадження" },
+  "cat.investing": { sk: "Investovanie", en: "Investing", ua: "Інвестування" },
+  "cat.budgeting": { sk: "Rozpočet", en: "Budget", ua: "Бюджет" },
+  "cat.crypto": { sk: "Krypto", en: "Crypto", ua: "Крипто" },
+  "cat.taxes": { sk: "Dane", en: "Taxes", ua: "Податки" },
+  "cat.legal": { sk: "Právo", en: "Law", ua: "Право" },
+  "cat.insurance": { sk: "Poistenie", en: "Insurance", ua: "Страхування" },
+
+  // Study categories
+  "studyCat.basics": { sk: "Základy peňazí", en: "Money Basics", ua: "Основи грошей" },
+  "studyCat.saving": { sk: "Šetrenie", en: "Saving", ua: "Заощадження" },
+  "studyCat.investing": { sk: "Investovanie", en: "Investing", ua: "Інвестування" },
+  "studyCat.budgeting": { sk: "Rozpočet", en: "Budget", ua: "Бюджет" },
+  "studyCat.crypto": { sk: "Kryptomeny", en: "Cryptocurrencies", ua: "Криптовалюти" },
+  "studyCat.taxes": { sk: "Dane", en: "Taxes", ua: "Податки" },
+  "studyCat.legal": { sk: "Právo", en: "Law", ua: "Право" },
+  "studyCat.insurance": { sk: "Poistenie", en: "Insurance", ua: "Страхування" },
+
   // Loading
   "loading.subtitle": { sk: "Nauč sa ovládať financie", en: "Learn to master finances", ua: "Навчись керувати фінансами" },
-  
+
   // Common
   "common.close": { sk: "Zavrieť", en: "Close", ua: "Закрити" },
   "common.level": { sk: "Level", en: "Level", ua: "Рівень" },
   "common.loading": { sk: "Načítavam...", en: "Loading...", ua: "Завантаження..." },
   "common.toNextLevel": { sk: "XP do ďalšieho", en: "XP to next", ua: "XP до наступного" },
+  "common.price": { sk: "Cena", en: "Price", ua: "Ціна" },
 };
 
 interface I18nContextType {

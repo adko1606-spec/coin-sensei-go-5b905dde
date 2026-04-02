@@ -332,7 +332,7 @@ const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
         {answered && (
           <motion.button initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} onClick={handleNext}
             className="mt-6 flex w-full items-center justify-center gap-2 rounded-2xl gradient-primary px-6 py-4 font-bold text-primary-foreground shadow-button transition-all hover:opacity-90 active:scale-95">
-            {currentIndex < lesson.questions.length - 1 ? (<>Ďalšia otázka <ArrowRight className="h-5 w-5" /></>) : "Dokončiť"}
+            {currentIndex < lesson.questions.length - 1 ? (<>{t("quiz.nextQuestion")} <ArrowRight className="h-5 w-5" /></>) : t("quiz.finish")}
           </motion.button>
         )}
       </motion.div>

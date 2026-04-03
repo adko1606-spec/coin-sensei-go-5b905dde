@@ -339,7 +339,7 @@ const Profile = () => {
                         {owned ? (
                           <button onClick={() => handleToggleEquip(item.id, equipped)}
                             className={`w-full rounded-xl py-2.5 text-xs font-bold transition-all ${equipped ? "bg-primary text-primary-foreground shadow-md" : "bg-muted text-foreground hover:bg-accent/20"}`}>
-                            {equipped ? "Unequip" : "Equip"}
+                            {equipped ? t("profile.unequip") : t("profile.equip")}
                           </button>
                         ) : (
                           <button onClick={() => handleBuyCosmetic({ ...item, price: finalPrice })} disabled={coins < finalPrice}

@@ -1,15 +1,17 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Bot, X, Send, Loader2 } from "lucide-react";
+import { useI18n } from "@/contexts/I18nContext";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-chat`;
 
 const AIChatBot = () => {
+  const { t } = useI18n();
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Msg[]>([
-    { role: "assistant", content: "Ahoj! 👋 Som FinAp AI asistent. Opýtaj sa ma čokoľvek o financiách! 💰" },
+    { role: "assistant", content: t("ai.chatGreeting") },
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -41,7 +43,7 @@ const AIChatBot = () => {
 
       if (!resp.ok || !resp.body) {
         const errorData = await resp.json().catch(() => ({}));
-        throw new Error(errorData.error || "Chyba pri komunikácii s AI");
+        throw new Error(errorData.error || "Error");
       }
 
       const reader = resp.body.getReader();
@@ -78,14 +80,13 @@ const AIChatBot = () => {
         }
       }
     } catch (e: any) {
-      setMessages((prev) => [...prev, { role: "assistant", content: `❌ ${e.message || "Chyba"}` }]);
+      setMessages((prev) => [...prev, { role: "assistant", content: `❌ ${e.message || "Error"}` }]);
     }
     setLoading(false);
   };
 
   return (
     <>
-      {/* Floating button */}
       <motion.button
         onClick={() => setOpen(!open)}
         className="fixed bottom-24 right-4 z-50 flex h-14 w-14 items-center justify-center rounded-full gradient-primary shadow-button text-primary-foreground"
@@ -95,7 +96,6 @@ const AIChatBot = () => {
         {open ? <X className="h-6 w-6" /> : <Bot className="h-6 w-6" />}
       </motion.button>
 
-      {/* Chat panel */}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -135,7 +135,7 @@ const AIChatBot = () => {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && send()}
-                placeholder="Napíš správu..."
+                placeholder={t("ai.writeMsgPlaceholder")}
                 className="flex-1 rounded-xl bg-muted px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
               />
               <button onClick={send} disabled={loading || !input.trim()}

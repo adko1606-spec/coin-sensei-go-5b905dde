@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useI18n } from "@/contexts/I18nContext";
 import { toast } from "sonner";
 import { sectorProfiles } from "@/data/marketScenarios";
 import { useSound } from "@/hooks/useSound";
@@ -52,6 +53,7 @@ const riskColors: Record<number, string> = {
 };
 
 const StockPriceChart = ({ stockId, currentPrice, changePercent }: { stockId: string; currentPrice: number; changePercent: number }) => {
+  const { t } = useI18n();
   const [data, setData] = useState<{ t: string; p: number }[]>([]);
 
   useEffect(() => {
@@ -82,7 +84,7 @@ const StockPriceChart = ({ stockId, currentPrice, changePercent }: { stockId: st
         } else {
           setData([
             { t: "Start", p: currentPrice },
-            { t: "Teraz", p: currentPrice },
+            { t: t("invest.current"), p: currentPrice },
           ]);
         }
       });
@@ -97,7 +99,7 @@ const StockPriceChart = ({ stockId, currentPrice, changePercent }: { stockId: st
   return (
     <div className="rounded-xl bg-muted/30 border border-border p-3">
       <div className="flex items-center justify-between mb-2">
-        <span className="text-xs font-bold text-muted-foreground uppercase">Dnešný vývoj</span>
+        <span className="text-xs font-bold text-muted-foreground uppercase">{t("invest.todayChart")}</span>
         <span className={`text-sm font-bold ${isPositive ? "text-primary" : isNegative ? "text-destructive" : "text-muted-foreground"}`}>
           {isPositive ? "+" : ""}{Math.round(changePercent)}%
         </span>
@@ -115,7 +117,7 @@ const StockPriceChart = ({ stockId, currentPrice, changePercent }: { stockId: st
             <YAxis hide domain={["dataMin - 5", "dataMax + 5"]} />
             <Tooltip
               contentStyle={{ fontSize: 12, borderRadius: 8, border: "none", boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }}
-              formatter={(v: number) => [`${v} F`, "Cena"]}
+              formatter={(v: number) => [`${v} F`, t("common.price")]}
             />
             <Area type="monotone" dataKey="p" stroke={color} fill="url(#detailGrad)" strokeWidth={2} dot={false} />
           </AreaChart>
@@ -127,6 +129,7 @@ const StockPriceChart = ({ stockId, currentPrice, changePercent }: { stockId: st
 
 const StockDetailModal = ({ stock, investment, onClose, onAction }: StockDetailModalProps) => {
   const { user, profile } = useAuth();
+  const { t } = useI18n();
   const { playInvest, playWithdraw } = useSound();
   const [investAmount, setInvestAmount] = useState("");
   const [withdrawAmount, setWithdrawAmount] = useState("");
@@ -168,8 +171,8 @@ const StockDetailModal = ({ stock, investment, onClose, onAction }: StockDetailM
 
   const handleInvest = async () => {
     const amount = parseInt(investAmount);
-    if (!amount || amount <= 0) { toast.error("Zadaj platnú sumu"); return; }
-    if (amount > coins) { toast.error("Nemáš dostatok mincí"); return; }
+    if (!amount || amount <= 0) { toast.error(t("invest.enterValidAmount")); return; }
+    if (amount > coins) { toast.error(t("invest.notEnoughCoins")); return; }
 
     setProcessing(true);
     try {
@@ -191,21 +194,21 @@ const StockDetailModal = ({ stock, investment, onClose, onAction }: StockDetailM
 
       await supabase.from("investment_transactions").insert({
         user_id: user!.id, stock_id: stock.id, type: "invest", amount,
-        balance_after: newValue, event_text: `Investoval si ${amount} Fincov`,
+        balance_after: newValue, event_text: `${t("invest.investedMsg")} ${amount} Fincov`,
       } as any);
 
       playInvest();
-      toast.success(`📈 Investoval si ${amount} Fincov do ${stock.name}!`);
+      toast.success(`📈 ${t("invest.investedMsg")} ${amount} ${t("invest.finceInto")} ${stock.name}!`);
       setInvestAmount("");
       onAction();
-    } catch { toast.error("Chyba pri investovaní"); }
+    } catch { toast.error(t("invest.investError")); }
     setProcessing(false);
   };
 
   const handleWithdraw = async () => {
     const amount = parseInt(withdrawAmount);
-    if (!amount || amount <= 0) { toast.error("Zadaj platnú sumu"); return; }
-    if (amount > Math.floor(currentInvestment)) { toast.error("Nemáš toľko investovaných mincí"); return; }
+    if (!amount || amount <= 0) { toast.error(t("invest.enterValidAmount")); return; }
+    if (amount > Math.floor(currentInvestment)) { toast.error(t("invest.notEnoughInvested")); return; }
 
     setProcessing(true);
     try {
@@ -227,14 +230,14 @@ const StockDetailModal = ({ stock, investment, onClose, onAction }: StockDetailM
 
       await supabase.from("investment_transactions").insert({
         user_id: user!.id, stock_id: stock.id, type: "withdraw", amount: -amount,
-        balance_after: newValue, event_text: `Vybral si ${amount} Fincov`,
+        balance_after: newValue, event_text: `${t("invest.withdrawnMsg")} ${amount} Fincov`,
       } as any);
 
       playWithdraw();
-      toast.success(`💰 Vybral si ${amount} Fincov z ${stock.name}!`);
+      toast.success(`💰 ${t("invest.withdrawnMsg")} ${amount} ${t("invest.finceFrom")} ${stock.name}!`);
       setWithdrawAmount("");
       onAction();
-    } catch { toast.error("Chyba pri výbere"); }
+    } catch { toast.error(t("invest.withdrawError")); }
     setProcessing(false);
   };
 
@@ -273,22 +276,22 @@ const StockDetailModal = ({ stock, investment, onClose, onAction }: StockDetailM
               <div className={`rounded-xl border p-3 ${riskColors[sectorProfile.riskLevel]}`}>
                 <div className="flex items-center gap-2 mb-1">
                   <Shield className="h-4 w-4" />
-                  <span className="text-sm font-bold">Riziko: {sectorProfile.risk}</span>
+                  <span className="text-sm font-bold">{t("invest.riskLabel")}: {sectorProfile.risk}</span>
                 </div>
                 <p className="text-xs opacity-80">{sectorProfile.description}</p>
-                <p className="text-xs opacity-60 mt-1">Historický výnos: {sectorProfile.avgReturn}</p>
+                <p className="text-xs opacity-60 mt-1">{t("invest.historicalReturn")}: {sectorProfile.avgReturn}</p>
               </div>
             )}
 
-            {/* Current investment - simplified */}
+            {/* Current investment */}
             {investedCoins > 0 && (
               <div className="rounded-xl bg-muted/50 p-4">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm text-muted-foreground">Vložené</span>
+                  <span className="text-sm text-muted-foreground">{t("invest.deposited")}</span>
                   <span className="font-bold text-foreground">{investedCoins} F</span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Aktuálne</span>
+                  <span className="text-sm text-muted-foreground">{t("invest.current")}</span>
                   <span className={`font-bold flex items-center gap-1 ${profitLoss >= 0 ? "text-primary" : "text-destructive"}`}>
                     {profitLoss >= 0 ? <TrendingUp className="h-3.5 w-3.5" /> : <TrendingDown className="h-3.5 w-3.5" />}
                     {Math.round(currentInvestment)} F
@@ -303,17 +306,17 @@ const StockDetailModal = ({ stock, investment, onClose, onAction }: StockDetailM
             {/* Tabs */}
             <div className="flex gap-1 bg-muted/50 rounded-xl p-1">
               {([
-                { key: "invest" as const, label: "Investovať", icon: ArrowDownCircle },
-                { key: "withdraw" as const, label: "Vybrať", icon: ArrowUpCircle },
-                { key: "history" as const, label: "História", icon: History },
-              ]).map((t) => (
+                { key: "invest" as const, label: t("invest.investAction"), icon: ArrowDownCircle },
+                { key: "withdraw" as const, label: t("invest.withdraw"), icon: ArrowUpCircle },
+                { key: "history" as const, label: t("invest.history"), icon: History },
+              ]).map((tb) => (
                 <button
-                  key={t.key} onClick={() => setTab(t.key)}
+                  key={tb.key} onClick={() => setTab(tb.key)}
                   className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-bold transition-all ${
-                    tab === t.key ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+                    tab === tb.key ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
-                  <t.icon className="h-3.5 w-3.5" />{t.label}
+                  <tb.icon className="h-3.5 w-3.5" />{tb.label}
                 </button>
               ))}
             </div>
@@ -322,10 +325,10 @@ const StockDetailModal = ({ stock, investment, onClose, onAction }: StockDetailM
             {tab === "invest" && (
               <div className="space-y-3">
                 <div className="text-xs text-muted-foreground flex items-center gap-1">
-                  Tvoje Fince: <span className="font-bold text-coin">{coins} F</span>
+                  {t("invest.yourFince")}: <span className="font-bold text-coin">{coins} F</span>
                 </div>
                 <Input
-                  type="number" placeholder="Koľko mincí investuješ?"
+                  type="number" placeholder={t("invest.howMuchInvest")}
                   value={investAmount} onChange={(e) => setInvestAmount(e.target.value)}
                   max={coins} min={1}
                 />
@@ -340,25 +343,24 @@ const StockDetailModal = ({ stock, investment, onClose, onAction }: StockDetailM
                 <Button className="w-full" onClick={handleInvest}
                   disabled={processing || !investAmount || parseInt(investAmount) <= 0}>
                   <ArrowDownCircle className="h-4 w-4 mr-2" />
-                  Investovať {investAmount || "0"} F
+                  {t("invest.investAction")} {investAmount || "0"} F
                 </Button>
 
-                {/* Educational warnings */}
                 <div className="space-y-2">
                   <div className="rounded-lg bg-destructive/5 border border-destructive/20 p-3">
                     <p className="text-xs text-muted-foreground leading-relaxed">
                       <AlertTriangle className="h-3 w-3 inline mr-1 text-destructive" />
-                      <strong>Toto je hra, nie realita.</strong> V skutočnom svete sú investície oveľa zložitejšie a výnosy nie sú garantované.
+                      <strong>{t("invest.gameWarning")}</strong>
                     </p>
                   </div>
                   <div className="rounded-lg bg-muted/30 border border-border p-3">
                     <p className="text-xs text-muted-foreground leading-relaxed">
                        <Info className="h-3 w-3 inline mr-1" />
-                      Hodnota sa mení každú hodinu. {sectorProfile?.riskLevel === 4
-                        ? "Krypto je veľmi volatilné – môžeš stratiť väčšinu investície!"
+                      {t("invest.valueChanges")} {sectorProfile?.riskLevel === 4
+                        ? t("invest.cryptoVolatile")
                         : sectorProfile?.riskLevel === 3
-                        ? "Táto oblasť je riziková – počítaj s výkyvmi."
-                        : "Stabilnejšie oblasti rastú pomalšie, ale sú bezpečnejšie."}
+                        ? t("invest.riskyArea")
+                        : t("invest.stableArea")}
                     </p>
                   </div>
                 </div>
@@ -371,10 +373,10 @@ const StockDetailModal = ({ stock, investment, onClose, onAction }: StockDetailM
                 {currentInvestment > 0 ? (
                   <>
                     <div className="text-xs text-muted-foreground">
-                      Na výber: <span className="font-bold text-foreground">{Math.floor(currentInvestment)} F</span>
+                      {t("invest.availableWithdraw")}: <span className="font-bold text-foreground">{Math.floor(currentInvestment)} F</span>
                     </div>
                     <Input
-                      type="number" placeholder="Koľko mincí chceš vybrať?"
+                      type="number" placeholder={t("invest.howMuchWithdraw")}
                       value={withdrawAmount} onChange={(e) => setWithdrawAmount(e.target.value)}
                       max={Math.floor(currentInvestment)} min={1}
                     />
@@ -389,12 +391,12 @@ const StockDetailModal = ({ stock, investment, onClose, onAction }: StockDetailM
                     <Button className="w-full" variant="secondary" onClick={handleWithdraw}
                       disabled={processing || !withdrawAmount || parseInt(withdrawAmount) <= 0}>
                       <ArrowUpCircle className="h-4 w-4 mr-2" />
-                      Vybrať {withdrawAmount || "0"} F
+                      {t("invest.withdraw")} {withdrawAmount || "0"} F
                     </Button>
                   </>
                 ) : (
                   <div className="text-center py-8 text-muted-foreground text-sm">
-                    Nemáš žiadne investície v tejto akcii
+                    {t("invest.noInvestmentHere")}
                   </div>
                 )}
               </div>
@@ -406,7 +408,7 @@ const StockDetailModal = ({ stock, investment, onClose, onAction }: StockDetailM
                 {events.length > 0 && (
                   <div>
                     <h4 className="text-xs font-bold text-muted-foreground uppercase mb-2 flex items-center gap-1">
-                      <Newspaper className="h-3 w-3" /> Trhové správy
+                      <Newspaper className="h-3 w-3" /> {t("invest.marketNews")}
                     </h4>
                     <div className="space-y-2">
                       {events.map((e) => (
@@ -429,7 +431,7 @@ const StockDetailModal = ({ stock, investment, onClose, onAction }: StockDetailM
                 {transactions.length > 0 ? (
                   <div>
                     <h4 className="text-xs font-bold text-muted-foreground uppercase mb-2 flex items-center gap-1">
-                      <History className="h-3 w-3" /> Tvoje transakcie
+                      <History className="h-3 w-3" /> {t("invest.yourTransactions")}
                     </h4>
                     <div className="space-y-2">
                       {transactions.map((tx) => (
@@ -452,7 +454,7 @@ const StockDetailModal = ({ stock, investment, onClose, onAction }: StockDetailM
                     </div>
                   </div>
                 ) : (
-                  <div className="text-center py-6 text-muted-foreground text-sm">Žiadne transakcie</div>
+                  <div className="text-center py-6 text-muted-foreground text-sm">{t("invest.noTransactions")}</div>
                 )}
               </div>
             )}

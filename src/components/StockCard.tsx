@@ -4,6 +4,7 @@ import { TrendingUp, TrendingDown, Minus, ArrowRight, Shield } from "lucide-reac
 import { Card, CardContent } from "@/components/ui/card";
 import { sectorProfiles } from "@/data/marketScenarios";
 import { supabase } from "@/integrations/supabase/client";
+import { useI18n } from "@/contexts/I18nContext";
 import { AreaChart, Area, ResponsiveContainer } from "recharts";
 
 interface Stock {
@@ -37,6 +38,7 @@ const riskColors: Record<number, string> = {
 };
 
 const StockCard = ({ stock, investment, index, onSelect }: StockCardProps) => {
+  const { t } = useI18n();
   const [priceHistory, setPriceHistory] = useState<{ t: number; p: number }[]>([]);
   const change = stock.price_change_percent;
   const isPositive = change > 0;
@@ -57,13 +59,10 @@ const StockCard = ({ stock, investment, index, onSelect }: StockCardProps) => {
       .then(({ data }) => {
         if (data && data.length > 0) {
           let price = stock.current_price;
-          // Reconstruct price from events backwards
           const impacts = data.map((e) => e.price_impact_percent);
-          // Go backwards to find starting price
           for (let i = impacts.length - 1; i >= 0; i--) {
             price = price / (1 + (impacts[i] ?? 0) / 100);
           }
-          // Now go forward building chart
           const points: { t: number; p: number }[] = [{ t: 0, p: Math.round(price) }];
           for (let i = 0; i < impacts.length; i++) {
             price = price * (1 + (impacts[i] ?? 0) / 100);
@@ -71,7 +70,6 @@ const StockCard = ({ stock, investment, index, onSelect }: StockCardProps) => {
           }
           setPriceHistory(points);
         } else {
-          // No events today - show flat line
           setPriceHistory([
             { t: 0, p: stock.current_price },
             { t: 1, p: stock.current_price },
@@ -105,14 +103,13 @@ const StockCard = ({ stock, investment, index, onSelect }: StockCardProps) => {
                 {profile && (
                   <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium flex items-center gap-0.5 ${riskColors[profile.riskLevel]}`}>
                     <Shield className="h-2.5 w-2.5" />
-                    {profile.risk} riziko
+                    {profile.risk} {t("invest.risk")}
                   </span>
                 )}
               </div>
               <p className="text-xs text-muted-foreground truncate">{stock.description}</p>
             </div>
 
-            {/* Mini sparkline chart */}
             <div className="w-16 h-8 flex-shrink-0">
               {priceHistory.length > 1 && (
                 <ResponsiveContainer width="100%" height="100%">
@@ -160,11 +157,11 @@ const StockCard = ({ stock, investment, index, onSelect }: StockCardProps) => {
           {investment && investment.current_value > 0 && (
             <div className="mt-3 pt-3 border-t border-border/50 flex items-center justify-between">
               <div className="text-xs">
-                <span className="text-muted-foreground">Vložené: </span>
+                <span className="text-muted-foreground">{t("invest.deposited")}: </span>
                 <span className="font-bold text-foreground">{investment.invested_coins} F</span>
               </div>
               <div className="text-xs">
-                <span className="text-muted-foreground">Teraz: </span>
+                <span className="text-muted-foreground">{t("invest.current")}: </span>
                 <span
                   className={`font-bold ${
                     investment.current_value >= investment.invested_coins

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Bot, Send, X, Loader2 } from "lucide-react";
+import { useI18n } from "@/contexts/I18nContext";
 
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-chat`;
 
@@ -10,6 +11,7 @@ interface AIQuestionHelperProps {
 }
 
 const AIQuestionHelper = ({ questionText, explanation, onClose }: AIQuestionHelperProps) => {
+  const { t } = useI18n();
   const [messages, setMessages] = useState<{ role: string; content: string }[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -18,7 +20,7 @@ const AIQuestionHelper = ({ questionText, explanation, onClose }: AIQuestionHelp
     const msg = text || input.trim();
     if (!msg || loading) return;
 
-    const systemContext = `Otázka z kvízu: "${questionText}"\nVysvetlenie: "${explanation}"`;
+    const systemContext = `Quiz question: "${questionText}"\nExplanation: "${explanation}"`;
     const userMsg = { role: "user" as const, content: msg };
     const allMsgs = [...messages, userMsg];
     setMessages(allMsgs);
@@ -36,13 +38,13 @@ const AIQuestionHelper = ({ questionText, explanation, onClose }: AIQuestionHelp
         },
         body: JSON.stringify({
           messages: [
-            { role: "system", content: `Pomáhaš študentovi pochopiť finančnú otázku z kvízu. ${systemContext}` },
+            { role: "system", content: `${t("ai.systemPrompt")} ${systemContext}` },
             ...allMsgs,
           ],
         }),
       });
 
-      if (!resp.ok || !resp.body) throw new Error("Chyba");
+      if (!resp.ok || !resp.body) throw new Error("Error");
 
       const reader = resp.body.getReader();
       const decoder = new TextDecoder();
@@ -78,7 +80,7 @@ const AIQuestionHelper = ({ questionText, explanation, onClose }: AIQuestionHelp
         }
       }
     } catch {
-      setMessages((prev) => [...prev, { role: "assistant", content: "❌ Nepodarilo sa spojiť s AI." }]);
+      setMessages((prev) => [...prev, { role: "assistant", content: `❌ ${t("ai.connectionError")}` }]);
     }
     setLoading(false);
   };
@@ -88,7 +90,7 @@ const AIQuestionHelper = ({ questionText, explanation, onClose }: AIQuestionHelp
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-1.5">
           <Bot className="h-4 w-4 text-accent" />
-          <span className="text-xs font-bold text-accent">AI Pomoc</span>
+          <span className="text-xs font-bold text-accent">{t("ai.help")}</span>
         </div>
         <button onClick={onClose} className="text-muted-foreground hover:text-foreground">
           <X className="h-3.5 w-3.5" />
@@ -97,7 +99,7 @@ const AIQuestionHelper = ({ questionText, explanation, onClose }: AIQuestionHelp
 
       {messages.length === 0 && (
         <div className="flex flex-wrap gap-1.5 mb-2">
-          {["Vysvetli túto otázku", "Prečo je to správna odpoveď?", "Daj mi príklad z praxe"].map((q) => (
+          {[t("ai.explainQuestion"), t("ai.whyCorrect"), t("ai.realExample")].map((q) => (
             <button key={q} onClick={() => send(q)}
               className="text-[11px] rounded-full bg-accent/10 px-2.5 py-1 text-accent hover:bg-accent/20 font-semibold transition-colors">
               {q}
@@ -119,7 +121,7 @@ const AIQuestionHelper = ({ questionText, explanation, onClose }: AIQuestionHelp
 
       <div className="flex gap-1.5">
         <input value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => e.key === "Enter" && send()}
-          placeholder="Opýtaj sa..."
+          placeholder={t("ai.askPlaceholder")}
           className="flex-1 rounded-lg bg-card px-2.5 py-1.5 text-xs text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-accent" />
         <button onClick={() => send()} disabled={loading || !input.trim()}
           className="rounded-lg bg-accent/20 p-1.5 text-accent disabled:opacity-50">

@@ -16,6 +16,8 @@ const COSMETIC_CATEGORIES = [
   { id: "hat", labelKey: "profile.hats" },
   { id: "accessory", labelKey: "profile.accessories" },
   { id: "color", labelKey: "profile.effects" },
+  { id: "house", labelKey: "profile.houses" },
+  { id: "car", labelKey: "profile.cars" },
 ];
 
 // Daily discount: 20% off 5 random items across ALL categories, seeded by today's date

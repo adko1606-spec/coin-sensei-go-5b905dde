@@ -321,7 +321,7 @@ const Profile = () => {
                     <motion.div key={item.id} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
                       className={`rounded-2xl transition-all relative ${equipped ? "bg-primary/10 ring-2 ring-primary shadow-lg" : owned ? "bg-card border border-border shadow-sm" : "bg-muted/40 border border-border/50"}`}
                       style={{ overflow: "visible" }}>
-                      {equipped && (<div className="absolute -top-2 -right-2 z-10 bg-primary text-primary-foreground text-[10px] font-bold px-2 py-0.5 rounded-full shadow">✓ Active</div>)}
+                      {equipped && (<div className="absolute -top-2 -right-2 z-10 bg-primary text-primary-foreground text-[10px] font-bold px-2 py-0.5 rounded-full shadow">✓ {t("profile.active")}</div>)}
                       {owned && !equipped && (<div className="absolute -top-2 -right-2 z-10 bg-muted text-foreground text-[10px] font-bold px-2 py-0.5 rounded-full border border-border shadow-sm">Owned</div>)}
                       {hasDiscount && !owned && (<div className="absolute -top-2 -left-2 z-10 bg-accent text-accent-foreground text-[10px] font-bold px-2 py-0.5 rounded-full shadow">-20%</div>)}
                       <div className="p-4 pt-6" style={{ overflow: "visible" }}>

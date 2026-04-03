@@ -6,6 +6,7 @@ import { Progress } from "@/components/ui/progress";
 import { useAuth } from "@/contexts/AuthContext";
 import { useI18n } from "@/contexts/I18nContext";
 import AIQuestionHelper from "@/components/AIQuestionHelper";
+import { useSound } from "@/hooks/useSound";
 
 interface QuizModalProps {
   lesson: Lesson;

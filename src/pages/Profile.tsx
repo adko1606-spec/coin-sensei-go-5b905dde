@@ -198,6 +198,35 @@ const Profile = () => {
           ))}
         </motion.div>
 
+        {/* Estate display (houses & cars) */}
+        {(() => {
+          const equippedHouse = equippedCosmeticItems.find((i: any) => i?.category === "house");
+          const equippedCar = equippedCosmeticItems.find((i: any) => i?.category === "car");
+          if (!equippedHouse && !equippedCar) return null;
+          return (
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.12 }} className="mt-4 rounded-2xl bg-card p-4 shadow-card">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-lg">🏘️</span>
+                <h3 className="text-sm font-extrabold text-foreground">{t("profile.yourEstate")}</h3>
+              </div>
+              <div className="flex items-center justify-center gap-6">
+                {equippedHouse && (
+                  <div className="text-center">
+                    <span className="text-5xl">{equippedHouse.icon}</span>
+                    <p className="text-xs font-bold text-foreground mt-1">{equippedHouse.name}</p>
+                  </div>
+                )}
+                {equippedCar && (
+                  <div className="text-center">
+                    <span className="text-5xl">{equippedCar.icon}</span>
+                    <p className="text-xs font-bold text-foreground mt-1">{equippedCar.name}</p>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          );
+        })()}
+
         <FriendsSection />
 
         {/* Badges */}

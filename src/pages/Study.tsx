@@ -52,7 +52,7 @@ const Study = () => {
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1">
               <GraduationCap className="h-4 w-4 text-primary" />
-              <span className="text-sm font-bold text-primary">{studyContent.length} {t("study.areas")}</span>
+              <span className="text-sm font-bold text-primary">{localizedContent.length} {t("study.areas")}</span>
             </div>
             <div className="flex items-center gap-1 rounded-full bg-coin/10 px-3 py-1">
               <Coins className="h-4 w-4 text-coin" />

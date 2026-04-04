@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { BookOpen, ChevronRight, ArrowLeft, Lightbulb, GraduationCap, Coins } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { studyContent, type StudyCategory, type StudyTopic } from "@/data/studyContent";
+import { getLocalizedStudyCategory } from "@/data/studyLocales";
 import { useAuth } from "@/contexts/AuthContext";
 import { useI18n } from "@/contexts/I18nContext";
 import BottomNav from "@/components/BottomNav";

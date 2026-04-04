@@ -2,6 +2,8 @@ import { motion } from "framer-motion";
 import { Lock, CheckCircle2, ChevronRight, AlertCircle } from "lucide-react";
 import type { Lesson } from "@/data/lessons";
 import { useAuth } from "@/contexts/AuthContext";
+import { useI18n } from "@/contexts/I18nContext";
+import { getLocalizedLessonMeta } from "@/data/lessonLocales";
 
 interface LessonCardProps {
   lesson: Lesson;

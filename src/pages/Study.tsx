@@ -17,9 +17,10 @@ import {
 
 const Study = () => {
   const { profile, loading } = useAuth();
-  const { t } = useI18n();
+  const { t, language } = useI18n();
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState<StudyCategory | null>(null);
+  const localizedContent = studyContent.map((c) => getLocalizedStudyCategory(c, language));
 
   const coins = (profile as any)?.coins ?? 0;
 

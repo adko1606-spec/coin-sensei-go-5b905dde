@@ -13,9 +13,11 @@ interface LessonCardProps {
 
 const LessonCard = ({ lesson, index, onStart }: LessonCardProps) => {
   const { getLessonScore } = useAuth();
+  const { language } = useI18n();
   const isEven = index % 2 === 0;
   const lessonScore = getLessonScore(lesson.id);
   const hasErrors = lessonScore !== null && lessonScore.score < 100;
+  const meta = getLocalizedLessonMeta(lesson.id, language);
 
   return (
     <motion.div

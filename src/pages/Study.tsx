@@ -67,7 +67,7 @@ const Study = () => {
           {!selectedCategory ? (
             <motion.div key="categories" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="mt-6 flex flex-col gap-4">
               <p className="text-muted-foreground text-sm text-center mb-2">{t("study.selectArea")}</p>
-              {studyContent.map((category, idx) => (
+              {localizedContent.map((category, idx) => (
                 <motion.button key={category.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.05 }} whileTap={{ scale: 0.98 }}
                   onClick={() => setSelectedCategory(category)}
                   className="flex items-center gap-4 rounded-2xl border border-border bg-card p-4 text-left shadow-sm transition-all hover:shadow-md hover:border-primary/30">

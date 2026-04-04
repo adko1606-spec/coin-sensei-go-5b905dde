@@ -24,10 +24,17 @@ const formatCountdown = (ms: number) => {
 const Home = () => {
   const navigate = useNavigate();
   const { user, profile, progress, totalXp, loading, currentLives, nextLifeIn } = useAuth();
-  const { t } = useI18n();
-  const [tip] = useState(getTodaysTip());
-  const [challenges] = useState<DailyChallenge[]>(getTodaysChallenges());
-  const [weeklyChallenges] = useState<WeeklyChallenge[]>(getWeeksChallenges());
+  const { t, language } = useI18n();
+  const [tip, setTip] = useState(getTodaysTip(language));
+  const [challenges, setChallenges] = useState<DailyChallenge[]>(getTodaysChallenges(language));
+  const [weeklyChallenges, setWeeklyChallenges] = useState<WeeklyChallenge[]>(getWeeksChallenges(language));
+
+  // Update challenges/tips when language changes
+  useEffect(() => {
+    setTip(getTodaysTip(language));
+    setChallenges(getTodaysChallenges(language));
+    setWeeklyChallenges(getWeeksChallenges(language));
+  }, [language]);
   const [dailyReset, setDailyReset] = useState("");
   const [weeklyReset, setWeeklyReset] = useState("");
 

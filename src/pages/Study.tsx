@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { BookOpen, ChevronRight, ArrowLeft, Lightbulb, GraduationCap, Coins } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { studyContent, type StudyCategory, type StudyTopic } from "@/data/studyContent";
+import { getLocalizedStudyCategory } from "@/data/studyLocales";
 import { useAuth } from "@/contexts/AuthContext";
 import { useI18n } from "@/contexts/I18nContext";
 import BottomNav from "@/components/BottomNav";
@@ -16,9 +17,10 @@ import {
 
 const Study = () => {
   const { profile, loading } = useAuth();
-  const { t } = useI18n();
+  const { t, language } = useI18n();
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState<StudyCategory | null>(null);
+  const localizedContent = studyContent.map((c) => getLocalizedStudyCategory(c, language));
 
   const coins = (profile as any)?.coins ?? 0;
 
@@ -50,7 +52,7 @@ const Study = () => {
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1">
               <GraduationCap className="h-4 w-4 text-primary" />
-              <span className="text-sm font-bold text-primary">{studyContent.length} {t("study.areas")}</span>
+              <span className="text-sm font-bold text-primary">{localizedContent.length} {t("study.areas")}</span>
             </div>
             <div className="flex items-center gap-1 rounded-full bg-coin/10 px-3 py-1">
               <Coins className="h-4 w-4 text-coin" />
@@ -65,7 +67,7 @@ const Study = () => {
           {!selectedCategory ? (
             <motion.div key="categories" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="mt-6 flex flex-col gap-4">
               <p className="text-muted-foreground text-sm text-center mb-2">{t("study.selectArea")}</p>
-              {studyContent.map((category, idx) => (
+              {localizedContent.map((category, idx) => (
                 <motion.button key={category.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.05 }} whileTap={{ scale: 0.98 }}
                   onClick={() => setSelectedCategory(category)}
                   className="flex items-center gap-4 rounded-2xl border border-border bg-card p-4 text-left shadow-sm transition-all hover:shadow-md hover:border-primary/30">

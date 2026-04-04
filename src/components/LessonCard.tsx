@@ -2,6 +2,8 @@ import { motion } from "framer-motion";
 import { Lock, CheckCircle2, ChevronRight, AlertCircle } from "lucide-react";
 import type { Lesson } from "@/data/lessons";
 import { useAuth } from "@/contexts/AuthContext";
+import { useI18n } from "@/contexts/I18nContext";
+import { getLocalizedLessonMeta } from "@/data/lessonLocales";
 
 interface LessonCardProps {
   lesson: Lesson;
@@ -11,9 +13,11 @@ interface LessonCardProps {
 
 const LessonCard = ({ lesson, index, onStart }: LessonCardProps) => {
   const { getLessonScore } = useAuth();
+  const { language } = useI18n();
   const isEven = index % 2 === 0;
   const lessonScore = getLessonScore(lesson.id);
   const hasErrors = lessonScore !== null && lessonScore.score < 100;
+  const meta = getLocalizedLessonMeta(lesson.id, language);
 
   return (
     <motion.div
@@ -70,9 +74,9 @@ const LessonCard = ({ lesson, index, onStart }: LessonCardProps) => {
         </div>
 
         <div className="flex-1 text-left">
-          <h3 className="font-bold text-foreground">{lesson.title}</h3>
+          <h3 className="font-bold text-foreground">{meta?.title ?? lesson.title}</h3>
           <p className="text-sm text-muted-foreground line-clamp-1">
-            {lesson.description}
+            {meta?.description ?? lesson.description}
           </p>
           <div className="mt-1 flex items-center gap-2">
             <span className="text-xs font-bold text-xp">+{lesson.xp} XP</span>

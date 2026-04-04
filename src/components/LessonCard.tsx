@@ -74,9 +74,9 @@ const LessonCard = ({ lesson, index, onStart }: LessonCardProps) => {
         </div>
 
         <div className="flex-1 text-left">
-          <h3 className="font-bold text-foreground">{lesson.title}</h3>
+          <h3 className="font-bold text-foreground">{meta?.title ?? lesson.title}</h3>
           <p className="text-sm text-muted-foreground line-clamp-1">
-            {lesson.description}
+            {meta?.description ?? lesson.description}
           </p>
           <div className="mt-1 flex items-center gap-2">
             <span className="text-xs font-bold text-xp">+{lesson.xp} XP</span>

@@ -11,6 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 import logo from "@/assets/logo-new.png";
 import { toast } from "sonner";
 import FriendsSection from "@/components/FriendsSection";
+import { ESTATE_IMAGES } from "@/data/estateAssets";
 
 const COSMETIC_CATEGORIES = [
   { id: "hat", labelKey: "profile.hats" },

@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Lightbulb, Target, Flame, Calendar, Heart, Clock, BookOpen, GraduationCap, TrendingUp, Trophy, User } from "lucide-react";
+import { Lightbulb, Target, Flame, Calendar, Heart, Clock, BookOpen, GraduationCap, TrendingUp, Trophy, User, Zap, Gift } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useI18n } from "@/contexts/I18nContext";
@@ -8,12 +8,15 @@ import StatsBar from "@/components/StatsBar";
 import BottomNav from "@/components/BottomNav";
 import CharacterAvatar from "@/components/CharacterAvatar";
 import { ChallengeCard } from "@/components/ChallengeCard";
+import MarketDrama from "@/components/MarketDrama";
+import TapRace from "@/components/TapRace";
 import { getTodaysTip } from "@/data/dailyTips";
 import { getTodaysChallenges, getWeeksChallenges, getDailyResetTime, getWeeklyResetTime, type DailyChallenge, type WeeklyChallenge } from "@/data/dailyChallenges";
 import logo from "@/assets/logo-new.png";
 import mascot from "@/assets/mascot.png";
 import { characters } from "@/data/characters";
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const formatCountdown = (ms: number) => {
   const h = Math.floor(ms / 3600000);
@@ -21,20 +24,47 @@ const formatCountdown = (ms: number) => {
   return `${h}h ${m}m`;
 };
 
+// Player identity based on behavior
+const getPlayerIdentity = (profile: any, progress: any[], totalXp: number) => {
+  const completedLessons = progress.filter((p) => p.completed).length;
+  const streak = profile?.current_streak ?? 0;
+  
+  if (streak >= 14) return "hodler";
+  if (completedLessons >= 15) return "diversifier";
+  if (totalXp >= 3000) return "daytrader";
+  if (completedLessons >= 5 && streak >= 3) return "cautious";
+  return "risktaker";
+};
+
+// Random reward check (5% chance per day)
+const checkDailyRandomReward = (): number | null => {
+  const today = new Date().toDateString();
+  const key = `finap-random-reward-${today}`;
+  if (localStorage.getItem(key)) return null;
+  
+  if (Math.random() < 0.05) {
+    const reward = [25, 50, 75, 100][Math.floor(Math.random() * 4)];
+    localStorage.setItem(key, String(reward));
+    return reward;
+  }
+  return null;
+};
+
 const Home = () => {
   const navigate = useNavigate();
-  const { user, profile, progress, totalXp, loading, currentLives, nextLifeIn } = useAuth();
+  const { user, profile, progress, totalXp, loading, currentLives, nextLifeIn, refreshProfile } = useAuth();
   const { t, language } = useI18n();
   const [tip, setTip] = useState(getTodaysTip(language));
   const [challenges, setChallenges] = useState<DailyChallenge[]>(getTodaysChallenges(language));
   const [weeklyChallenges, setWeeklyChallenges] = useState<WeeklyChallenge[]>(getWeeksChallenges(language));
+  const [showTapRace, setShowTapRace] = useState(false);
 
-  // Update challenges/tips when language changes
   useEffect(() => {
     setTip(getTodaysTip(language));
     setChallenges(getTodaysChallenges(language));
     setWeeklyChallenges(getWeeksChallenges(language));
   }, [language]);
+
   const [dailyReset, setDailyReset] = useState("");
   const [weeklyReset, setWeeklyReset] = useState("");
 
@@ -44,6 +74,24 @@ const Home = () => {
   const currentStreak = (profile as any)?.current_streak ?? 0;
   const selectedChar = characters.find((c) => c.id === (profile as any)?.selected_character);
   const [equippedCosmeticItems, setEquippedCosmeticItems] = useState<any[]>([]);
+
+  const playerIdentity = useMemo(() => getPlayerIdentity(profile, progress, totalXp), [profile, progress, totalXp]);
+
+  // Check for random reward on mount
+  useEffect(() => {
+    if (!user) return;
+    const reward = checkDailyRandomReward();
+    if (reward) {
+      setTimeout(() => {
+        toast.success(`${t("game.secretReward")} +${reward} Fince! 🪙`, { duration: 5000 });
+        supabase.from("profiles").select("coins").eq("user_id", user.id).single().then(({ data }) => {
+          if (data) {
+            supabase.from("profiles").update({ coins: (data as any).coins + reward } as any).eq("user_id", user.id).then(() => refreshProfile());
+          }
+        });
+      }, 2000);
+    }
+  }, [user]);
 
   useEffect(() => {
     const update = () => {
@@ -146,6 +194,10 @@ const Home = () => {
           <div>
             <h2 className="text-2xl font-extrabold text-foreground">{t("home.hello")}, {displayName}! 👋</h2>
             <p className="text-muted-foreground">{t("home.subtitle")}</p>
+            {/* Player identity badge */}
+            <div className="mt-1 inline-flex items-center gap-1 rounded-full bg-accent/10 px-2 py-0.5">
+              <span className="text-[10px] font-bold text-accent">{t(`game.${playerIdentity}`)}</span>
+            </div>
           </div>
         </motion.div>
 
@@ -153,14 +205,28 @@ const Home = () => {
           <StatsBar xp={totalXp} streak={currentStreak} level={level} />
         </div>
 
-        {/* Main action - Lessons button */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mt-6">
+        {/* Streak warning */}
+        {currentStreak > 0 && todayProgress.length === 0 && (
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-4 rounded-xl bg-accent/10 border border-accent/20 p-3">
+            <p className="text-xs font-bold text-accent">{t("game.streakWarning")}</p>
+          </motion.div>
+        )}
+
+        {/* Main action buttons */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mt-6 flex gap-2">
           <button
             onClick={() => navigate("/lessons")}
-            className="w-full rounded-2xl gradient-primary p-5 shadow-button transition-all hover:opacity-90 active:scale-[0.98] flex items-center justify-center gap-3"
+            className="flex-1 rounded-2xl gradient-primary p-4 shadow-button transition-all hover:opacity-90 active:scale-[0.98] flex items-center justify-center gap-2"
           >
-            <BookOpen className="h-7 w-7 text-primary-foreground" />
-            <span className="text-xl font-extrabold text-primary-foreground">{t("home.lessons")}</span>
+            <BookOpen className="h-6 w-6 text-primary-foreground" />
+            <span className="text-lg font-extrabold text-primary-foreground">{t("home.lessons")}</span>
+          </button>
+          <button
+            onClick={() => setShowTapRace(true)}
+            className="rounded-2xl bg-accent/10 border border-accent/20 p-4 transition-all hover:bg-accent/20 active:scale-[0.98] flex flex-col items-center justify-center gap-1"
+          >
+            <Zap className="h-5 w-5 text-accent" />
+            <span className="text-[10px] font-bold text-accent">{t("game.quickBattle")}</span>
           </button>
         </motion.div>
 
@@ -181,6 +247,11 @@ const Home = () => {
               <span className="text-[11px] font-bold text-foreground">{item.label}</span>
             </button>
           ))}
+        </motion.div>
+
+        {/* Market Drama - Top gainers/losers */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.17 }} className="mt-6">
+          <MarketDrama />
         </motion.div>
 
         {/* Daily Tip */}
@@ -231,6 +302,8 @@ const Home = () => {
           </div>
         </motion.div>
       </main>
+
+      {showTapRace && <TapRace onClose={() => setShowTapRace(false)} />}
 
       <BottomNav />
     </div>

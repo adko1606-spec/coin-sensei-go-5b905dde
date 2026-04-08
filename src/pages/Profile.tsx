@@ -11,6 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 import logo from "@/assets/logo-new.png";
 import { toast } from "sonner";
 import FriendsSection from "@/components/FriendsSection";
+import { ESTATE_IMAGES } from "@/data/estateAssets";
 
 const COSMETIC_CATEGORIES = [
   { id: "hat", labelKey: "profile.hats" },
@@ -198,7 +199,7 @@ const Profile = () => {
           ))}
         </motion.div>
 
-        {/* Estate display (houses & cars) */}
+        {/* Estate display (houses & cars) with illustrations */}
         {(() => {
           const equippedHouse = equippedCosmeticItems.find((i: any) => i?.category === "house");
           const equippedCar = equippedCosmeticItems.find((i: any) => i?.category === "car");
@@ -212,13 +213,21 @@ const Profile = () => {
               <div className="flex items-center justify-center gap-6">
                 {equippedHouse && (
                   <div className="text-center">
-                    <span className="text-5xl">{equippedHouse.icon}</span>
+                    {ESTATE_IMAGES[equippedHouse.id] ? (
+                      <img src={ESTATE_IMAGES[equippedHouse.id]} alt={equippedHouse.name} className="h-20 w-20 object-contain mx-auto" loading="lazy" />
+                    ) : (
+                      <span className="text-5xl">{equippedHouse.icon}</span>
+                    )}
                     <p className="text-xs font-bold text-foreground mt-1">{equippedHouse.name}</p>
                   </div>
                 )}
                 {equippedCar && (
                   <div className="text-center">
-                    <span className="text-5xl">{equippedCar.icon}</span>
+                    {ESTATE_IMAGES[equippedCar.id] ? (
+                      <img src={ESTATE_IMAGES[equippedCar.id]} alt={equippedCar.name} className="h-20 w-20 object-contain mx-auto" loading="lazy" />
+                    ) : (
+                      <span className="text-5xl">{equippedCar.icon}</span>
+                    )}
                     <p className="text-xs font-bold text-foreground mt-1">{equippedCar.name}</p>
                   </div>
                 )}
@@ -326,10 +335,14 @@ const Profile = () => {
                       {hasDiscount && !owned && (<div className="absolute -top-2 -left-2 z-10 bg-accent text-accent-foreground text-[10px] font-bold px-2 py-0.5 rounded-full shadow">-20%</div>)}
                       <div className="p-4 pt-6" style={{ overflow: "visible" }}>
                         <div className="flex justify-center mb-3" style={{ overflow: "visible" }}>
-                         {(item.category === "hat" || item.category === "color") ? (
+                          {(item.category === "hat" || item.category === "color") ? (
                             <CharacterAvatar characterId={activeCharacter?.id} characterImage={activeCharacter?.image} characterName={activeCharacter?.name} equippedItems={[item]} size="lg" effectScale={item.category === "color" ? effectScale : undefined} />
                           ) : (item.category === "house" || item.category === "car") ? (
-                            <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-muted to-muted/50 flex items-center justify-center text-4xl shadow-inner">{item.icon}</div>
+                            ESTATE_IMAGES[item.id] ? (
+                              <img src={ESTATE_IMAGES[item.id]} alt={item.name} className="h-16 w-16 object-contain" loading="lazy" />
+                            ) : (
+                              <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-muted to-muted/50 flex items-center justify-center text-4xl shadow-inner">{item.icon}</div>
+                            )
                           ) : (
                             <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-muted to-muted/50 flex items-center justify-center text-3xl shadow-inner">{item.icon}</div>
                           )}

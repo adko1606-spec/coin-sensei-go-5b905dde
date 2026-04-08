@@ -335,10 +335,14 @@ const Profile = () => {
                       {hasDiscount && !owned && (<div className="absolute -top-2 -left-2 z-10 bg-accent text-accent-foreground text-[10px] font-bold px-2 py-0.5 rounded-full shadow">-20%</div>)}
                       <div className="p-4 pt-6" style={{ overflow: "visible" }}>
                         <div className="flex justify-center mb-3" style={{ overflow: "visible" }}>
-                         {(item.category === "hat" || item.category === "color") ? (
+                          {(item.category === "hat" || item.category === "color") ? (
                             <CharacterAvatar characterId={activeCharacter?.id} characterImage={activeCharacter?.image} characterName={activeCharacter?.name} equippedItems={[item]} size="lg" effectScale={item.category === "color" ? effectScale : undefined} />
                           ) : (item.category === "house" || item.category === "car") ? (
-                            <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-muted to-muted/50 flex items-center justify-center text-4xl shadow-inner">{item.icon}</div>
+                            ESTATE_IMAGES[item.id] ? (
+                              <img src={ESTATE_IMAGES[item.id]} alt={item.name} className="h-16 w-16 object-contain" loading="lazy" />
+                            ) : (
+                              <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-muted to-muted/50 flex items-center justify-center text-4xl shadow-inner">{item.icon}</div>
+                            )
                           ) : (
                             <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-muted to-muted/50 flex items-center justify-center text-3xl shadow-inner">{item.icon}</div>
                           )}

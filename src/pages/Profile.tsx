@@ -199,7 +199,7 @@ const Profile = () => {
           ))}
         </motion.div>
 
-        {/* Estate display (houses & cars) */}
+        {/* Estate display (houses & cars) with illustrations */}
         {(() => {
           const equippedHouse = equippedCosmeticItems.find((i: any) => i?.category === "house");
           const equippedCar = equippedCosmeticItems.find((i: any) => i?.category === "car");
@@ -213,13 +213,21 @@ const Profile = () => {
               <div className="flex items-center justify-center gap-6">
                 {equippedHouse && (
                   <div className="text-center">
-                    <span className="text-5xl">{equippedHouse.icon}</span>
+                    {ESTATE_IMAGES[equippedHouse.id] ? (
+                      <img src={ESTATE_IMAGES[equippedHouse.id]} alt={equippedHouse.name} className="h-20 w-20 object-contain mx-auto" loading="lazy" />
+                    ) : (
+                      <span className="text-5xl">{equippedHouse.icon}</span>
+                    )}
                     <p className="text-xs font-bold text-foreground mt-1">{equippedHouse.name}</p>
                   </div>
                 )}
                 {equippedCar && (
                   <div className="text-center">
-                    <span className="text-5xl">{equippedCar.icon}</span>
+                    {ESTATE_IMAGES[equippedCar.id] ? (
+                      <img src={ESTATE_IMAGES[equippedCar.id]} alt={equippedCar.name} className="h-20 w-20 object-contain mx-auto" loading="lazy" />
+                    ) : (
+                      <span className="text-5xl">{equippedCar.icon}</span>
+                    )}
                     <p className="text-xs font-bold text-foreground mt-1">{equippedCar.name}</p>
                   </div>
                 )}

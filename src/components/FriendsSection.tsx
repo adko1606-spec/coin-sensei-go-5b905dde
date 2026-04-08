@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useI18n } from "@/contexts/I18nContext";
 import { characters } from "@/data/characters";
+import CharacterAvatar from "@/components/CharacterAvatar";
 import { toast } from "sonner";
 
 type FriendProfile = {
@@ -22,6 +23,11 @@ type Friendship = {
   status: string;
 };
 
+type FriendCosmetic = {
+  user_id: string;
+  items: any[];
+};
+
 const FriendsSection = () => {
   const { user } = useAuth();
   const { t } = useI18n();
@@ -30,6 +36,7 @@ const FriendsSection = () => {
   const [searchResults, setSearchResults] = useState<FriendProfile[]>([]);
   const [friendships, setFriendships] = useState<Friendship[]>([]);
   const [friendProfiles, setFriendProfiles] = useState<FriendProfile[]>([]);
+  const [friendCosmetics, setFriendCosmetics] = useState<FriendCosmetic[]>([]);
   const [pendingReceived, setPendingReceived] = useState<(Friendship & { profile: FriendProfile })[]>([]);
   const [searching, setSearching] = useState(false);
 
@@ -43,7 +50,28 @@ const FriendsSection = () => {
     if (friendIds.length > 0) {
       const { data: profiles } = await supabase.from("profiles").select("user_id, display_name, selected_character, current_streak, coins").in("user_id", friendIds);
       if (profiles) setFriendProfiles(profiles as any);
-    } else { setFriendProfiles([]); }
+
+      // Load friend cosmetics (equipped items)
+      const { data: cosmeticsData } = await supabase
+        .from("user_cosmetics")
+        .select("user_id, item_id")
+        .in("user_id", friendIds)
+        .eq("equipped", true);
+      
+      if (cosmeticsData && cosmeticsData.length > 0) {
+        const itemIds = [...new Set(cosmeticsData.map((c: any) => c.item_id))];
+        const { data: items } = await supabase.from("cosmetic_items").select("*").in("id", itemIds);
+        
+        const grouped: FriendCosmetic[] = friendIds.map((fid) => {
+          const equippedIds = cosmeticsData.filter((c: any) => c.user_id === fid).map((c: any) => c.item_id);
+          return {
+            user_id: fid,
+            items: (items || []).filter((i: any) => equippedIds.includes(i.id)),
+          };
+        });
+        setFriendCosmetics(grouped);
+      }
+    } else { setFriendProfiles([]); setFriendCosmetics([]); }
     const pending = (data as any[]).filter((f) => f.status === "pending" && f.receiver_id === user.id);
     if (pending.length > 0) {
       const senderIds = pending.map((f) => f.sender_id);
@@ -96,6 +124,10 @@ const FriendsSection = () => {
     return friendships.find((f) => (f.sender_id === user?.id && f.receiver_id === userId) || (f.receiver_id === user?.id && f.sender_id === userId))?.id;
   };
 
+  const getFriendEquipped = (userId: string) => {
+    return friendCosmetics.find((fc) => fc.user_id === userId)?.items || [];
+  };
+
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="mt-6">
       <div className="flex items-center justify-between mb-3">
@@ -120,9 +152,14 @@ const FriendsSection = () => {
             const char = characters.find((c) => c.id === req.profile.selected_character);
             return (
               <div key={req.id} className="flex items-center gap-3 rounded-2xl bg-secondary/10 border border-secondary/20 p-3">
-                <div className="h-10 w-10 rounded-xl bg-accent/10 overflow-hidden shrink-0 flex items-center justify-center">
-                  {char ? <img src={char.image} alt={char.name} className="h-full w-full object-cover" /> : <span className="text-xl">🎓</span>}
-                </div>
+                <CharacterAvatar
+                  characterId={char?.id}
+                  characterImage={char?.image}
+                  characterName={char?.name}
+                  equippedItems={[]}
+                  size="sm"
+                  showEffects={false}
+                />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-bold text-foreground truncate">{req.profile.display_name}</p>
                   <p className="text-xs text-muted-foreground">{t("profile.wantsToBeFriend")}</p>
@@ -164,9 +201,14 @@ const FriendsSection = () => {
                   const char = characters.find((c) => c.id === result.selected_character);
                   return (
                     <div key={result.user_id} className="flex items-center gap-3 rounded-xl bg-muted/50 p-3">
-                      <div className="h-9 w-9 rounded-lg bg-accent/10 overflow-hidden shrink-0 flex items-center justify-center">
-                        {char ? <img src={char.image} alt={char.name} className="h-full w-full object-cover" /> : <span className="text-lg">🎓</span>}
-                      </div>
+                      <CharacterAvatar
+                        characterId={char?.id}
+                        characterImage={char?.image}
+                        characterName={char?.name}
+                        equippedItems={[]}
+                        size="sm"
+                        showEffects={false}
+                      />
                       <p className="flex-1 text-sm font-bold text-foreground truncate">{result.display_name}</p>
                       {status === "accepted" ? (
                         <span className="text-xs font-bold text-primary">{t("profile.friendsAlready")}</span>
@@ -195,10 +237,18 @@ const FriendsSection = () => {
           {friendProfiles.map((friend) => {
             const char = characters.find((c) => c.id === friend.selected_character);
             const fId = getFriendshipId(friend.user_id);
+            const equippedItems = getFriendEquipped(friend.user_id);
             return (
               <div key={friend.user_id} className="flex items-center gap-3 rounded-2xl bg-card p-3 shadow-card">
-                <div className="h-10 w-10 rounded-xl bg-accent/10 overflow-hidden shrink-0 flex items-center justify-center">
-                  {char ? <img src={char.image} alt={char.name} className="h-full w-full object-cover" /> : <span className="text-xl">🎓</span>}
+                <div style={{ overflow: "visible" }}>
+                  <CharacterAvatar
+                    characterId={char?.id}
+                    characterImage={char?.image}
+                    characterName={char?.name}
+                    equippedItems={equippedItems}
+                    size="sm"
+                    showEffects={false}
+                  />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-bold text-foreground truncate">{friend.display_name}</p>

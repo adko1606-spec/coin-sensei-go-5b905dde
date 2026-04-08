@@ -12,7 +12,7 @@ import {
   Shield,
   Info,
 } from "lucide-react";
-import { AreaChart, Area, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts";
+import { AreaChart, Area, ResponsiveContainer, XAxis, YAxis, Tooltip, ReferenceDot } from "recharts";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
@@ -52,43 +52,99 @@ const riskColors: Record<number, string> = {
   4: "border-destructive/30 bg-destructive/5 text-destructive",
 };
 
-const StockPriceChart = ({ stockId, currentPrice, changePercent }: { stockId: string; currentPrice: number; changePercent: number }) => {
+type Timeframe = "1D" | "1W" | "1M";
+
+const StockPriceChart = ({ stockId, currentPrice, changePercent, userId }: { stockId: string; currentPrice: number; changePercent: number; userId?: string }) => {
   const { t } = useI18n();
-  const [data, setData] = useState<{ t: string; p: number }[]>([]);
+  const [data, setData] = useState<{ t: string; p: number; isBuy?: boolean; buyAmount?: number }[]>([]);
+  const [timeframe, setTimeframe] = useState<Timeframe>("1D");
 
   useEffect(() => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const now = new Date();
+    let since: Date;
+    let limit = 24;
 
-    supabase
-      .from("market_events")
-      .select("created_at, price_impact_percent")
-      .eq("stock_id", stockId)
-      .gte("created_at", today.toISOString())
-      .order("created_at", { ascending: true })
-      .limit(24)
-      .then(({ data: events }) => {
-        if (events && events.length > 0) {
-          let price = currentPrice;
-          const impacts = events.map((e) => e.price_impact_percent);
-          for (let i = impacts.length - 1; i >= 0; i--) {
-            price = price / (1 + (impacts[i] ?? 0) / 100);
-          }
-          const points: { t: string; p: number }[] = [{ t: "Start", p: Math.round(price) }];
-          for (let i = 0; i < impacts.length; i++) {
-            price = price * (1 + (impacts[i] ?? 0) / 100);
-            const time = new Date(events[i].created_at);
-            points.push({ t: `${time.getHours()}:${String(time.getMinutes()).padStart(2, "0")}`, p: Math.round(price) });
-          }
-          setData(points);
-        } else {
-          setData([
-            { t: "Start", p: currentPrice },
-            { t: t("invest.current"), p: currentPrice },
-          ]);
+    switch (timeframe) {
+      case "1D":
+        since = new Date(now);
+        since.setHours(0, 0, 0, 0);
+        limit = 24;
+        break;
+      case "1W":
+        since = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        limit = 168;
+        break;
+      case "1M":
+        since = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+        limit = 720;
+        break;
+    }
+
+    const loadChart = async () => {
+      const [evRes, txRes] = await Promise.all([
+        supabase
+          .from("market_events")
+          .select("created_at, price_impact_percent")
+          .eq("stock_id", stockId)
+          .gte("created_at", since.toISOString())
+          .order("created_at", { ascending: true })
+          .limit(limit),
+        userId ? supabase
+          .from("investment_transactions")
+          .select("created_at, amount, type")
+          .eq("user_id", userId)
+          .eq("stock_id", stockId)
+          .eq("type", "invest")
+          .gte("created_at", since.toISOString())
+          .order("created_at", { ascending: true }) : Promise.resolve({ data: [] }),
+      ]);
+
+      const events = evRes.data || [];
+      const buys = (txRes.data || []) as any[];
+
+      if (events.length > 0) {
+        let price = currentPrice;
+        const impacts = events.map((e) => e.price_impact_percent);
+        for (let i = impacts.length - 1; i >= 0; i--) {
+          price = price / (1 + (impacts[i] ?? 0) / 100);
         }
-      });
-  }, [stockId, currentPrice]);
+
+        const formatTime = (date: Date) => {
+          if (timeframe === "1D") return `${date.getHours()}:${String(date.getMinutes()).padStart(2, "0")}`;
+          if (timeframe === "1W") return `${date.getDate()}.${date.getMonth() + 1}`;
+          return `${date.getDate()}.${date.getMonth() + 1}`;
+        };
+
+        const points: typeof data = [{ t: "Start", p: Math.round(price) }];
+        for (let i = 0; i < impacts.length; i++) {
+          price = price * (1 + (impacts[i] ?? 0) / 100);
+          const time = new Date(events[i].created_at);
+          const timeStr = formatTime(time);
+          
+          // Check if there's a buy at this time
+          const buy = buys.find((b) => {
+            const bt = new Date(b.created_at);
+            return Math.abs(bt.getTime() - time.getTime()) < 3600000;
+          });
+
+          points.push({
+            t: timeStr,
+            p: Math.round(price),
+            isBuy: !!buy,
+            buyAmount: buy ? buy.amount : undefined,
+          });
+        }
+        setData(points);
+      } else {
+        setData([
+          { t: "Start", p: currentPrice },
+          { t: t("invest.current"), p: currentPrice },
+        ]);
+      }
+    };
+
+    loadChart();
+  }, [stockId, currentPrice, timeframe, userId]);
 
   const isPositive = changePercent > 0;
   const isNegative = changePercent < 0;
@@ -96,33 +152,63 @@ const StockPriceChart = ({ stockId, currentPrice, changePercent }: { stockId: st
 
   if (data.length < 2) return null;
 
+  const buyPoints = data.filter((d) => d.isBuy);
+
   return (
     <div className="rounded-xl bg-muted/30 border border-border p-3">
       <div className="flex items-center justify-between mb-2">
-        <span className="text-xs font-bold text-muted-foreground uppercase">{t("invest.todayChart")}</span>
+        <div className="flex gap-1">
+          {(["1D", "1W", "1M"] as Timeframe[]).map((tf) => (
+            <button
+              key={tf}
+              onClick={() => setTimeframe(tf)}
+              className={`px-2 py-0.5 rounded-md text-[10px] font-bold transition-all ${
+                timeframe === tf ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              {tf}
+            </button>
+          ))}
+        </div>
         <span className={`text-sm font-bold ${isPositive ? "text-primary" : isNegative ? "text-destructive" : "text-muted-foreground"}`}>
           {isPositive ? "+" : ""}{Math.round(changePercent)}%
         </span>
       </div>
-      <div className="h-32">
-        <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={data}>
-            <defs>
-              <linearGradient id="detailGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor={color} stopOpacity={0.3} />
-                <stop offset="100%" stopColor={color} stopOpacity={0.02} />
-              </linearGradient>
-            </defs>
-            <XAxis dataKey="t" tick={{ fontSize: 10 }} tickLine={false} axisLine={false} />
-            <YAxis hide domain={["dataMin - 5", "dataMax + 5"]} />
-            <Tooltip
-              contentStyle={{ fontSize: 12, borderRadius: 8, border: "none", boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }}
-              formatter={(v: number) => [`${v} F`, t("common.price")]}
-            />
-            <Area type="monotone" dataKey="p" stroke={color} fill="url(#detailGrad)" strokeWidth={2} dot={false} />
-          </AreaChart>
-        </ResponsiveContainer>
+      <div className="h-40 overflow-x-auto">
+        <div style={{ width: data.length > 20 ? `${Math.max(100, data.length * 5)}%` : "100%", height: "100%" }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart data={data}>
+              <defs>
+                <linearGradient id={`detailGrad-${stockId}`} x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor={color} stopOpacity={0.3} />
+                  <stop offset="100%" stopColor={color} stopOpacity={0.02} />
+                </linearGradient>
+              </defs>
+              <XAxis dataKey="t" tick={{ fontSize: 9 }} tickLine={false} axisLine={false} interval="preserveStartEnd" />
+              <YAxis hide domain={["dataMin - 5", "dataMax + 5"]} />
+              <Tooltip
+                contentStyle={{ fontSize: 12, borderRadius: 8, border: "none", boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }}
+                formatter={(v: number, _: any, props: any) => {
+                  const entry = props.payload;
+                  const items = [`${v} F`];
+                  if (entry.isBuy) items.push(`📥 ${t("invest.investAction")}: ${entry.buyAmount} F`);
+                  return [items.join(" | "), t("common.price")];
+                }}
+              />
+              <Area type="monotone" dataKey="p" stroke={color} fill={`url(#detailGrad-${stockId})`} strokeWidth={2} dot={false} />
+              {buyPoints.map((bp, idx) => (
+                <ReferenceDot key={idx} x={bp.t} y={bp.p} r={4} fill="hsl(145, 72%, 40%)" stroke="white" strokeWidth={2} />
+              ))}
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
       </div>
+      {buyPoints.length > 0 && (
+        <div className="flex items-center gap-1 mt-1">
+          <div className="h-2 w-2 rounded-full bg-primary" />
+          <span className="text-[10px] text-muted-foreground">{t("invest.buyMarker")}</span>
+        </div>
+      )}
     </div>
   );
 };
@@ -155,13 +241,13 @@ const StockDetailModal = ({ stock, investment, onClose, onAction }: StockDetailM
           .eq("user_id", user.id)
           .eq("stock_id", stock.id)
           .order("created_at", { ascending: false })
-          .limit(10),
+          .limit(20),
         supabase
           .from("market_events")
           .select("*")
           .eq("stock_id", stock.id)
           .order("created_at", { ascending: false })
-          .limit(5),
+          .limit(10),
       ]);
       if (txRes.data) setTransactions(txRes.data);
       if (evRes.data) setEvents(evRes.data);
@@ -268,8 +354,8 @@ const StockDetailModal = ({ stock, investment, onClose, onAction }: StockDetailM
           </div>
 
           <div className="p-4 space-y-4">
-            {/* Price chart */}
-            <StockPriceChart stockId={stock.id} currentPrice={stock.current_price} changePercent={stock.price_change_percent} />
+            {/* Price chart with timeframe & buy markers */}
+            <StockPriceChart stockId={stock.id} currentPrice={stock.current_price} changePercent={stock.price_change_percent} userId={user?.id} />
 
             {/* Sector risk info */}
             {sectorProfile && (

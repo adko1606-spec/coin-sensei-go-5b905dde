@@ -29,12 +29,39 @@ function getDailyDiscountIds(items: any[]): string[] {
     hash = ((hash << 5) - hash) + today.charCodeAt(i);
     hash |= 0;
   }
-  // Shuffle ALL items (not filtered by category)
-  const shuffled = [...items].sort((a, b) => {
-    const ha = ((hash * 31 + a.id.charCodeAt(0)) | 0) - ((hash * 31 + b.id.charCodeAt(0)) | 0);
-    return ha;
+  // Group items by category, pick 1 from each category first, then fill remaining
+  const byCategory: Record<string, any[]> = {};
+  items.forEach((item) => {
+    const cat = item.category || "other";
+    if (!byCategory[cat]) byCategory[cat] = [];
+    byCategory[cat].push(item);
   });
-  return shuffled.slice(0, 5).map((i: any) => i.id);
+  const catKeys = Object.keys(byCategory);
+  const picked: string[] = [];
+  // Sort each category's items deterministically using hash
+  catKeys.forEach((cat) => {
+    byCategory[cat].sort((a: any, b: any) => {
+      const ha = ((hash * 31 + a.id.charCodeAt(0) + a.id.charCodeAt(1)) | 0);
+      const hb = ((hash * 31 + b.id.charCodeAt(0) + b.id.charCodeAt(1)) | 0);
+      return ha - hb;
+    });
+  });
+  // Round-robin: pick 1 from each category
+  let catIdx = 0;
+  const catOrder = [...catKeys].sort((a, b) => ((hash * 7 + a.charCodeAt(0)) | 0) - ((hash * 7 + b.charCodeAt(0)) | 0));
+  const catPointers: Record<string, number> = {};
+  catOrder.forEach((c) => { catPointers[c] = 0; });
+  while (picked.length < 5 && catIdx < catOrder.length * 3) {
+    const cat = catOrder[catIdx % catOrder.length];
+    const ptr = catPointers[cat];
+    if (ptr < byCategory[cat].length) {
+      picked.push(byCategory[cat][ptr].id);
+      catPointers[cat] = ptr + 1;
+    }
+    catIdx++;
+    if (picked.length >= 5) break;
+  }
+  return picked;
 }
 
 const Profile = () => {

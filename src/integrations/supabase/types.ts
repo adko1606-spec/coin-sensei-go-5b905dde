@@ -174,6 +174,45 @@ export type Database = {
           },
         ]
       }
+      player_ratings: {
+        Row: {
+          created_at: string
+          highest_rating: number
+          id: string
+          losses: number
+          rank: string
+          rating: number
+          updated_at: string
+          user_id: string
+          win_streak: number
+          wins: number
+        }
+        Insert: {
+          created_at?: string
+          highest_rating?: number
+          id?: string
+          losses?: number
+          rank?: string
+          rating?: number
+          updated_at?: string
+          user_id: string
+          win_streak?: number
+          wins?: number
+        }
+        Update: {
+          created_at?: string
+          highest_rating?: number
+          id?: string
+          losses?: number
+          rank?: string
+          rating?: number
+          updated_at?: string
+          user_id?: string
+          win_streak?: number
+          wins?: number
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -218,6 +257,113 @@ export type Database = {
           onboarding_completed?: boolean
           selected_character?: string | null
           updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      pvp_invites: {
+        Row: {
+          created_at: string
+          id: string
+          match_id: string | null
+          receiver_id: string
+          sender_id: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          match_id?: string | null
+          receiver_id: string
+          sender_id: string
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          match_id?: string | null
+          receiver_id?: string
+          sender_id?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pvp_invites_match_id_fkey"
+            columns: ["match_id"]
+            isOneToOne: false
+            referencedRelation: "pvp_matches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pvp_matches: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          id: string
+          player1_id: string
+          player1_rating_change: number
+          player1_score: number
+          player1_time_ms: number
+          player2_id: string
+          player2_rating_change: number
+          player2_score: number
+          player2_time_ms: number
+          questions: Json
+          status: string
+          winner_id: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          player1_id: string
+          player1_rating_change?: number
+          player1_score?: number
+          player1_time_ms?: number
+          player2_id: string
+          player2_rating_change?: number
+          player2_score?: number
+          player2_time_ms?: number
+          questions?: Json
+          status?: string
+          winner_id?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          player1_id?: string
+          player1_rating_change?: number
+          player1_score?: number
+          player1_time_ms?: number
+          player2_id?: string
+          player2_rating_change?: number
+          player2_score?: number
+          player2_time_ms?: number
+          questions?: Json
+          status?: string
+          winner_id?: string | null
+        }
+        Relationships: []
+      }
+      pvp_queue: {
+        Row: {
+          id: string
+          joined_at: string
+          rating: number
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          joined_at?: string
+          rating?: number
+          user_id: string
+        }
+        Update: {
+          id?: string
+          joined_at?: string
+          rating?: number
           user_id?: string
         }
         Relationships: []

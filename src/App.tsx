@@ -20,6 +20,7 @@ import Settings from "./pages/Settings";
 import Auth from "./pages/Auth";
 import Onboarding from "./pages/Onboarding";
 import NotFound from "./pages/NotFound";
+import PvpBattle from "./pages/PvpBattle";
 
 const queryClient = new QueryClient();
 
@@ -60,6 +61,7 @@ const AppContent = () => {
         <Route path="/leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+        <Route path="/pvp" element={<ProtectedRoute><PvpBattle /></ProtectedRoute>} />
         <Route path="/onboarding" element={<OnboardingRoute><Onboarding /></OnboardingRoute>} />
         <Route path="/auth" element={<AuthRoute><Auth /></AuthRoute>} />
         <Route path="*" element={<NotFound />} />

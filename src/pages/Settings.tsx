@@ -47,6 +47,7 @@ const Settings = () => {
         supabase.from("investment_transactions").delete().eq("user_id", user.id),
         supabase.from("user_badges").delete().eq("user_id", user.id),
         supabase.from("user_cosmetics").delete().eq("user_id", user.id),
+        supabase.from("player_ratings").update({ rating: 0, rank: "Bronze", wins: 0, losses: 0, win_streak: 0, highest_rating: 0 } as any).eq("user_id", user.id),
       ]);
       await supabase.from("profiles").update({
         coins: 0,

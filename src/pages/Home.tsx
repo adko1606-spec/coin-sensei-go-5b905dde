@@ -52,7 +52,7 @@ const checkDailyRandomReward = (): number | null => {
 
 const Home = () => {
   const navigate = useNavigate();
-  const { user, profile, progress, totalXp, loading, currentLives, nextLifeIn, refreshProfile } = useAuth();
+  const { user, profile, progress, totalXp, loading, currentLives, nextLifeIn, refreshProfile, addCoins } = useAuth();
   const { t, language } = useI18n();
   const [tip, setTip] = useState(getTodaysTip(language));
   const [challenges, setChallenges] = useState<DailyChallenge[]>(getTodaysChallenges(language));
@@ -146,6 +146,39 @@ const Home = () => {
 
   const challengeStatus = useMemo(() => calcStatus(challenges, todayProgress), [progress, challenges]);
   const weeklyStatus = useMemo(() => calcStatus(weeklyChallenges, weekProgress), [progress, weeklyChallenges]);
+
+  // Challenge reward claiming
+  useEffect(() => {
+    if (!user) return;
+    const todayKey = `finap-challenges-claimed-${new Date().toDateString()}`;
+    const weekKey = `finap-weekly-claimed-${monday.toDateString()}`;
+    const claimedDaily = JSON.parse(localStorage.getItem(todayKey) || "[]");
+    const claimedWeekly = JSON.parse(localStorage.getItem(weekKey) || "[]");
+
+    let totalCoinsReward = 0;
+    let totalXpReward = 0;
+
+    challengeStatus.forEach((s) => {
+      if (s.completed && !claimedDaily.includes(s.id)) {
+        const ch = challenges.find((c) => c.id === s.id);
+        if (ch) { totalCoinsReward += ch.reward.coins; totalXpReward += ch.reward.xp; claimedDaily.push(s.id); }
+      }
+    });
+
+    weeklyStatus.forEach((s) => {
+      if (s.completed && !claimedWeekly.includes(s.id)) {
+        const ch = weeklyChallenges.find((c) => c.id === s.id);
+        if (ch) { totalCoinsReward += ch.reward.coins; totalXpReward += ch.reward.xp; claimedWeekly.push(s.id); }
+      }
+    });
+
+    if (totalCoinsReward > 0 || totalXpReward > 0) {
+      localStorage.setItem(todayKey, JSON.stringify(claimedDaily));
+      localStorage.setItem(weekKey, JSON.stringify(claimedWeekly));
+      addCoins(totalCoinsReward).then(() => refreshProfile());
+      toast.success(`🏆 ${t("challenge.rewardClaimed")}: +${totalCoinsReward} Fince, +${totalXpReward} XP!`, { duration: 5000 });
+    }
+  }, [challengeStatus, weeklyStatus, user]);
 
   if (loading) {
     return (

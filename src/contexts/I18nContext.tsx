@@ -334,6 +334,9 @@ const translations: Translations = {
   "demo.year": { sk: "Rok", en: "Year", ua: "Рік" },
   "demo.value": { sk: "Hodnota", en: "Value", ua: "Вартість" },
 
+  // Challenge rewards
+  "challenge.rewardClaimed": { sk: "Odmena za výzvu získaná", en: "Challenge reward claimed", ua: "Нагороду за завдання отримано" },
+
   // Categories (for lessons filter)
   "cat.all": { sk: "Všetko", en: "All", ua: "Все" },
   "cat.basics": { sk: "Základy", en: "Basics", ua: "Основи" },

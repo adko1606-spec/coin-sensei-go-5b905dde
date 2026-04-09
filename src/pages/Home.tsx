@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Lightbulb, Target, Flame, Calendar, Heart, Clock, BookOpen, GraduationCap, TrendingUp, Trophy, User, Zap, Gift } from "lucide-react";
+import { Lightbulb, Target, Flame, Calendar, Heart, Clock, BookOpen, GraduationCap, TrendingUp, Trophy, User, Zap, Gift, Swords } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useI18n } from "@/contexts/I18nContext";
@@ -260,6 +260,13 @@ const Home = () => {
           >
             <Zap className="h-5 w-5 text-accent" />
             <span className="text-[10px] font-bold text-accent">{t("game.quickBattle")}</span>
+          </button>
+          <button
+            onClick={() => navigate("/pvp")}
+            className="rounded-2xl bg-destructive/10 border border-destructive/20 p-4 transition-all hover:bg-destructive/20 active:scale-[0.98] flex flex-col items-center justify-center gap-1"
+          >
+            <Swords className="h-5 w-5 text-destructive" />
+            <span className="text-[10px] font-bold text-destructive">PvP</span>
           </button>
         </motion.div>
 

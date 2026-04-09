@@ -1,6 +1,6 @@
-import { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Swords, Users, Zap, Trophy, ChevronLeft, Crown, Shield, Star, Timer, Check, X } from "lucide-react";
+import { Swords, Users, Zap, ChevronLeft, Crown, Shield, Check, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useI18n } from "@/contexts/I18nContext";
@@ -77,7 +77,7 @@ type Screen = "lobby" | "queue" | "battle" | "result" | "rank";
 
 const PvpBattle = () => {
   const navigate = useNavigate();
-  const { user, profile, addCoins, refreshProfile } = useAuth();
+  const { user, addCoins } = useAuth();
   const { t } = useI18n();
 
   const [screen, setScreen] = useState<Screen>("lobby");
@@ -139,7 +139,7 @@ const PvpBattle = () => {
     }, delay);
   };
 
-  const inviteFriend = (friendId: string) => {
+  const inviteFriend = (_friendId: string) => {
     toast.success(t("pvp.inviteSent"));
     // Simulate friend accepting after delay
     setTimeout(() => startBattle(), 1500);

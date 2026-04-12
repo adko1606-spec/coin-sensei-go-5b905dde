@@ -44,7 +44,7 @@ const Onboarding = () => {
     <div className="min-h-screen gradient-hero flex items-center justify-center p-4">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md">
         <div className="flex flex-col items-center mb-6">
-          <img src={logo} alt="FinAp" className="h-20 w-20 mb-2" />
+          <img src={logo} alt="FinLit" className="h-20 w-20 mb-2" />
           <h1 className="text-2xl font-extrabold text-foreground">{t("onboarding.welcome")}</h1>
           <p className="text-muted-foreground text-sm">{t("onboarding.tellUsAbout")}</p>
         </div>

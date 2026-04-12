@@ -303,7 +303,7 @@ const translations: Translations = {
   "auth.registerSuccess": { sk: "Registrácia úspešná! Skontroluj si email na potvrdenie.", en: "Registration successful! Check your email for confirmation.", ua: "Реєстрація успішна! Перевірте email для підтвердження." },
 
   // Onboarding
-  "onboarding.welcome": { sk: "Vitaj vo FinAp!", en: "Welcome to FinAp!", ua: "Ласкаво просимо до FinAp!" },
+  "onboarding.welcome": { sk: "Vitaj vo FinLit!", en: "Welcome to FinLit!", ua: "Ласкаво просимо до FinLit!" },
   "onboarding.tellUsAbout": { sk: "Povieme si o tebe niečo 😊", en: "Tell us something about yourself 😊", ua: "Розкажіть нам про себе 😊" },
   "onboarding.howOld": { sk: "Koľko máš rokov?", en: "How old are you?", ua: "Скільки вам років?" },
   "onboarding.knowledge": { sk: "Aké sú tvoje finančné znalosti?", en: "What's your financial knowledge?", ua: "Які ваші фінансові знання?" },
@@ -342,7 +342,7 @@ const translations: Translations = {
   "ai.realExample": { sk: "Daj mi príklad z praxe", en: "Give me a real-world example", ua: "Наведіть приклад з практики" },
   "ai.askPlaceholder": { sk: "Opýtaj sa...", en: "Ask...", ua: "Запитайте..." },
   "ai.connectionError": { sk: "Nepodarilo sa spojiť s AI.", en: "Failed to connect to AI.", ua: "Не вдалося з'єднатися з AI." },
-  "ai.chatGreeting": { sk: "Ahoj! 👋 Som FinAp AI asistent. Opýtaj sa ma čokoľvek o financiách! 💰", en: "Hi! 👋 I'm the FinAp AI assistant. Ask me anything about finance! 💰", ua: "Привіт! 👋 Я FinAp AI асистент. Запитайте мене будь-що про фінанси! 💰" },
+  "ai.chatGreeting": { sk: "Ahoj! 👋 Som FinLit AI asistent. Opýtaj sa ma čokoľvek o financiách! 💰", en: "Hi! 👋 I'm the FinLit AI assistant. Ask me anything about finance! 💰", ua: "Привіт! 👋 Я FinLit AI асистент. Запитайте мене будь-що про фінанси! 💰" },
   "ai.writeMsgPlaceholder": { sk: "Napíš správu...", en: "Write a message...", ua: "Напишіть повідомлення..." },
   "ai.systemPrompt": { sk: "Pomáhaš študentovi pochopiť finančnú otázku z kvízu.", en: "You are helping a student understand a financial quiz question.", ua: "Ви допомагаєте студенту зрозуміти фінансове питання з вікторини." },
 

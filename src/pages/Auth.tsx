@@ -43,8 +43,8 @@ const Auth = () => {
     <div className="min-h-screen gradient-hero flex items-center justify-center p-4">
       <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md">
         <div className="flex flex-col items-center mb-8">
-          <img src={logo} alt="FinAp" className="h-24 w-24 mb-2" />
-          <h1 className="text-3xl font-extrabold text-foreground">FinAp</h1>
+          <img src={logo} alt="FinLit" className="h-24 w-24 mb-2" />
+          <h1 className="text-3xl font-extrabold text-foreground">FinLit</h1>
           <p className="text-muted-foreground mt-1">{t("auth.subtitle")}</p>
         </div>
 

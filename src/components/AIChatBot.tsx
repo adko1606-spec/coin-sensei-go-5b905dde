@@ -106,7 +106,7 @@ const AIChatBot = () => {
           >
             <div className="flex items-center gap-2 px-4 py-3 border-b border-border bg-primary/5">
               <Bot className="h-5 w-5 text-primary" />
-              <h3 className="text-sm font-bold text-foreground">FinAp AI</h3>
+              <h3 className="text-sm font-bold text-foreground">FinLit AI</h3>
             </div>
 
             <div ref={scrollRef} className="flex-1 overflow-y-auto p-3 space-y-3 min-h-[200px]">

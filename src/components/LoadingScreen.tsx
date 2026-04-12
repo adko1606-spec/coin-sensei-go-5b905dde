@@ -92,8 +92,8 @@ const LoadingScreen = ({ onDone }: { onDone: () => void }) => {
             transition={{ type: "spring", stiffness: 200, damping: 15 }}
             className="flex flex-col items-center z-10"
           >
-            <img src={logo} alt="FinAp" className="h-28 w-28 mb-4" />
-            <h1 className="text-4xl font-black text-primary tracking-tight">FinAp</h1>
+            <img src={logo} alt="FinLit" className="h-28 w-28 mb-4" />
+            <h1 className="text-4xl font-black text-primary tracking-tight">FinLit</h1>
             <p className="text-sm text-muted-foreground mt-2">Nauč sa ovládať financie</p>
           </motion.div>
 

@@ -44,7 +44,7 @@ const Study = () => {
               </button>
             ) : (
               <>
-                <img src={logo} alt="FinAp logo" className="h-8 w-8" />
+                <img src={logo} alt="FinLit logo" className="h-8 w-8" />
                 <h1 className="text-lg font-extrabold text-primary">{t("study.title")}</h1>
               </>
             )}

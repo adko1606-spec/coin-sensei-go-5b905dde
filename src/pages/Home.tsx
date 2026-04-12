@@ -193,8 +193,8 @@ const Home = () => {
       <header className="sticky top-0 z-40 border-b border-border bg-card/80 backdrop-blur-xl">
         <div className="mx-auto flex max-w-lg items-center justify-between px-4 py-3">
           <div className="flex items-center gap-2">
-            <img src={logo} alt="FinAp logo" className="h-8 w-8" />
-            <h1 className="text-lg font-extrabold text-primary">FinAp</h1>
+            <img src={logo} alt="FinLit logo" className="h-8 w-8" />
+            <h1 className="text-lg font-extrabold text-primary">FinLit</h1>
           </div>
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-1 rounded-full bg-destructive/10 px-3 py-1 relative group">
@@ -221,7 +221,7 @@ const Home = () => {
             {selectedChar ? (
               <CharacterAvatar characterId={selectedChar.id} characterImage={selectedChar.image} characterName={selectedChar.name} equippedItems={equippedCosmeticItems} size="md" />
             ) : (
-              <img src={mascot} alt="FinAp maskot" className="h-16 w-16" />
+              <img src={mascot} alt="FinLit maskot" className="h-16 w-16" />
             )}
           </div>
           <div>

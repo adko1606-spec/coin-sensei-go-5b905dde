@@ -128,11 +128,13 @@ const PvpBattle = () => {
     loadFriends();
   }, [user]);
 
-  // Listen for incoming invites via realtime
+  // Listen for incoming invites and changes via realtime
   useEffect(() => {
     if (!user) return;
-    const channel = supabase
-      .channel('pvp-invites-' + user.id)
+
+    // Listen for new invites TO this user
+    const insertChannel = supabase
+      .channel('pvp-invites-insert-' + user.id)
       .on('postgres_changes', {
         event: 'INSERT',
         schema: 'public',
@@ -141,7 +143,6 @@ const PvpBattle = () => {
       }, async (payload: any) => {
         const invite = payload.new;
         if (invite.status === 'pending') {
-          // Get sender name
           const { data: senderProfile } = await supabase.from("profiles").select("display_name").eq("user_id", invite.sender_id).single();
           const name = senderProfile?.display_name || "Hráč";
           setPendingInvites(prev => [...prev, { ...invite, sender_name: name }]);
@@ -150,7 +151,43 @@ const PvpBattle = () => {
       })
       .subscribe();
 
-    // Also load existing pending invites
+    // Listen for invite updates (declined/cancelled) - for receiver
+    const updateChannel = supabase
+      .channel('pvp-invites-update-' + user.id)
+      .on('postgres_changes', {
+        event: 'UPDATE',
+        schema: 'public',
+        table: 'pvp_invites',
+      }, (payload: any) => {
+        const invite = payload.new;
+        if (invite.status === 'cancelled' || invite.status === 'declined') {
+          setPendingInvites(prev => prev.filter(p => p.id !== invite.id));
+          // If we're waiting for acceptance and our invite was declined
+          if (screen === 'waiting_accept' && invite.sender_id === user.id) {
+            toast.info("Pozvánka bola odmietnutá");
+            setScreen("lobby");
+          }
+        }
+      })
+      .subscribe();
+
+    // Listen for invite deletions
+    const deleteChannel = supabase
+      .channel('pvp-invites-delete-' + user.id)
+      .on('postgres_changes', {
+        event: 'DELETE',
+        schema: 'public',
+        table: 'pvp_invites',
+      }, (payload: any) => {
+        const oldInvite = payload.old;
+        setPendingInvites(prev => prev.filter(p => p.id !== oldInvite.id));
+        if (screen === 'waiting_accept') {
+          setScreen("lobby");
+        }
+      })
+      .subscribe();
+
+    // Load existing pending invites
     const loadInvites = async () => {
       const { data } = await supabase.from("pvp_invites").select("*").eq("receiver_id", user.id).eq("status", "pending");
       if (data && data.length > 0) {
@@ -165,8 +202,12 @@ const PvpBattle = () => {
     };
     loadInvites();
 
-    return () => { supabase.removeChannel(channel); };
-  }, [user]);
+    return () => {
+      supabase.removeChannel(insertChannel);
+      supabase.removeChannel(updateChannel);
+      supabase.removeChannel(deleteChannel);
+    };
+  }, [user, screen]);
 
   // Listen for match updates (when opponent finishes)
   useEffect(() => {
@@ -341,8 +382,19 @@ const PvpBattle = () => {
   };
 
   const declineInvite = async (invite: any) => {
-    await supabase.from("pvp_invites").update({ status: 'declined' } as any).eq("id", invite.id);
+    await supabase.from("pvp_invites").delete().eq("id", invite.id);
     setPendingInvites(prev => prev.filter(p => p.id !== invite.id));
+  };
+
+  // Cancel own sent invite
+  const cancelInvite = async () => {
+    if (!user || !currentMatchId) return;
+    await supabase.from("pvp_invites").delete().eq("sender_id", user.id).eq("status", "pending");
+    if (currentMatchId) {
+      await supabase.from("pvp_matches").delete().eq("id", currentMatchId).eq("status", "pending");
+    }
+    setCurrentMatchId(null);
+    setScreen("lobby");
   };
 
   // Timer per question
@@ -548,7 +600,7 @@ const PvpBattle = () => {
         <div className="mx-auto flex max-w-lg items-center justify-between px-4 py-3">
           <button onClick={() => navigate(-1)} className="rounded-full p-2 text-muted-foreground hover:bg-muted"><ChevronLeft className="h-5 w-5" /></button>
           <div className="flex items-center gap-2">
-            <img src={logo} alt="FinAp" className="h-7 w-7" />
+            <img src={logo} alt="FinLit" className="h-7 w-7" />
             <h1 className="text-lg font-extrabold text-primary">{t("pvp.title")}</h1>
           </div>
           <div className="relative w-9">
@@ -711,7 +763,7 @@ const PvpBattle = () => {
               </motion.div>
               <h2 className="mt-6 text-xl font-extrabold text-foreground">Čakáme na {opponentName}...</h2>
               <p className="text-sm text-muted-foreground mt-2">Pozvánka odoslaná, čakáme na prijatie</p>
-              <button onClick={() => setScreen("lobby")} className="mt-6 rounded-xl bg-muted px-6 py-2 text-sm font-bold text-foreground">
+              <button onClick={cancelInvite} className="mt-6 rounded-xl bg-muted px-6 py-2 text-sm font-bold text-foreground">
                 Zrušiť
               </button>
             </motion.div>

@@ -155,8 +155,8 @@ const Profile = () => {
       <header className="sticky top-0 z-40 border-b border-border bg-card/80 backdrop-blur-xl">
         <div className="mx-auto flex max-w-lg items-center justify-between px-4 py-3">
           <div className="flex items-center gap-2">
-            <img src={logo} alt="FinAp logo" className="h-8 w-8" />
-            <h1 className="text-lg font-extrabold text-primary">FinAp</h1>
+            <img src={logo} alt="FinLit logo" className="h-8 w-8" />
+            <h1 className="text-lg font-extrabold text-primary">FinLit</h1>
           </div>
           <button onClick={() => navigate("/settings")} className="rounded-full p-2 text-muted-foreground hover:bg-muted transition-colors" title={t("settings.title")}>
             <Settings className="h-5 w-5" />

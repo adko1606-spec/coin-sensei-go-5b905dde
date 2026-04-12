@@ -763,7 +763,7 @@ const PvpBattle = () => {
               </motion.div>
               <h2 className="mt-6 text-xl font-extrabold text-foreground">Čakáme na {opponentName}...</h2>
               <p className="text-sm text-muted-foreground mt-2">Pozvánka odoslaná, čakáme na prijatie</p>
-              <button onClick={() => setScreen("lobby")} className="mt-6 rounded-xl bg-muted px-6 py-2 text-sm font-bold text-foreground">
+              <button onClick={cancelInvite} className="mt-6 rounded-xl bg-muted px-6 py-2 text-sm font-bold text-foreground">
                 Zrušiť
               </button>
             </motion.div>

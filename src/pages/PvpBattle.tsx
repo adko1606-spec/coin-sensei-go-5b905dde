@@ -548,7 +548,7 @@ const PvpBattle = () => {
         <div className="mx-auto flex max-w-lg items-center justify-between px-4 py-3">
           <button onClick={() => navigate(-1)} className="rounded-full p-2 text-muted-foreground hover:bg-muted"><ChevronLeft className="h-5 w-5" /></button>
           <div className="flex items-center gap-2">
-            <img src={logo} alt="FinAp" className="h-7 w-7" />
+            <img src={logo} alt="FinLit" className="h-7 w-7" />
             <h1 className="text-lg font-extrabold text-primary">{t("pvp.title")}</h1>
           </div>
           <div className="relative w-9">

@@ -382,8 +382,19 @@ const PvpBattle = () => {
   };
 
   const declineInvite = async (invite: any) => {
-    await supabase.from("pvp_invites").update({ status: 'declined' } as any).eq("id", invite.id);
+    await supabase.from("pvp_invites").delete().eq("id", invite.id);
     setPendingInvites(prev => prev.filter(p => p.id !== invite.id));
+  };
+
+  // Cancel own sent invite
+  const cancelInvite = async () => {
+    if (!user || !currentMatchId) return;
+    await supabase.from("pvp_invites").delete().eq("sender_id", user.id).eq("status", "pending");
+    if (currentMatchId) {
+      await supabase.from("pvp_matches").delete().eq("id", currentMatchId).eq("status", "pending");
+    }
+    setCurrentMatchId(null);
+    setScreen("lobby");
   };
 
   // Timer per question

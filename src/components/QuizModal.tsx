@@ -234,6 +234,14 @@ const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
     );
   }
 
+  const motivationalPhrases = [
+    "Takmer dokonalé… dáš to bez chyby? 🔥",
+    "Skús to ešte raz a ukáž, že na to máš! 💪",
+    "Len kúsok chýbal k dokonalosti! 🎯",
+    "Toto zvládneš lepšie, vieš to! 🚀",
+    "Každý pokus ťa robí múdrejším! 🧠",
+  ];
+
   if (finished) {
     return (
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
@@ -262,6 +270,20 @@ const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
             className="w-full rounded-2xl gradient-primary px-6 py-4 font-bold text-primary-foreground shadow-button transition-all hover:opacity-90 active:scale-95">
             {t("quiz.continue")}
           </button>
+          {!isPerfect && (
+            <div className="mt-3">
+              <button onClick={() => {
+                setCurrentIndex(0); setAnswered(false); setIsCorrect(null); setScore(0); setErrors(0); setFinished(false);
+                setSelectedChoiceIdx(null); setSelectedTF(null); setShowAIHelp(false);
+              }}
+                className="w-full rounded-2xl bg-accent/10 border border-accent/20 px-6 py-3 font-bold text-accent transition-all hover:bg-accent/20 active:scale-95">
+                🔄 {t("quiz.tryAgain")}
+              </button>
+              <p className="mt-2 text-xs text-muted-foreground italic">
+                {motivationalPhrases[Math.floor(Math.random() * motivationalPhrases.length)]}
+              </p>
+            </div>
+          )}
         </motion.div>
       </motion.div>
     );

@@ -58,6 +58,21 @@ const Home = () => {
   const [challenges, setChallenges] = useState<DailyChallenge[]>(getTodaysChallenges(language));
   const [weeklyChallenges, setWeeklyChallenges] = useState<WeeklyChallenge[]>(getWeeksChallenges(language));
   const [showTapRace, setShowTapRace] = useState(false);
+  const [pvpInviteCount, setPvpInviteCount] = useState(0);
+
+  // Global PvP invite listener
+  useEffect(() => {
+    if (!user) return;
+    const loadCount = async () => {
+      const { data, count } = await supabase.from("pvp_invites").select("id", { count: "exact" }).eq("receiver_id", user.id).eq("status", "pending");
+      setPvpInviteCount(count ?? 0);
+    };
+    loadCount();
+    const channel = supabase.channel('global-pvp-invites-' + user.id)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'pvp_invites', filter: `receiver_id=eq.${user.id}` }, () => { loadCount(); })
+      .subscribe();
+    return () => { supabase.removeChannel(channel); };
+  }, [user]);
 
   useEffect(() => {
     setTip(getTodaysTip(language));
@@ -246,27 +261,34 @@ const Home = () => {
         )}
 
         {/* Main action buttons */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mt-6 flex gap-2">
-          <button
-            onClick={() => navigate("/lessons")}
-            className="flex-1 rounded-2xl gradient-primary p-4 shadow-button transition-all hover:opacity-90 active:scale-[0.98] flex items-center justify-center gap-2"
-          >
-            <BookOpen className="h-6 w-6 text-primary-foreground" />
-            <span className="text-lg font-extrabold text-primary-foreground">{t("home.lessons")}</span>
-          </button>
-          <button
-            onClick={() => setShowTapRace(true)}
-            className="rounded-2xl bg-accent/10 border border-accent/20 p-4 transition-all hover:bg-accent/20 active:scale-[0.98] flex flex-col items-center justify-center gap-1"
-          >
-            <Zap className="h-5 w-5 text-accent" />
-            <span className="text-[10px] font-bold text-accent">{t("game.quickBattle")}</span>
-          </button>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mt-6 space-y-2">
+          <div className="flex gap-2">
+            <button
+              onClick={() => navigate("/lessons")}
+              className="flex-1 rounded-2xl gradient-primary p-4 shadow-button transition-all hover:opacity-90 active:scale-[0.98] flex items-center justify-center gap-2"
+            >
+              <BookOpen className="h-6 w-6 text-primary-foreground" />
+              <span className="text-lg font-extrabold text-primary-foreground">{t("home.lessons")}</span>
+            </button>
+            <button
+              onClick={() => setShowTapRace(true)}
+              className="rounded-2xl bg-accent/10 border border-accent/20 px-4 py-3 transition-all hover:bg-accent/20 active:scale-[0.98] flex flex-col items-center justify-center gap-0.5"
+            >
+              <Zap className="h-4 w-4 text-accent" />
+              <span className="text-[9px] font-bold text-accent">{t("game.quickBattle")}</span>
+            </button>
+          </div>
           <button
             onClick={() => navigate("/pvp")}
-            className="rounded-2xl bg-destructive/10 border border-destructive/20 p-4 transition-all hover:bg-destructive/20 active:scale-[0.98] flex flex-col items-center justify-center gap-1"
+            className="relative w-full rounded-2xl bg-gradient-to-r from-destructive/90 to-destructive p-5 shadow-button transition-all hover:opacity-90 active:scale-[0.98] flex items-center justify-center gap-3"
           >
-            <Swords className="h-5 w-5 text-destructive" />
-            <span className="text-[10px] font-bold text-destructive">PvP</span>
+            <Swords className="h-7 w-7 text-destructive-foreground" />
+            <span className="text-xl font-extrabold text-destructive-foreground">⚔️ PvP Blitz Battle</span>
+            {pvpInviteCount > 0 && (
+              <span className="absolute top-2 right-2 h-6 w-6 rounded-full bg-primary flex items-center justify-center text-[11px] font-bold text-primary-foreground animate-pulse">
+                {pvpInviteCount}
+              </span>
+            )}
           </button>
         </motion.div>
 

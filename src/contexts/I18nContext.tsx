@@ -271,6 +271,7 @@ const translations: Translations = {
   "quiz.errors": { sk: "chýb", en: "errors", ua: "помилок" },
   "quiz.notPerfectHint": { sk: "Lekcia bude označená červenou, kým ju nesplníš bez chyby.", en: "Lesson will be marked red until you complete it without errors.", ua: "Урок буде позначений червоним, доки не пройдете без помилок." },
   "quiz.continue": { sk: "Pokračovať", en: "Continue", ua: "Продовжити" },
+  "quiz.tryAgain": { sk: "Skús znova", en: "Try again", ua: "Спробуй знову" },
   "quiz.confirmAnswer": { sk: "Potvrdiť odpoveď", en: "Confirm answer", ua: "Підтвердити відповідь" },
   "quiz.correctAnswer": { sk: "Správna odpoveď", en: "Correct answer", ua: "Правильна відповідь" },
   "quiz.confirmOrder": { sk: "Potvrdiť poradie", en: "Confirm order", ua: "Підтвердити порядок" },

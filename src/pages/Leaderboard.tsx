@@ -37,6 +37,126 @@ const getRankIcon = (rank: number) => {
   return <span className="text-sm font-bold text-muted-foreground w-5 text-center">{rank}</span>;
 };
 
+// Player Profile Modal with estate & investment info
+const PlayerProfileModal = ({ player, onClose, t }: { player: LeaderboardEntry; onClose: () => void; t: (k: string) => string }) => {
+  const char = characters.find((c) => c.id === player.selected_character);
+  const rankInfo = getRankInfo(player.rank);
+  const [equippedItems, setEquippedItems] = useState<any[]>([]);
+  const [investPerf, setInvestPerf] = useState<{ total_invested: number; current_value: number } | null>(null);
+
+  useEffect(() => {
+    const load = async () => {
+      // Load equipped cosmetics
+      const { data: ucs } = await supabase.from("user_cosmetics").select("item_id").eq("user_id", player.user_id).eq("equipped", true);
+      if (ucs && ucs.length > 0) {
+        const ids = ucs.map(u => u.item_id);
+        const { data: items } = await supabase.from("cosmetic_items").select("*").in("id", ids);
+        if (items) setEquippedItems(items);
+      }
+      // Load investment performance
+      const { data: invs } = await supabase.from("user_investments").select("invested_coins, current_value").eq("user_id", player.user_id).eq("is_active", true);
+      if (invs && invs.length > 0) {
+        const total_invested = invs.reduce((s: number, i: any) => s + i.invested_coins, 0);
+        const current_value = invs.reduce((s: number, i: any) => s + i.current_value, 0);
+        setInvestPerf({ total_invested, current_value });
+      }
+    };
+    load();
+  }, [player.user_id]);
+
+  const equippedHouse = equippedItems.find((i: any) => i.category === "house");
+  const equippedCar = equippedItems.find((i: any) => i.category === "car");
+  const profitLoss = investPerf ? investPerf.current_value - investPerf.total_invested : 0;
+  const profitPercent = investPerf && investPerf.total_invested > 0 ? Math.round((profitLoss / investPerf.total_invested) * 100) : 0;
+
+  return (
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/40 backdrop-blur-sm p-4" onClick={onClose}>
+      <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }}
+        className="w-full max-w-sm rounded-3xl bg-card p-6 shadow-xl max-h-[85vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-extrabold text-foreground">{t("leaderboard.viewProfile")}</h3>
+          <button onClick={onClose} className="text-muted-foreground"><X className="h-5 w-5" /></button>
+        </div>
+        <div className="flex flex-col items-center gap-3">
+          {char ? (
+            <img src={char.image} alt={char.name} className="h-20 w-20 rounded-2xl object-cover" />
+          ) : (
+            <div className="h-20 w-20 rounded-2xl bg-accent/10 flex items-center justify-center text-4xl">🎓</div>
+          )}
+          <h4 className="text-xl font-extrabold text-foreground">{player.display_name}</h4>
+          <div className="flex items-center gap-2">
+            <span className="text-lg">{rankInfo.icon}</span>
+            <span className={`text-sm font-bold ${rankInfo.color}`}>{player.rank}</span>
+            <span className="text-sm text-muted-foreground">({player.rating})</span>
+          </div>
+        </div>
+
+        {/* Estate display */}
+        {(equippedHouse || equippedCar) && (
+          <div className="mt-4 rounded-xl bg-muted/50 p-3">
+            <p className="text-xs font-bold text-muted-foreground mb-2">🏘️ Majetok</p>
+            <div className="flex items-center justify-center gap-4">
+              {equippedHouse && (
+                <div className="text-center">
+                  {ESTATE_IMAGES[equippedHouse.id] ? (
+                    <img src={ESTATE_IMAGES[equippedHouse.id]} alt={equippedHouse.name} className="h-14 w-14 object-contain mx-auto" />
+                  ) : <span className="text-3xl">{equippedHouse.icon}</span>}
+                  <p className="text-[10px] font-bold text-foreground mt-1">{equippedHouse.name}</p>
+                </div>
+              )}
+              {equippedCar && (
+                <div className="text-center">
+                  {ESTATE_IMAGES[equippedCar.id] ? (
+                    <img src={ESTATE_IMAGES[equippedCar.id]} alt={equippedCar.name} className="h-14 w-14 object-contain mx-auto" />
+                  ) : <span className="text-3xl">{equippedCar.icon}</span>}
+                  <p className="text-[10px] font-bold text-foreground mt-1">{equippedCar.name}</p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Investment performance */}
+        {investPerf && (
+          <div className={`mt-3 rounded-xl p-3 ${profitLoss >= 0 ? "bg-primary/10" : "bg-destructive/10"}`}>
+            <div className="flex items-center gap-2 mb-1">
+              {profitLoss >= 0 ? <TrendingUp className="h-4 w-4 text-primary" /> : <TrendingDown className="h-4 w-4 text-destructive" />}
+              <p className="text-xs font-bold text-muted-foreground">Investičný výkon</p>
+            </div>
+            <p className={`text-lg font-extrabold ${profitLoss >= 0 ? "text-primary" : "text-destructive"}`}>
+              {profitLoss >= 0 ? "+" : ""}{Math.round(profitLoss)} Fince ({profitPercent >= 0 ? "+" : ""}{profitPercent}%)
+            </p>
+          </div>
+        )}
+
+        <div className="mt-4 grid grid-cols-2 gap-3">
+          <div className="rounded-xl bg-xp/10 p-3 text-center">
+            <Zap className="h-4 w-4 text-xp mx-auto mb-1" />
+            <p className="text-xs text-muted-foreground">{t("profile.totalXp")}</p>
+            <p className="text-lg font-bold text-foreground">{player.total_xp}</p>
+          </div>
+          <div className="rounded-xl bg-streak/10 p-3 text-center">
+            <Flame className="h-4 w-4 text-streak mx-auto mb-1" />
+            <p className="text-xs text-muted-foreground">{t("profile.currentStreak")}</p>
+            <p className="text-lg font-bold text-foreground">{player.current_streak} {t("profile.days")}</p>
+          </div>
+          <div className="rounded-xl bg-primary/10 p-3 text-center">
+            <BookOpen className="h-4 w-4 text-primary mx-auto mb-1" />
+            <p className="text-xs text-muted-foreground">{t("profile.completedLessons")}</p>
+            <p className="text-lg font-bold text-foreground">{player.completed_lessons}</p>
+          </div>
+          <div className="rounded-xl bg-coin/10 p-3 text-center">
+            <span className="text-sm">🪙</span>
+            <p className="text-xs text-muted-foreground">{t("profile.fince")}</p>
+            <p className="text-lg font-bold text-foreground">{player.coins}</p>
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+};
+
 const Leaderboard = () => {
   const { user, loading } = useAuth();
   const { t } = useI18n();

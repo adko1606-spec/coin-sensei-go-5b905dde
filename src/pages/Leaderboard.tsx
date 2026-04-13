@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Trophy, Zap, Flame, BookOpen, Crown, Medal, Globe, Users, X, Shield } from "lucide-react";
+import { Trophy, Zap, Flame, BookOpen, Crown, Medal, Globe, Users, X, Shield, TrendingUp, TrendingDown } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useI18n } from "@/contexts/I18nContext";
 import BottomNav from "@/components/BottomNav";
 import { supabase } from "@/integrations/supabase/client";
 import { characters } from "@/data/characters";
+import { ESTATE_IMAGES } from "@/data/estateAssets";
 import logo from "@/assets/logo-new.png";
 
 type LeaderboardEntry = {
@@ -237,54 +238,7 @@ const Leaderboard = () => {
       {/* Player profile modal */}
       <AnimatePresence>
         {selectedPlayer && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/40 backdrop-blur-sm p-4" onClick={() => setSelectedPlayer(null)}>
-            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }}
-              className="w-full max-w-sm rounded-3xl bg-card p-6 shadow-xl" onClick={(e) => e.stopPropagation()}>
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-extrabold text-foreground">{t("leaderboard.viewProfile")}</h3>
-                <button onClick={() => setSelectedPlayer(null)} className="text-muted-foreground"><X className="h-5 w-5" /></button>
-              </div>
-              <div className="flex flex-col items-center gap-3">
-                {(() => {
-                  const char = characters.find((c) => c.id === selectedPlayer.selected_character);
-                  return char ? (
-                    <img src={char.image} alt={char.name} className="h-20 w-20 rounded-2xl object-cover" />
-                  ) : (
-                    <div className="h-20 w-20 rounded-2xl bg-accent/10 flex items-center justify-center text-4xl">🎓</div>
-                  );
-                })()}
-                <h4 className="text-xl font-extrabold text-foreground">{selectedPlayer.display_name}</h4>
-                <div className="flex items-center gap-2">
-                  <span className="text-lg">{getRankInfo(selectedPlayer.rank).icon}</span>
-                  <span className={`text-sm font-bold ${getRankInfo(selectedPlayer.rank).color}`}>{selectedPlayer.rank}</span>
-                  <span className="text-sm text-muted-foreground">({selectedPlayer.rating})</span>
-                </div>
-              </div>
-              <div className="mt-4 grid grid-cols-2 gap-3">
-                <div className="rounded-xl bg-xp/10 p-3 text-center">
-                  <Zap className="h-4 w-4 text-xp mx-auto mb-1" />
-                  <p className="text-xs text-muted-foreground">{t("profile.totalXp")}</p>
-                  <p className="text-lg font-bold text-foreground">{selectedPlayer.total_xp}</p>
-                </div>
-                <div className="rounded-xl bg-streak/10 p-3 text-center">
-                  <Flame className="h-4 w-4 text-streak mx-auto mb-1" />
-                  <p className="text-xs text-muted-foreground">{t("profile.currentStreak")}</p>
-                  <p className="text-lg font-bold text-foreground">{selectedPlayer.current_streak} {t("profile.days")}</p>
-                </div>
-                <div className="rounded-xl bg-primary/10 p-3 text-center">
-                  <BookOpen className="h-4 w-4 text-primary mx-auto mb-1" />
-                  <p className="text-xs text-muted-foreground">{t("profile.completedLessons")}</p>
-                  <p className="text-lg font-bold text-foreground">{selectedPlayer.completed_lessons}</p>
-                </div>
-                <div className="rounded-xl bg-coin/10 p-3 text-center">
-                  <span className="text-sm">🪙</span>
-                  <p className="text-xs text-muted-foreground">{t("profile.fince")}</p>
-                  <p className="text-lg font-bold text-foreground">{selectedPlayer.coins}</p>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
+          <PlayerProfileModal player={selectedPlayer} onClose={() => setSelectedPlayer(null)} t={t} />
         )}
       </AnimatePresence>
 

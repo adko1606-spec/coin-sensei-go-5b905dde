@@ -202,7 +202,8 @@ const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
       }
     }
     setShowAIHelp(false);
-  }, [playCorrect, playWrongMild, playWrongSerious, errors]);
+    setAnsweredQuestions(prev => ({ ...prev, [currentIndex]: { correct } }));
+  }, [playCorrect, playWrongMild, playWrongSerious, errors, currentIndex]);
 
   const handleChoiceAnswer = useCallback((index: number) => {
     if (answered) return;

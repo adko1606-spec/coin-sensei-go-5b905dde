@@ -138,6 +138,8 @@ export const lessons: Lesson[] = [
       { id: "q3j", type: "truefalse", text: "Je lepšie splatiť dlhy s vysokým úrokom skôr, ako začať šetriť.", correctAnswer: true, explanation: "Áno! Úroky z dlhov sú väčšinou vyššie ako výnosy zo sporenia – najprv splať drahé dlhy." },
       { id: "q3k", type: "slider", text: "Koľko percent Slovákov nemá žiadne úspory na nečakané výdavky?", min: 10, max: 60, step: 5, correctValue: 35, tolerance: 10, unit: "%", label: "Bez úspor", explanation: "Približne 30-40% Slovákov nemá žiadnu finančnú rezervu – buď iný!" },
       { id: "q3l", type: "order", text: "Zoraď spôsoby sporenia podľa výnosnosti (od najnižšej):", items: ["Termínovaný vklad", "Peniaze pod vankúšom", "Sporiaci účet", "Stavebné sporenie"], correctOrder: [1, 2, 3, 0], explanation: "Pod vankúšom = 0%, sporiaci účet nízky úrok, stavebné sporenie a termínovaný vklad majú vyšší výnos." },
+      { id: "q3m", type: "choice", text: "🎬 Situácia: Dostávaš 50€ mesačne vreckovné. Kamarát ťa pozýva na festival za 45€. Čo urobíš?", options: ["Ideš – veď to je len raz", "Šetríš 2 mesiace a ideš potom na ďalší", "Požičiaš si od rodičov", "Predáš niečo na internete"], correctIndex: 1, explanation: "Ak minie 45€ z 50€, zostane ti len 5€ na celý mesiac. Lepšie je šetriť a plánovať." },
+      { id: "q3n", type: "choice", text: "🎬 Situácia: Rozbiješ si telefón. Oprava stojí 150€. Máš núdzový fond 300€. Čo spravíš?", options: ["Zaplatíš z núdzového fondu – na to je", "Kúpiš si nový telefón na splátky", "Počkáš a budeš používať starý", "Požičiaš si od kamarátov"], correctIndex: 0, explanation: "Presne na toto je núdzový fond! Opravíš telefón a začneš znovu budovať rezervu." },
     ],
   },
   {

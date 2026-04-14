@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { motion, AnimatePresence, Reorder } from "framer-motion";
 import { X, CheckCircle2, XCircle, ArrowRight, Trophy, GripVertical, Coins, Heart, Bot } from "lucide-react";
 import type { Lesson, Question, ChoiceQuestion, TrueFalseQuestion, SliderQuestion, OrderQuestion } from "@/data/lessons";
@@ -7,6 +7,16 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useI18n } from "@/contexts/I18nContext";
 import AIQuestionHelper from "@/components/AIQuestionHelper";
 import { useSound } from "@/hooks/useSound";
+
+// Lesson progress save/load
+const PROGRESS_KEY = (lessonId: string) => `finlit-lesson-progress-${lessonId}`;
+
+interface SavedProgress {
+  currentIndex: number;
+  score: number;
+  errors: number;
+  answeredQuestions: Record<number, { correct: boolean }>;
+}
 
 interface QuizModalProps {
   lesson: Lesson;
@@ -140,18 +150,41 @@ const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
   const { currentLives, loseLife } = useAuth();
   const { t } = useI18n();
   const { playCorrect, playWrongMild, playWrongSerious, playReward, playLifeLost } = useSound();
-  const [currentIndex, setCurrentIndex] = useState(0);
+
+  // Load saved progress
+  const savedProgress = (() => {
+    try {
+      const raw = localStorage.getItem(PROGRESS_KEY(lesson.id));
+      if (raw) return JSON.parse(raw) as SavedProgress;
+    } catch {}
+    return null;
+  })();
+
+  const [currentIndex, setCurrentIndex] = useState(savedProgress?.currentIndex ?? 0);
   const [answered, setAnswered] = useState(false);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
-  const [score, setScore] = useState(0);
-  const [errors, setErrors] = useState(0);
+  const [score, setScore] = useState(savedProgress?.score ?? 0);
+  const [errors, setErrors] = useState(savedProgress?.errors ?? 0);
   const [finished, setFinished] = useState(false);
   const [selectedChoiceIdx, setSelectedChoiceIdx] = useState<number | null>(null);
   const [selectedTF, setSelectedTF] = useState<boolean | null>(null);
   const [showAIHelp, setShowAIHelp] = useState(false);
+  const [answeredQuestions, setAnsweredQuestions] = useState<Record<number, { correct: boolean }>>(savedProgress?.answeredQuestions ?? {});
 
   const question: Question = lesson.questions[currentIndex];
   const progressVal = ((currentIndex + (answered ? 1 : 0)) / lesson.questions.length) * 100;
+
+  // Save progress on each answered question
+  useEffect(() => {
+    if (finished) {
+      localStorage.removeItem(PROGRESS_KEY(lesson.id));
+      return;
+    }
+    if (Object.keys(answeredQuestions).length > 0) {
+      const data: SavedProgress = { currentIndex, score, errors, answeredQuestions };
+      localStorage.setItem(PROGRESS_KEY(lesson.id), JSON.stringify(data));
+    }
+  }, [currentIndex, score, errors, answeredQuestions, finished, lesson.id]);
 
   const markCorrect = useCallback((correct: boolean) => {
     setAnswered(true);
@@ -169,7 +202,8 @@ const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
       }
     }
     setShowAIHelp(false);
-  }, [playCorrect, playWrongMild, playWrongSerious, errors]);
+    setAnsweredQuestions(prev => ({ ...prev, [currentIndex]: { correct } }));
+  }, [playCorrect, playWrongMild, playWrongSerious, errors, currentIndex]);
 
   const handleChoiceAnswer = useCallback((index: number) => {
     if (answered) return;
@@ -274,7 +308,8 @@ const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
             <div className="mt-3">
               <button onClick={() => {
                 setCurrentIndex(0); setAnswered(false); setIsCorrect(null); setScore(0); setErrors(0); setFinished(false);
-                setSelectedChoiceIdx(null); setSelectedTF(null); setShowAIHelp(false);
+                setSelectedChoiceIdx(null); setSelectedTF(null); setShowAIHelp(false); setAnsweredQuestions({});
+                localStorage.removeItem(PROGRESS_KEY(lesson.id));
               }}
                 className="w-full rounded-2xl bg-accent/10 border border-accent/20 px-6 py-3 font-bold text-accent transition-all hover:bg-accent/20 active:scale-95">
                 🔄 {t("quiz.tryAgain")}

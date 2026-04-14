@@ -9,6 +9,7 @@ import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { I18nProvider } from "@/contexts/I18nContext";
 import { SoundProvider } from "@/hooks/useSound";
 import AIChatBot from "@/components/AIChatBot";
+import GlobalPvpNotifier from "@/components/GlobalPvpNotifier";
 import LoadingScreen from "@/components/LoadingScreen";
 import Home from "./pages/Home";
 import Study from "./pages/Study";
@@ -67,6 +68,7 @@ const AppContent = () => {
         <Route path="*" element={<NotFound />} />
       </Routes>
       {showChat && <AIChatBot />}
+      <GlobalPvpNotifier />
     </>
   );
 };

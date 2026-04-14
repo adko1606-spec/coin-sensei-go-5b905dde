@@ -84,6 +84,8 @@ export const lessons: Lesson[] = [
       { id: "q1j", type: "choice", text: "Čo je fiat mena?", options: ["Mena krytá zlatom", "Mena vydávaná štátom bez krytia komoditou", "Kryptomena", "Darčeková karta"], correctIndex: 1, explanation: "Fiat mena (ako euro) nie je krytá fyzickou komoditou, ale dôverou v štát." },
       { id: "q1k", type: "slider", text: "V ktorom roku Slovensko prijalo euro?", min: 2000, max: 2020, step: 1, correctValue: 2009, tolerance: 0, unit: "", label: "Rok", explanation: "Slovensko prijalo euro 1. januára 2009." },
       { id: "q1l", type: "order", text: "Zoraď funkcie peňazí podľa dôležitosti:", items: ["Uchovávateľ hodnoty", "Prostriedok výmeny", "Jednotka zúčtovania", "Prostriedok odloženej platby"], correctOrder: [1, 2, 0, 3], explanation: "Primárna funkcia je výmena, potom zúčtovanie, uchovanie hodnoty a odložená platba." },
+      { id: "q1m", type: "choice", text: "🎬 Situácia: Tvoj kamarát ti ponúka, že ti za 50€ bankovku dá dve 20€ bankovky. Čo urobíš?", options: ["Súhlasíš – dve bankovky sú lepšie ako jedna", "Odmietneš – strácaš 10€", "Navrhneš výmenu rovnakej hodnoty", "Zopakuješ ponuku iným kamarátom"], correctIndex: 1, explanation: "50€ > 2×20€ = 40€. Strácaš 10€! Vždy si spočítaj reálnu hodnotu pred výmenou." },
+      { id: "q1n", type: "choice", text: "🎬 Situácia: V obchode stojí čokoláda 1,50€. Platíš 5€ bankovkou. Predavačka ti vráti 2,50€. Je to správne?", options: ["Áno, to sedí", "Nie, mala mi vrátiť 3,50€", "Nie, mala mi vrátiť 4,50€", "Neviem to spočítať"], correctIndex: 1, explanation: "5€ - 1,50€ = 3,50€. Predavačka ti vrátila o 1€ menej! Vždy si skontroluj výdavok." },
     ],
   },
   {
@@ -108,6 +110,8 @@ export const lessons: Lesson[] = [
       { id: "q2j", type: "choice", text: "Čo je kontokorentný úver?", options: ["Typ sporenia", "Povolené prečerpanie účtu do mínusu", "Investičný fond", "Hypotéka"], correctIndex: 1, explanation: "Kontokorent ti umožňuje ísť do mínusu na bežnom účte – ale za vysoký úrok!" },
       { id: "q2k", type: "truefalse", text: "SEPA prevod medzi krajinami eurozóny trvá maximálne 1 pracovný deň.", correctAnswer: true, explanation: "Správne! SEPA (Single Euro Payments Area) prevody v eurách sú do 1 dňa." },
       { id: "q2l", type: "slider", text: "Koľko bánk pôsobí na Slovensku (približne)?", min: 5, max: 30, step: 1, correctValue: 13, tolerance: 3, unit: "", label: "Počet bánk", explanation: "Na Slovensku pôsobí približne 12-14 bánk vrátane pobočiek zahraničných." },
+      { id: "q2m", type: "choice", text: "🎬 Situácia: Práve si dostal prvú výplatu 600€. Čo urobíš najprv?", options: ["Všetko miniete na nové oblečenie", "Založíš si bežný účet a pošleš tam výplatu", "Schováš hotovosť pod matrac", "Požičiaš kamarátovi"], correctIndex: 1, explanation: "Založenie bankového účtu je prvý krok k správe financií – bezpečnejšie ako hotovosť." },
+      { id: "q2n", type: "choice", text: "🎬 Situácia: Banka ti ponúka kreditnú kartu s limitom 2000€ zadarmo. Čo spravíš?", options: ["Hneď ju zoberieš a nakúpiš", "Opýtaš sa na úrokovú sadzbu a podmienky", "Odmietneš – kreditky sú vždy zlé", "Požiadaš o vyšší limit"], correctIndex: 1, explanation: "Vždy sa opýtaj na podmienky! Kreditka nie je zlá, ale musíš rozumieť úrokom a poplatkom." },
     ],
   },
 
@@ -134,6 +138,8 @@ export const lessons: Lesson[] = [
       { id: "q3j", type: "truefalse", text: "Je lepšie splatiť dlhy s vysokým úrokom skôr, ako začať šetriť.", correctAnswer: true, explanation: "Áno! Úroky z dlhov sú väčšinou vyššie ako výnosy zo sporenia – najprv splať drahé dlhy." },
       { id: "q3k", type: "slider", text: "Koľko percent Slovákov nemá žiadne úspory na nečakané výdavky?", min: 10, max: 60, step: 5, correctValue: 35, tolerance: 10, unit: "%", label: "Bez úspor", explanation: "Približne 30-40% Slovákov nemá žiadnu finančnú rezervu – buď iný!" },
       { id: "q3l", type: "order", text: "Zoraď spôsoby sporenia podľa výnosnosti (od najnižšej):", items: ["Termínovaný vklad", "Peniaze pod vankúšom", "Sporiaci účet", "Stavebné sporenie"], correctOrder: [1, 2, 3, 0], explanation: "Pod vankúšom = 0%, sporiaci účet nízky úrok, stavebné sporenie a termínovaný vklad majú vyšší výnos." },
+      { id: "q3m", type: "choice", text: "🎬 Situácia: Dostávaš 50€ mesačne vreckovné. Kamarát ťa pozýva na festival za 45€. Čo urobíš?", options: ["Ideš – veď to je len raz", "Šetríš 2 mesiace a ideš potom na ďalší", "Požičiaš si od rodičov", "Predáš niečo na internete"], correctIndex: 1, explanation: "Ak minie 45€ z 50€, zostane ti len 5€ na celý mesiac. Lepšie je šetriť a plánovať." },
+      { id: "q3n", type: "choice", text: "🎬 Situácia: Rozbiješ si telefón. Oprava stojí 150€. Máš núdzový fond 300€. Čo spravíš?", options: ["Zaplatíš z núdzového fondu – na to je", "Kúpiš si nový telefón na splátky", "Počkáš a budeš používať starý", "Požičiaš si od kamarátov"], correctIndex: 0, explanation: "Presne na toto je núdzový fond! Opravíš telefón a začneš znovu budovať rezervu." },
     ],
   },
   {
@@ -158,6 +164,7 @@ export const lessons: Lesson[] = [
       { id: "q4j", type: "slider", text: "Aká je priemerná úroková sadzba kreditnej karty na Slovensku?", min: 5, max: 35, step: 1, correctValue: 20, tolerance: 5, unit: "%", label: "Úrok", explanation: "Kreditné karty majú priemerne 18-22% úrok – veľmi drahé na dlhodobé pôžičky!" },
       { id: "q4k", type: "order", text: "Zoraď stratégie riešenia dlhov od najlepšej:", items: ["Ignorovať dlhy", "Vytvoriť plán splácania", "Požičať si na splatenie dlhov", "Kontaktovať veriteľov o možnostiach"], correctOrder: [1, 3, 2, 0], explanation: "Plán splácania je najlepší, kontaktovanie veriteľov tiež pomáha." },
       { id: "q4l", type: "truefalse", text: "Ak nesplatíš dlh, veriteľ nemôže siahnuť na tvoj majetok.", correctAnswer: false, explanation: "Nie! Exekútor môže siahnuť na tvoj majetok, účet aj plat." },
+      { id: "q4m", type: "choice", text: "🎬 Situácia: Kamarát ti hovorí: 'Požičaj si na nový iPhone, splátky sú len 30€ mesačne!' Čo na to?", options: ["Super nápad, beriem!", "Spočítaš celkovú sumu splátok vrátane úrokov", "Pôžička na telefón sa vždy oplatí", "Požičiaš si od rodiny namiesto banky"], correctIndex: 1, explanation: "30€ × 24 mesiacov = 720€ + úroky. Vždy si spočítaj celkovú cenu, nie len mesačnú splátku!" },
     ],
   },
 
@@ -184,6 +191,7 @@ export const lessons: Lesson[] = [
       { id: "q5j", type: "choice", text: "Aký je najčastejší dôvod prečo ľudia nedodržia rozpočet?", options: ["Nemajú dosť peňazí", "Nerealistické očakávania", "Banky im bránia", "Nedá sa to"], correctIndex: 1, explanation: "Najčastejšie ľudia nastavia nerealistický rozpočet a vzdajú to." },
       { id: "q5k", type: "order", text: "Zoraď výdavky od najdôležitejších pri tvorbe rozpočtu:", items: ["Zábava a hobby", "Bývanie a energie", "Jedlo a základné potreby", "Splátky dlhov"], correctOrder: [1, 2, 3, 0], explanation: "Bývanie a jedlo sú najdôležitejšie, potom dlhy a až nakoniec zábava." },
       { id: "q5l", type: "slider", text: "Koľko percent mladých Slovákov si vedie osobný rozpočet?", min: 5, max: 50, step: 5, correctValue: 20, tolerance: 10, unit: "%", label: "S rozpočtom", explanation: "Len asi 15-25% mladých ľudí si aktívne vedie rozpočet – buď medzi nimi!" },
+      { id: "q5m", type: "choice", text: "🎬 Situácia: Zarábaš 800€. Nájom 350€, jedlo 150€, doprava 50€. Koľko ti zostane na zábavu a sporenie?", options: ["450€", "350€", "250€", "200€"], correctIndex: 2, explanation: "800 - 350 - 150 - 50 = 250€. Z toho by si mal 160€ na zábavu a 90€ ušetriť (podľa 50/30/20)." },
     ],
   },
   {
@@ -208,6 +216,7 @@ export const lessons: Lesson[] = [
       { id: "q6j", type: "choice", text: "Čo je anchoring (kotvenie) v marketingu?", options: ["Typ reklamy", "Psychologický trik s vysokou pôvodnou cenou", "Vernostný program", "Zľavový kupón"], correctIndex: 1, explanation: "Kotvenie: obchod ukáže pôvodnú cenu 200€ a zľavu na 99€ – cítiš výhodnú kúpu." },
       { id: "q6k", type: "order", text: "Zoraď nákupné rozhodnutia od najlepšieho po najhoršie:", items: ["Kúpiš hneď lebo je v zľave", "Počkáš, porovnáš a kúpiš keď potrebuješ", "Kúpiš lebo kamarát to má", "Ušetríš a kúpiš kvalitnejšiu verziu"], correctOrder: [1, 3, 0, 2], explanation: "Najlepšie je počkať a porovnať, alebo investovať do kvality." },
       { id: "q6l", type: "truefalse", text: "Subscription služby (predplatné) sú vždy výhodnejšie ako jednorazový nákup.", correctAnswer: false, explanation: "Nie! Predplatné sa oplatí len ak službu pravidelne využívaš." },
+      { id: "q6m", type: "choice", text: "🎬 Situácia: V obchode vidíš tabuľku 'ZĽAVA 70% – pôvodná cena 200€, teraz 60€'. Čo si myslíš?", options: ["Super deal, kupujem!", "Pôvodná cena mohla byť umelo navýšená", "70% zľava = vždy sa oplatí", "Kúpim dve, lebo je to lacné"], correctIndex: 1, explanation: "Obchody často umelo navýšia 'pôvodnú cenu' – vždy porovnaj s cenami inde!" },
     ],
   },
 
@@ -234,6 +243,7 @@ export const lessons: Lesson[] = [
       { id: "q7j", type: "choice", text: "Čo je P/E ratio?", options: ["Cena akcie delená ziskom na akciu", "Pomer peňazí a eura", "Typ fondu", "Dividendový výnos"], correctIndex: 0, explanation: "P/E (Price/Earnings) ukazuje, koľkokrát je cena akcie vyššia ako ročný zisk firmy." },
       { id: "q7k", type: "slider", text: "Koľko stojí priemerne jedna akcia Apple (približne v USD)?", min: 50, max: 400, step: 10, correctValue: 190, tolerance: 40, unit: "$", label: "Cena akcie", explanation: "Akcia Apple sa obchoduje približne za 170-210 USD (2024)." },
       { id: "q7l", type: "order", text: "Zoraď kroky začiatočníka pri investovaní:", items: ["Kúp prvý ETF", "Nastav si pravidelnú investíciu", "Otvor si účet u brokera", "Vzdelávaj sa o investovaní"], correctOrder: [3, 2, 0, 1], explanation: "Najprv sa vzdelávaj, otvor účet, kúp ETF a nastav pravidelné investície." },
+      { id: "q7m", type: "choice", text: "🎬 Situácia: Kamarát ti hovorí: 'Investoval som 500€ do jednej firmy a zdvojnásobil som to!' Čo spravíš?", options: ["Hneď investuješ do rovnakej firmy", "Opýtaš sa na riziko a urobíš vlastný prieskum", "Investuješ ešte viac ako on", "Počkáš kým cena vzrastie ešte viac"], correctIndex: 1, explanation: "Nikdy neinvestuj len preto, že to niekomu vyšlo. Urob si DYOR – vlastný výskum!" },
     ],
   },
   {

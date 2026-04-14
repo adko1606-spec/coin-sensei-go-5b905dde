@@ -164,6 +164,7 @@ export const lessons: Lesson[] = [
       { id: "q4j", type: "slider", text: "Aká je priemerná úroková sadzba kreditnej karty na Slovensku?", min: 5, max: 35, step: 1, correctValue: 20, tolerance: 5, unit: "%", label: "Úrok", explanation: "Kreditné karty majú priemerne 18-22% úrok – veľmi drahé na dlhodobé pôžičky!" },
       { id: "q4k", type: "order", text: "Zoraď stratégie riešenia dlhov od najlepšej:", items: ["Ignorovať dlhy", "Vytvoriť plán splácania", "Požičať si na splatenie dlhov", "Kontaktovať veriteľov o možnostiach"], correctOrder: [1, 3, 2, 0], explanation: "Plán splácania je najlepší, kontaktovanie veriteľov tiež pomáha." },
       { id: "q4l", type: "truefalse", text: "Ak nesplatíš dlh, veriteľ nemôže siahnuť na tvoj majetok.", correctAnswer: false, explanation: "Nie! Exekútor môže siahnuť na tvoj majetok, účet aj plat." },
+      { id: "q4m", type: "choice", text: "🎬 Situácia: Kamarát ti hovorí: 'Požičaj si na nový iPhone, splátky sú len 30€ mesačne!' Čo na to?", options: ["Super nápad, beriem!", "Spočítaš celkovú sumu splátok vrátane úrokov", "Pôžička na telefón sa vždy oplatí", "Požičiaš si od rodiny namiesto banky"], correctIndex: 1, explanation: "30€ × 24 mesiacov = 720€ + úroky. Vždy si spočítaj celkovú cenu, nie len mesačnú splátku!" },
     ],
   },
 
@@ -190,6 +191,7 @@ export const lessons: Lesson[] = [
       { id: "q5j", type: "choice", text: "Aký je najčastejší dôvod prečo ľudia nedodržia rozpočet?", options: ["Nemajú dosť peňazí", "Nerealistické očakávania", "Banky im bránia", "Nedá sa to"], correctIndex: 1, explanation: "Najčastejšie ľudia nastavia nerealistický rozpočet a vzdajú to." },
       { id: "q5k", type: "order", text: "Zoraď výdavky od najdôležitejších pri tvorbe rozpočtu:", items: ["Zábava a hobby", "Bývanie a energie", "Jedlo a základné potreby", "Splátky dlhov"], correctOrder: [1, 2, 3, 0], explanation: "Bývanie a jedlo sú najdôležitejšie, potom dlhy a až nakoniec zábava." },
       { id: "q5l", type: "slider", text: "Koľko percent mladých Slovákov si vedie osobný rozpočet?", min: 5, max: 50, step: 5, correctValue: 20, tolerance: 10, unit: "%", label: "S rozpočtom", explanation: "Len asi 15-25% mladých ľudí si aktívne vedie rozpočet – buď medzi nimi!" },
+      { id: "q5m", type: "choice", text: "🎬 Situácia: Zarábaš 800€. Nájom 350€, jedlo 150€, doprava 50€. Koľko ti zostane na zábavu a sporenie?", options: ["450€", "350€", "250€", "200€"], correctIndex: 2, explanation: "800 - 350 - 150 - 50 = 250€. Z toho by si mal 160€ na zábavu a 90€ ušetriť (podľa 50/30/20)." },
     ],
   },
   {
@@ -214,6 +216,7 @@ export const lessons: Lesson[] = [
       { id: "q6j", type: "choice", text: "Čo je anchoring (kotvenie) v marketingu?", options: ["Typ reklamy", "Psychologický trik s vysokou pôvodnou cenou", "Vernostný program", "Zľavový kupón"], correctIndex: 1, explanation: "Kotvenie: obchod ukáže pôvodnú cenu 200€ a zľavu na 99€ – cítiš výhodnú kúpu." },
       { id: "q6k", type: "order", text: "Zoraď nákupné rozhodnutia od najlepšieho po najhoršie:", items: ["Kúpiš hneď lebo je v zľave", "Počkáš, porovnáš a kúpiš keď potrebuješ", "Kúpiš lebo kamarát to má", "Ušetríš a kúpiš kvalitnejšiu verziu"], correctOrder: [1, 3, 0, 2], explanation: "Najlepšie je počkať a porovnať, alebo investovať do kvality." },
       { id: "q6l", type: "truefalse", text: "Subscription služby (predplatné) sú vždy výhodnejšie ako jednorazový nákup.", correctAnswer: false, explanation: "Nie! Predplatné sa oplatí len ak službu pravidelne využívaš." },
+      { id: "q6m", type: "choice", text: "🎬 Situácia: V obchode vidíš tabuľku 'ZĽAVA 70% – pôvodná cena 200€, teraz 60€'. Čo si myslíš?", options: ["Super deal, kupujem!", "Pôvodná cena mohla byť umelo navýšená", "70% zľava = vždy sa oplatí", "Kúpim dve, lebo je to lacné"], correctIndex: 1, explanation: "Obchody často umelo navýšia 'pôvodnú cenu' – vždy porovnaj s cenami inde!" },
     ],
   },
 
@@ -240,6 +243,7 @@ export const lessons: Lesson[] = [
       { id: "q7j", type: "choice", text: "Čo je P/E ratio?", options: ["Cena akcie delená ziskom na akciu", "Pomer peňazí a eura", "Typ fondu", "Dividendový výnos"], correctIndex: 0, explanation: "P/E (Price/Earnings) ukazuje, koľkokrát je cena akcie vyššia ako ročný zisk firmy." },
       { id: "q7k", type: "slider", text: "Koľko stojí priemerne jedna akcia Apple (približne v USD)?", min: 50, max: 400, step: 10, correctValue: 190, tolerance: 40, unit: "$", label: "Cena akcie", explanation: "Akcia Apple sa obchoduje približne za 170-210 USD (2024)." },
       { id: "q7l", type: "order", text: "Zoraď kroky začiatočníka pri investovaní:", items: ["Kúp prvý ETF", "Nastav si pravidelnú investíciu", "Otvor si účet u brokera", "Vzdelávaj sa o investovaní"], correctOrder: [3, 2, 0, 1], explanation: "Najprv sa vzdelávaj, otvor účet, kúp ETF a nastav pravidelné investície." },
+      { id: "q7m", type: "choice", text: "🎬 Situácia: Kamarát ti hovorí: 'Investoval som 500€ do jednej firmy a zdvojnásobil som to!' Čo spravíš?", options: ["Hneď investuješ do rovnakej firmy", "Opýtaš sa na riziko a urobíš vlastný prieskum", "Investuješ ešte viac ako on", "Počkáš kým cena vzrastie ešte viac"], correctIndex: 1, explanation: "Nikdy neinvestuj len preto, že to niekomu vyšlo. Urob si DYOR – vlastný výskum!" },
     ],
   },
   {

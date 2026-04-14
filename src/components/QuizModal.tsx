@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { motion, AnimatePresence, Reorder } from "framer-motion";
 import { X, CheckCircle2, XCircle, ArrowRight, Trophy, GripVertical, Coins, Heart, Bot } from "lucide-react";
 import type { Lesson, Question, ChoiceQuestion, TrueFalseQuestion, SliderQuestion, OrderQuestion } from "@/data/lessons";
@@ -8,8 +8,15 @@ import { useI18n } from "@/contexts/I18nContext";
 import AIQuestionHelper from "@/components/AIQuestionHelper";
 import { useSound } from "@/hooks/useSound";
 
-interface QuizModalProps {
-  lesson: Lesson;
+// Lesson progress save/load
+const PROGRESS_KEY = (lessonId: string) => `finlit-lesson-progress-${lessonId}`;
+
+interface SavedProgress {
+  currentIndex: number;
+  score: number;
+  errors: number;
+  answeredQuestions: Record<number, { correct: boolean }>;
+}
   onClose: () => void;
   onComplete: (xp: number, score: number, totalQuestions: number) => void;
 }

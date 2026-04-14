@@ -308,7 +308,8 @@ const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
             <div className="mt-3">
               <button onClick={() => {
                 setCurrentIndex(0); setAnswered(false); setIsCorrect(null); setScore(0); setErrors(0); setFinished(false);
-                setSelectedChoiceIdx(null); setSelectedTF(null); setShowAIHelp(false);
+                setSelectedChoiceIdx(null); setSelectedTF(null); setShowAIHelp(false); setAnsweredQuestions({});
+                localStorage.removeItem(PROGRESS_KEY(lesson.id));
               }}
                 className="w-full rounded-2xl bg-accent/10 border border-accent/20 px-6 py-3 font-bold text-accent transition-all hover:bg-accent/20 active:scale-95">
                 🔄 {t("quiz.tryAgain")}

@@ -110,6 +110,8 @@ export const lessons: Lesson[] = [
       { id: "q2j", type: "choice", text: "Čo je kontokorentný úver?", options: ["Typ sporenia", "Povolené prečerpanie účtu do mínusu", "Investičný fond", "Hypotéka"], correctIndex: 1, explanation: "Kontokorent ti umožňuje ísť do mínusu na bežnom účte – ale za vysoký úrok!" },
       { id: "q2k", type: "truefalse", text: "SEPA prevod medzi krajinami eurozóny trvá maximálne 1 pracovný deň.", correctAnswer: true, explanation: "Správne! SEPA (Single Euro Payments Area) prevody v eurách sú do 1 dňa." },
       { id: "q2l", type: "slider", text: "Koľko bánk pôsobí na Slovensku (približne)?", min: 5, max: 30, step: 1, correctValue: 13, tolerance: 3, unit: "", label: "Počet bánk", explanation: "Na Slovensku pôsobí približne 12-14 bánk vrátane pobočiek zahraničných." },
+      { id: "q2m", type: "choice", text: "🎬 Situácia: Práve si dostal prvú výplatu 600€. Čo urobíš najprv?", options: ["Všetko miniete na nové oblečenie", "Založíš si bežný účet a pošleš tam výplatu", "Schováš hotovosť pod matrac", "Požičiaš kamarátovi"], correctIndex: 1, explanation: "Založenie bankového účtu je prvý krok k správe financií – bezpečnejšie ako hotovosť." },
+      { id: "q2n", type: "choice", text: "🎬 Situácia: Banka ti ponúka kreditnú kartu s limitom 2000€ zadarmo. Čo spravíš?", options: ["Hneď ju zoberieš a nakúpiš", "Opýtaš sa na úrokovú sadzbu a podmienky", "Odmietneš – kreditky sú vždy zlé", "Požiadaš o vyšší limit"], correctIndex: 1, explanation: "Vždy sa opýtaj na podmienky! Kreditka nie je zlá, ale musíš rozumieť úrokom a poplatkom." },
     ],
   },
 

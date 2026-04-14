@@ -543,7 +543,7 @@ const PvpBattle = () => {
       setSelectedAnswer(null);
       setShowExplanation(false);
     } else {
-      if (isInviteMatch && currentMatchId) {
+      if (currentMatchId) {
         submitMatchResults();
       } else {
         finishSimulatedBattle();

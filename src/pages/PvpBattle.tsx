@@ -96,6 +96,7 @@ const PvpBattle = () => {
   const [opponentName, setOpponentName] = useState("Súper");
   const [isInviteMatch, setIsInviteMatch] = useState(false);
   const [myAnswers, setMyAnswers] = useState<{idx: number, timeMs: number}[]>([]);
+  const queuePollRef = useRef<{ queueInterval: any; pollInterval: any } | null>(null);
   const timerRef = useRef<any>(null);
   const qStartRef = useRef(Date.now());
   const channelRef = useRef<any>(null);
@@ -267,35 +268,137 @@ const PvpBattle = () => {
     return () => { supabase.removeChannel(channel); };
   }, [user, screen]);
 
-  // Quick match - simulate (real matchmaking needs server)
-  const startQuickMatch = () => {
+  // Quick match - REAL matchmaking via pvp_queue
+  const startQuickMatch = async () => {
+    if (!user) return;
     setIsInviteMatch(false);
     setScreen("queue");
     setQueueTime(0);
-    const interval = setInterval(() => setQueueTime(t => t + 1), 1000);
-    const delay = 2000 + Math.random() * 2000;
-    setTimeout(() => {
-      clearInterval(interval);
-      startSimulatedBattle();
-    }, delay);
+    
+    // Insert into queue
+    await supabase.from("pvp_queue").delete().eq("user_id", user.id); // clean stale
+    await supabase.from("pvp_queue").insert({
+      user_id: user.id,
+      rating: playerRating?.rating ?? 0,
+    } as any);
+
+    // Start polling for opponent
+    const queueInterval = setInterval(() => setQueueTime(t => t + 1), 1000);
+    const pollInterval = setInterval(async () => {
+      // Check if someone else is in queue (not us)
+      const { data: queueEntries } = await supabase
+        .from("pvp_queue")
+        .select("*")
+        .neq("user_id", user.id)
+        .order("joined_at", { ascending: true })
+        .limit(1);
+
+      if (queueEntries && queueEntries.length > 0) {
+        const opponent = queueEntries[0];
+        
+        // Create match with shared questions
+        const qs = generateBattleQuestions();
+        const { data: match, error } = await supabase.from("pvp_matches").insert({
+          player1_id: user.id,
+          player2_id: opponent.user_id,
+          questions: qs as any,
+          status: 'active',
+        } as any).select().single();
+
+        if (match && !error) {
+          // Remove both from queue
+          await supabase.from("pvp_queue").delete().eq("user_id", user.id);
+          await supabase.from("pvp_queue").delete().eq("user_id", opponent.user_id);
+
+          // Get opponent name
+          const { data: opProfile } = await supabase.from("profiles").select("display_name").eq("user_id", opponent.user_id).single();
+          setOpponentName(opProfile?.display_name || "Súper");
+
+          clearInterval(queueInterval);
+          clearInterval(pollInterval);
+          
+          setCurrentMatchId(match.id);
+          setQuestions(qs);
+          setCurrentQ(0);
+          setMyScore(0);
+          setOpponentScore(0);
+          setTotalTimeMs(0);
+          setSelectedAnswer(null);
+          setShowExplanation(false);
+          setMyAnswers([]);
+          setIsInviteMatch(true); // use real match flow
+          setScreen("battle");
+          setTimeLeft(10);
+          qStartRef.current = Date.now();
+          return;
+        }
+      }
+
+      // Also check if we were matched BY someone else (we're player2)
+      const { data: myMatches } = await supabase
+        .from("pvp_matches")
+        .select("*")
+        .eq("player2_id", user.id)
+        .eq("status", "active")
+        .order("created_at", { ascending: false })
+        .limit(1);
+
+      if (myMatches && myMatches.length > 0) {
+        const match = myMatches[0];
+        // We were matched! Remove from queue
+        await supabase.from("pvp_queue").delete().eq("user_id", user.id);
+        
+        const { data: opProfile } = await supabase.from("profiles").select("display_name").eq("user_id", match.player1_id).single();
+        setOpponentName(opProfile?.display_name || "Súper");
+
+        clearInterval(queueInterval);
+        clearInterval(pollInterval);
+
+        setCurrentMatchId(match.id);
+        const qs = (match.questions as any) as BattleQuestion[];
+        setQuestions(qs);
+        setCurrentQ(0);
+        setMyScore(0);
+        setOpponentScore(0);
+        setTotalTimeMs(0);
+        setSelectedAnswer(null);
+        setShowExplanation(false);
+        setMyAnswers([]);
+        setIsInviteMatch(true);
+        setScreen("battle");
+        setTimeLeft(10);
+        qStartRef.current = Date.now();
+        return;
+      }
+    }, 2000);
+
+    // Store refs for cleanup
+    queuePollRef.current = { queueInterval, pollInterval };
   };
 
-  const startSimulatedBattle = () => {
-    const qs = generateBattleQuestions();
-    setQuestions(qs);
-    setCurrentQ(0);
-    setMyScore(0);
-    setOpponentScore(0);
-    setTotalTimeMs(0);
-    setSelectedAnswer(null);
-    setShowExplanation(false);
-    setMyAnswers([]);
-    setCurrentMatchId(null);
-    setOpponentName("Bot 🤖");
-    setScreen("battle");
-    setTimeLeft(10);
-    qStartRef.current = Date.now();
+  // Cleanup queue on cancel/unmount
+  const cancelQueue = async () => {
+    if (!user) return;
+    await supabase.from("pvp_queue").delete().eq("user_id", user.id);
+    if (queuePollRef.current) {
+      clearInterval(queuePollRef.current.queueInterval);
+      clearInterval(queuePollRef.current.pollInterval);
+    }
+    setScreen("lobby");
   };
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (queuePollRef.current) {
+        clearInterval(queuePollRef.current.queueInterval);
+        clearInterval(queuePollRef.current.pollInterval);
+      }
+      if (user) {
+        supabase.from("pvp_queue").delete().eq("user_id", user.id);
+      }
+    };
+  }, [user]);
 
   // Invite friend - create real match
   const inviteFriend = async (friendId: string) => {

@@ -84,6 +84,8 @@ export const lessons: Lesson[] = [
       { id: "q1j", type: "choice", text: "Čo je fiat mena?", options: ["Mena krytá zlatom", "Mena vydávaná štátom bez krytia komoditou", "Kryptomena", "Darčeková karta"], correctIndex: 1, explanation: "Fiat mena (ako euro) nie je krytá fyzickou komoditou, ale dôverou v štát." },
       { id: "q1k", type: "slider", text: "V ktorom roku Slovensko prijalo euro?", min: 2000, max: 2020, step: 1, correctValue: 2009, tolerance: 0, unit: "", label: "Rok", explanation: "Slovensko prijalo euro 1. januára 2009." },
       { id: "q1l", type: "order", text: "Zoraď funkcie peňazí podľa dôležitosti:", items: ["Uchovávateľ hodnoty", "Prostriedok výmeny", "Jednotka zúčtovania", "Prostriedok odloženej platby"], correctOrder: [1, 2, 0, 3], explanation: "Primárna funkcia je výmena, potom zúčtovanie, uchovanie hodnoty a odložená platba." },
+      { id: "q1m", type: "choice", text: "🎬 Situácia: Tvoj kamarát ti ponúka, že ti za 50€ bankovku dá dve 20€ bankovky. Čo urobíš?", options: ["Súhlasíš – dve bankovky sú lepšie ako jedna", "Odmietneš – strácaš 10€", "Navrhneš výmenu rovnakej hodnoty", "Zopakuješ ponuku iným kamarátom"], correctIndex: 1, explanation: "50€ > 2×20€ = 40€. Strácaš 10€! Vždy si spočítaj reálnu hodnotu pred výmenou." },
+      { id: "q1n", type: "choice", text: "🎬 Situácia: V obchode stojí čokoláda 1,50€. Platíš 5€ bankovkou. Predavačka ti vráti 2,50€. Je to správne?", options: ["Áno, to sedí", "Nie, mala mi vrátiť 3,50€", "Nie, mala mi vrátiť 4,50€", "Neviem to spočítať"], correctIndex: 1, explanation: "5€ - 1,50€ = 3,50€. Predavačka ti vrátila o 1€ menej! Vždy si skontroluj výdavok." },
     ],
   },
   {

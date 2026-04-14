@@ -851,7 +851,7 @@ const PvpBattle = () => {
               <h2 className="mt-6 text-xl font-extrabold text-foreground">{t("pvp.searching")}</h2>
               <p className="text-muted-foreground mt-2">{queueTime}s</p>
               <p className="text-xs text-muted-foreground mt-1">{t("pvp.matchRange")}: ±{queueTime > 5 ? 400 : 200}</p>
-              <button onClick={() => setScreen("lobby")} className="mt-6 rounded-xl bg-muted px-6 py-2 text-sm font-bold text-foreground">
+              <button onClick={cancelQueue} className="mt-6 rounded-xl bg-muted px-6 py-2 text-sm font-bold text-foreground">
                 {t("common.close")}
               </button>
             </motion.div>

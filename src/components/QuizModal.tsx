@@ -17,6 +17,9 @@ interface SavedProgress {
   errors: number;
   answeredQuestions: Record<number, { correct: boolean }>;
 }
+
+interface QuizModalProps {
+  lesson: Lesson;
   onClose: () => void;
   onComplete: (xp: number, score: number, totalQuestions: number) => void;
 }

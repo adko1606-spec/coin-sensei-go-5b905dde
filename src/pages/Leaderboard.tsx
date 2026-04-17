@@ -42,23 +42,22 @@ const PlayerProfileModal = ({ player, onClose, t }: { player: LeaderboardEntry; 
   const char = characters.find((c) => c.id === player.selected_character);
   const rankInfo = getRankInfo(player.rank);
   const [equippedItems, setEquippedItems] = useState<any[]>([]);
-  const [investPerf, setInvestPerf] = useState<{ total_invested: number; current_value: number } | null>(null);
+  const [investPerf, setInvestPerf] = useState<{ total_invested: number; current_value: number; count: number; profitable: number } | null>(null);
 
   useEffect(() => {
     const load = async () => {
-      // Load equipped cosmetics
       const { data: ucs } = await supabase.from("user_cosmetics").select("item_id").eq("user_id", player.user_id).eq("equipped", true);
       if (ucs && ucs.length > 0) {
         const ids = ucs.map(u => u.item_id);
         const { data: items } = await supabase.from("cosmetic_items").select("*").in("id", ids);
         if (items) setEquippedItems(items);
       }
-      // Load investment performance
       const { data: invs } = await supabase.from("user_investments").select("invested_coins, current_value").eq("user_id", player.user_id).eq("is_active", true);
       if (invs && invs.length > 0) {
-        const total_invested = invs.reduce((s: number, i: any) => s + i.invested_coins, 0);
-        const current_value = invs.reduce((s: number, i: any) => s + i.current_value, 0);
-        setInvestPerf({ total_invested, current_value });
+        const total_invested = invs.reduce((s: number, i: any) => s + Number(i.invested_coins), 0);
+        const current_value = invs.reduce((s: number, i: any) => s + Number(i.current_value), 0);
+        const profitable = invs.filter((i: any) => Number(i.current_value) > Number(i.invested_coins)).length;
+        setInvestPerf({ total_invested, current_value, count: invs.length, profitable });
       }
     };
     load();
@@ -66,8 +65,10 @@ const PlayerProfileModal = ({ player, onClose, t }: { player: LeaderboardEntry; 
 
   const equippedHouse = equippedItems.find((i: any) => i.category === "house");
   const equippedCar = equippedItems.find((i: any) => i.category === "car");
+  const otherCosmetics = equippedItems.filter((i: any) => i.category !== "house" && i.category !== "car");
   const profitLoss = investPerf ? investPerf.current_value - investPerf.total_invested : 0;
   const profitPercent = investPerf && investPerf.total_invested > 0 ? Math.round((profitLoss / investPerf.total_invested) * 100) : 0;
+  const winRate = investPerf && investPerf.count > 0 ? Math.round((investPerf.profitable / investPerf.count) * 100) : 0;
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
@@ -92,16 +93,16 @@ const PlayerProfileModal = ({ player, onClose, t }: { player: LeaderboardEntry; 
           </div>
         </div>
 
-        {/* Estate display */}
-        {(equippedHouse || equippedCar) && (
-          <div className="mt-4 rounded-xl bg-muted/50 p-3">
-            <p className="text-xs font-bold text-muted-foreground mb-2">🏘️ Majetok</p>
-            <div className="flex items-center justify-center gap-4">
+        {/* Assets section */}
+        {(equippedHouse || equippedCar || otherCosmetics.length > 0) && (
+          <div className="mt-4 rounded-xl border border-border bg-muted/40 p-3">
+            <p className="text-xs font-extrabold text-foreground mb-2 flex items-center gap-1">🏘️ Majetok & kozmetika</p>
+            <div className="flex flex-wrap items-center justify-center gap-3">
               {equippedHouse && (
                 <div className="text-center">
                   {ESTATE_IMAGES[equippedHouse.id] ? (
                     <img src={ESTATE_IMAGES[equippedHouse.id]} alt={equippedHouse.name} className="h-14 w-14 object-contain mx-auto" />
-                  ) : <span className="text-3xl">{equippedHouse.icon}</span>}
+                  ) : <span className="text-3xl">🏠</span>}
                   <p className="text-[10px] font-bold text-foreground mt-1">{equippedHouse.name}</p>
                 </div>
               )}
@@ -109,24 +110,40 @@ const PlayerProfileModal = ({ player, onClose, t }: { player: LeaderboardEntry; 
                 <div className="text-center">
                   {ESTATE_IMAGES[equippedCar.id] ? (
                     <img src={ESTATE_IMAGES[equippedCar.id]} alt={equippedCar.name} className="h-14 w-14 object-contain mx-auto" />
-                  ) : <span className="text-3xl">{equippedCar.icon}</span>}
+                  ) : <span className="text-3xl">🚗</span>}
                   <p className="text-[10px] font-bold text-foreground mt-1">{equippedCar.name}</p>
                 </div>
               )}
+              {otherCosmetics.slice(0, 4).map((c: any) => (
+                <div key={c.id} className="text-center">
+                  <div className="h-10 w-10 rounded-xl bg-card flex items-center justify-center text-2xl mx-auto">{c.preview_emoji || c.icon || "🎨"}</div>
+                  <p className="text-[9px] font-bold text-muted-foreground mt-1 truncate max-w-[60px]">{c.name}</p>
+                </div>
+              ))}
             </div>
+            {!equippedHouse && !equippedCar && otherCosmetics.length === 0 && (
+              <p className="text-xs text-muted-foreground text-center">Žiadny majetok</p>
+            )}
           </div>
         )}
 
         {/* Investment performance */}
         {investPerf && (
-          <div className={`mt-3 rounded-xl p-3 ${profitLoss >= 0 ? "bg-primary/10" : "bg-destructive/10"}`}>
+          <div className={`mt-3 rounded-xl p-3 border ${profitLoss >= 0 ? "bg-primary/10 border-primary/30" : "bg-destructive/10 border-destructive/30"}`}>
             <div className="flex items-center gap-2 mb-1">
               {profitLoss >= 0 ? <TrendingUp className="h-4 w-4 text-primary" /> : <TrendingDown className="h-4 w-4 text-destructive" />}
-              <p className="text-xs font-bold text-muted-foreground">Investičný výkon</p>
+              <p className="text-xs font-extrabold text-foreground">💰 Investičný výkon</p>
+              <span className={`ml-auto text-[10px] font-bold px-2 py-0.5 rounded-full ${profitLoss >= 0 ? "bg-primary/20 text-primary" : "bg-destructive/20 text-destructive"}`}>
+                {profitLoss >= 0 ? "🟢 V zisku" : "🔴 V strate"}
+              </span>
             </div>
             <p className={`text-lg font-extrabold ${profitLoss >= 0 ? "text-primary" : "text-destructive"}`}>
               {profitLoss >= 0 ? "+" : ""}{Math.round(profitLoss)} Fince ({profitPercent >= 0 ? "+" : ""}{profitPercent}%)
             </p>
+            <div className="mt-1 flex items-center gap-3 text-[11px] text-muted-foreground">
+              <span>📊 {investPerf.count} aktív</span>
+              <span>✅ Win rate: <span className="font-bold text-foreground">{winRate}%</span></span>
+            </div>
           </div>
         )}
 

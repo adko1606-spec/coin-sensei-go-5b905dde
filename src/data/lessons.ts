@@ -652,3 +652,13 @@ export const lessons: Lesson[] = [
     ],
   },
 ];
+
+// Obohatí lekcie o scenárové (swipe-style) otázky podľa kategórie
+import { getScenariosForCategory } from "./lessonScenarios";
+lessons.forEach((lesson) => {
+  const extras = getScenariosForCategory(lesson.category, lesson.id);
+  if (extras.length > 0) {
+    lesson.questions = [...lesson.questions, ...extras];
+  }
+});
+

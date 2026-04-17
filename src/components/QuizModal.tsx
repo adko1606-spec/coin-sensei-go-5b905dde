@@ -146,6 +146,108 @@ const OrderView = ({ question, submitted, isCorrect, onSubmit }: {
   );
 };
 
+const ScenarioView = ({ question, selectedChoice, onAnswer }: {
+  question: ScenarioQuestion; selectedChoice: "A" | "B" | null; onAnswer: (choice: "A" | "B") => void;
+}) => {
+  const x = useMotionValue(0);
+  const rotate = useTransform(x, [-200, 0, 200], [-12, 0, 12]);
+  const leftOpacity = useTransform(x, [-150, -20, 0], [1, 0, 0]);
+  const rightOpacity = useTransform(x, [0, 20, 150], [0, 0, 1]);
+
+  const handleDragEnd = (_: any, info: PanInfo) => {
+    if (selectedChoice) return;
+    if (info.offset.x < -100) onAnswer("A");
+    else if (info.offset.x > 100) onAnswer("B");
+    else x.set(0);
+  };
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (selectedChoice) return;
+      if (e.key === "ArrowLeft") onAnswer("A");
+      if (e.key === "ArrowRight") onAnswer("B");
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [selectedChoice, onAnswer]);
+
+  // Neutrálne štýly pred odpoveďou. Farby sa zobrazia až PO výbere.
+  const getBtnStyle = (choice: "A" | "B") => {
+    if (!selectedChoice) return "border-border bg-muted/40 hover:bg-muted/60";
+    const opt = choice === "A" ? question.optionA : question.optionB;
+    if (opt.correct) return "border-primary bg-primary/10";
+    if (selectedChoice === choice && !opt.correct) return "border-destructive bg-destructive/10";
+    return "border-border bg-muted/30 opacity-60";
+  };
+
+  return (
+    <div className="relative">
+      {!selectedChoice && (
+        <>
+          <motion.div style={{ opacity: leftOpacity }} className="pointer-events-none absolute left-2 top-1/2 -translate-y-1/2 z-10">
+            <div className="rounded-xl border-2 border-foreground/40 bg-foreground/10 px-3 py-1 -rotate-6">
+              <span className="text-sm font-extrabold text-foreground">A ←</span>
+            </div>
+          </motion.div>
+          <motion.div style={{ opacity: rightOpacity }} className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 z-10">
+            <div className="rounded-xl border-2 border-foreground/40 bg-foreground/10 px-3 py-1 rotate-6">
+              <span className="text-sm font-extrabold text-foreground">→ B</span>
+            </div>
+          </motion.div>
+        </>
+      )}
+
+      <motion.div
+        drag={selectedChoice ? false : "x"}
+        dragConstraints={{ left: 0, right: 0 }}
+        onDragEnd={handleDragEnd}
+        style={{ x, rotate }}
+        className="cursor-grab active:cursor-grabbing"
+      >
+        <div className="rounded-3xl border-2 border-border bg-card p-5 shadow-float">
+          <div className="mb-2 inline-flex items-center gap-1 rounded-full bg-accent/10 px-3 py-1">
+            <Sparkles className="h-3 w-3 text-accent" />
+            <span className="text-[11px] font-bold text-accent">Reálna situácia</span>
+          </div>
+          <h4 className="text-lg font-extrabold text-foreground leading-tight">{question.title}</h4>
+          <p className="mt-1 text-sm text-muted-foreground">{question.context}</p>
+        </div>
+      </motion.div>
+
+      <div className="mt-3 space-y-2">
+        <button
+          onClick={() => !selectedChoice && onAnswer("A")}
+          disabled={!!selectedChoice}
+          className={`w-full flex items-center gap-3 rounded-2xl border-2 p-3 text-left transition-all ${getBtnStyle("A")}`}
+        >
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-foreground/10">
+            <ArrowLeftIcon className="h-4 w-4 text-foreground" />
+          </div>
+          <span className="text-sm font-semibold text-foreground flex-1">{question.optionA.label}</span>
+          {selectedChoice && question.optionA.correct && <CheckCircle2 className="h-5 w-5 text-primary shrink-0" />}
+          {selectedChoice === "A" && !question.optionA.correct && <XCircle className="h-5 w-5 text-destructive shrink-0" />}
+        </button>
+        <button
+          onClick={() => !selectedChoice && onAnswer("B")}
+          disabled={!!selectedChoice}
+          className={`w-full flex items-center gap-3 rounded-2xl border-2 p-3 text-left transition-all ${getBtnStyle("B")}`}
+        >
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-foreground/10">
+            <ArrowRightIcon className="h-4 w-4 text-foreground" />
+          </div>
+          <span className="text-sm font-semibold text-foreground flex-1">{question.optionB.label}</span>
+          {selectedChoice && question.optionB.correct && <CheckCircle2 className="h-5 w-5 text-primary shrink-0" />}
+          {selectedChoice === "B" && !question.optionB.correct && <XCircle className="h-5 w-5 text-destructive shrink-0" />}
+        </button>
+      </div>
+
+      {!selectedChoice && (
+        <p className="mt-2 text-center text-[10px] text-muted-foreground">Potiahni vľavo/vpravo alebo použi šípky ← →</p>
+      )}
+    </div>
+  );
+};
+
 const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
   const { currentLives, loseLife } = useAuth();
   const { t } = useI18n();

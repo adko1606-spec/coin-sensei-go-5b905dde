@@ -358,10 +358,7 @@ const Home = () => {
         </motion.div>
       </main>
 
-      {showTapRace && <TapRace onClose={() => setShowTapRace(false)} />}
-      <AnimatePresence>
-        {showSwipeLearn && <SwipeLearn onClose={() => setShowSwipeLearn(false)} />}
-      </AnimatePresence>
+      </main>
 
       <BottomNav />
     </div>

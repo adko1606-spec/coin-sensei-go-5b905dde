@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Lightbulb, Target, Flame, Calendar, Heart, Clock, BookOpen, GraduationCap, TrendingUp, Trophy, User, Zap, Gift, Swords } from "lucide-react";
+import { motion } from "framer-motion";
+import { Lightbulb, Target, Flame, Calendar, Heart, Clock, BookOpen, GraduationCap, TrendingUp, Trophy, User, Swords } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useI18n } from "@/contexts/I18nContext";
@@ -9,8 +9,6 @@ import BottomNav from "@/components/BottomNav";
 import CharacterAvatar from "@/components/CharacterAvatar";
 import { ChallengeCard } from "@/components/ChallengeCard";
 import MarketDrama from "@/components/MarketDrama";
-import TapRace from "@/components/TapRace";
-import SwipeLearn from "@/components/SwipeLearn";
 import { getTodaysTip } from "@/data/dailyTips";
 import { getTodaysChallenges, getWeeksChallenges, getDailyResetTime, getWeeklyResetTime, type DailyChallenge, type WeeklyChallenge } from "@/data/dailyChallenges";
 import logo from "@/assets/logo-new.png";
@@ -58,8 +56,6 @@ const Home = () => {
   const [tip, setTip] = useState(getTodaysTip(language));
   const [challenges, setChallenges] = useState<DailyChallenge[]>(getTodaysChallenges(language));
   const [weeklyChallenges, setWeeklyChallenges] = useState<WeeklyChallenge[]>(getWeeksChallenges(language));
-  const [showTapRace, setShowTapRace] = useState(false);
-  const [showSwipeLearn, setShowSwipeLearn] = useState(false);
   const [pvpInviteCount, setPvpInviteCount] = useState(0);
 
   // Global PvP invite listener

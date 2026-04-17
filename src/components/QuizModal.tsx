@@ -270,6 +270,7 @@ const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
   const [finished, setFinished] = useState(false);
   const [selectedChoiceIdx, setSelectedChoiceIdx] = useState<number | null>(null);
   const [selectedTF, setSelectedTF] = useState<boolean | null>(null);
+  const [selectedScenario, setSelectedScenario] = useState<"A" | "B" | null>(null);
   const [showAIHelp, setShowAIHelp] = useState(false);
   const [answeredQuestions, setAnsweredQuestions] = useState<Record<number, { correct: boolean }>>(savedProgress?.answeredQuestions ?? {});
 
@@ -329,6 +330,14 @@ const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
     markCorrect(q.correctOrder.every((v, i) => v === order[i]));
   }, [question, markCorrect]);
 
+  const handleScenarioAnswer = useCallback((choice: "A" | "B") => {
+    if (answered) return;
+    setSelectedScenario(choice);
+    const q = question as ScenarioQuestion;
+    const opt = choice === "A" ? q.optionA : q.optionB;
+    markCorrect(opt.correct);
+  }, [answered, question, markCorrect]);
+
   const handleNext = () => {
     if (currentIndex < lesson.questions.length - 1) {
       setCurrentIndex((i) => i + 1);
@@ -336,6 +345,7 @@ const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
       setIsCorrect(null);
       setSelectedChoiceIdx(null);
       setSelectedTF(null);
+      setSelectedScenario(null);
       setShowAIHelp(false);
     } else {
       setFinished(true);

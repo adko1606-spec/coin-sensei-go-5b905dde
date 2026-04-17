@@ -358,8 +358,6 @@ const Home = () => {
         </motion.div>
       </main>
 
-      </main>
-
       <BottomNav />
     </div>
   );

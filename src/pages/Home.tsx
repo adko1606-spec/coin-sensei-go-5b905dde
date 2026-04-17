@@ -10,6 +10,7 @@ import CharacterAvatar from "@/components/CharacterAvatar";
 import { ChallengeCard } from "@/components/ChallengeCard";
 import MarketDrama from "@/components/MarketDrama";
 import TapRace from "@/components/TapRace";
+import SwipeLearn from "@/components/SwipeLearn";
 import { getTodaysTip } from "@/data/dailyTips";
 import { getTodaysChallenges, getWeeksChallenges, getDailyResetTime, getWeeklyResetTime, type DailyChallenge, type WeeklyChallenge } from "@/data/dailyChallenges";
 import logo from "@/assets/logo-new.png";
@@ -58,6 +59,7 @@ const Home = () => {
   const [challenges, setChallenges] = useState<DailyChallenge[]>(getTodaysChallenges(language));
   const [weeklyChallenges, setWeeklyChallenges] = useState<WeeklyChallenge[]>(getWeeksChallenges(language));
   const [showTapRace, setShowTapRace] = useState(false);
+  const [showSwipeLearn, setShowSwipeLearn] = useState(false);
   const [pvpInviteCount, setPvpInviteCount] = useState(0);
 
   // Global PvP invite listener
@@ -278,18 +280,27 @@ const Home = () => {
               <span className="text-[9px] font-bold text-accent">{t("game.quickBattle")}</span>
             </button>
           </div>
-          <button
-            onClick={() => navigate("/pvp")}
-            className="relative w-full rounded-2xl bg-gradient-to-r from-destructive/90 to-destructive p-5 shadow-button transition-all hover:opacity-90 active:scale-[0.98] flex items-center justify-center gap-3"
-          >
-            <Swords className="h-7 w-7 text-destructive-foreground" />
-            <span className="text-xl font-extrabold text-destructive-foreground">⚔️ PvP Blitz Battle</span>
-            {pvpInviteCount > 0 && (
-              <span className="absolute top-2 right-2 h-6 w-6 rounded-full bg-primary flex items-center justify-center text-[11px] font-bold text-primary-foreground animate-pulse">
-                {pvpInviteCount}
-              </span>
-            )}
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={() => navigate("/pvp")}
+              className="relative flex-1 rounded-2xl bg-gradient-to-r from-destructive/90 to-destructive p-3.5 shadow-button transition-all hover:opacity-90 active:scale-[0.98] flex items-center justify-center gap-2"
+            >
+              <Swords className="h-5 w-5 text-destructive-foreground" />
+              <span className="text-base font-extrabold text-destructive-foreground">⚔️ PvP Battle</span>
+              {pvpInviteCount > 0 && (
+                <span className="absolute -top-1.5 -right-1.5 h-5 w-5 rounded-full bg-primary flex items-center justify-center text-[10px] font-bold text-primary-foreground animate-pulse">
+                  {pvpInviteCount}
+                </span>
+              )}
+            </button>
+            <button
+              onClick={() => setShowSwipeLearn(true)}
+              className="rounded-2xl bg-gradient-to-r from-accent/90 to-accent px-4 py-3 shadow-button transition-all hover:opacity-90 active:scale-[0.98] flex flex-col items-center justify-center gap-0.5"
+            >
+              <Gift className="h-4 w-4 text-accent-foreground" />
+              <span className="text-[10px] font-bold text-accent-foreground">Swipe Learn</span>
+            </button>
+          </div>
         </motion.div>
 
         {/* Quick nav grid */}
@@ -366,6 +377,9 @@ const Home = () => {
       </main>
 
       {showTapRace && <TapRace onClose={() => setShowTapRace(false)} />}
+      <AnimatePresence>
+        {showSwipeLearn && <SwipeLearn onClose={() => setShowSwipeLearn(false)} />}
+      </AnimatePresence>
 
       <BottomNav />
     </div>

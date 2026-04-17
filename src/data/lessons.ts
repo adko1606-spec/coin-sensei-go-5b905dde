@@ -1,4 +1,4 @@
-export type QuestionType = "choice" | "truefalse" | "slider" | "order";
+export type QuestionType = "choice" | "truefalse" | "slider" | "order" | "scenario";
 
 export interface BaseQuestion {
   id: string;
@@ -35,7 +35,20 @@ export interface OrderQuestion extends BaseQuestion {
   correctOrder: number[];
 }
 
-export type Question = ChoiceQuestion | TrueFalseQuestion | SliderQuestion | OrderQuestion;
+export interface ScenarioQuestion extends BaseQuestion {
+  type: "scenario";
+  title: string;
+  context: string;
+  optionA: { label: string; correct: boolean; explanation: string };
+  optionB: { label: string; correct: boolean; explanation: string };
+}
+
+export type Question =
+  | ChoiceQuestion
+  | TrueFalseQuestion
+  | SliderQuestion
+  | OrderQuestion
+  | ScenarioQuestion;
 
 export interface Lesson {
   id: string;

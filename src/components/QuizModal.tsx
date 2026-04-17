@@ -420,7 +420,7 @@ const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
             <div className="mt-3">
               <button onClick={() => {
                 setCurrentIndex(0); setAnswered(false); setIsCorrect(null); setScore(0); setErrors(0); setFinished(false);
-                setSelectedChoiceIdx(null); setSelectedTF(null); setShowAIHelp(false); setAnsweredQuestions({});
+                setSelectedChoiceIdx(null); setSelectedTF(null); setSelectedScenario(null); setShowAIHelp(false); setAnsweredQuestions({});
                 localStorage.removeItem(PROGRESS_KEY(lesson.id));
               }}
                 className="w-full rounded-2xl bg-accent/10 border border-accent/20 px-6 py-3 font-bold text-accent transition-all hover:bg-accent/20 active:scale-95">
@@ -438,6 +438,7 @@ const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
 
   const typeBadge = {
     choice: t("quiz.choice"), truefalse: t("quiz.trueFalse"), slider: t("quiz.slider"), order: t("quiz.order"),
+    scenario: "🎬 Reálna situácia",
   }[question.type];
 
   return (
@@ -469,11 +470,19 @@ const QuizModal = ({ lesson, onClose, onComplete }: QuizModalProps) => {
 
         <AnimatePresence mode="wait">
           <motion.div key={question.id} initial={{ x: 30, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: -30, opacity: 0 }}>
-            <p className="mb-6 text-lg font-bold text-foreground">{question.text}</p>
+            {question.type !== "scenario" && (
+              <p className="mb-6 text-lg font-bold text-foreground">{question.text}</p>
+            )}
             {question.type === "choice" && <ChoiceView question={question} selectedAnswer={selectedChoiceIdx} isCorrect={isCorrect} onAnswer={handleChoiceAnswer} />}
             {question.type === "truefalse" && <TrueFalseView question={question} selectedAnswer={selectedTF} isCorrect={isCorrect} onAnswer={handleTFAnswer} />}
             {question.type === "slider" && <SliderView question={question} submitted={answered} isCorrect={isCorrect} onSubmit={handleSliderSubmit} />}
             {question.type === "order" && <OrderView question={question} submitted={answered} isCorrect={isCorrect} onSubmit={handleOrderSubmit} />}
+            {question.type === "scenario" && (
+              <>
+                <ScenarioView question={question} selectedChoice={selectedScenario} onAnswer={handleScenarioAnswer} />
+                <p className="mt-4 text-sm font-semibold text-foreground">{question.text}</p>
+              </>
+            )}
 
             {answered && (
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}

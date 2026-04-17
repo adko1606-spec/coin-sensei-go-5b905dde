@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
-import { motion, AnimatePresence, Reorder } from "framer-motion";
-import { X, CheckCircle2, XCircle, ArrowRight, Trophy, GripVertical, Coins, Heart, Bot } from "lucide-react";
-import type { Lesson, Question, ChoiceQuestion, TrueFalseQuestion, SliderQuestion, OrderQuestion } from "@/data/lessons";
+import { motion, AnimatePresence, Reorder, useMotionValue, useTransform, type PanInfo } from "framer-motion";
+import { X, CheckCircle2, XCircle, ArrowRight, Trophy, GripVertical, Coins, Heart, Bot, Sparkles, ArrowLeft as ArrowLeftIcon, ArrowRight as ArrowRightIcon } from "lucide-react";
+import type { Lesson, Question, ChoiceQuestion, TrueFalseQuestion, SliderQuestion, OrderQuestion, ScenarioQuestion } from "@/data/lessons";
 import { Progress } from "@/components/ui/progress";
 import { useAuth } from "@/contexts/AuthContext";
 import { useI18n } from "@/contexts/I18nContext";

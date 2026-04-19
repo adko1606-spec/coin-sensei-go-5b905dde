@@ -150,30 +150,39 @@ const ScenarioView = ({ question, selectedChoice, onAnswer }: {
   question: ScenarioQuestion; selectedChoice: "A" | "B" | null; onAnswer: (choice: "A" | "B") => void;
 }) => {
   const x = useMotionValue(0);
-  const rotate = useTransform(x, [-200, 0, 200], [-12, 0, 12]);
-  const leftOpacity = useTransform(x, [-150, -20, 0], [1, 0, 0]);
-  const rightOpacity = useTransform(x, [0, 20, 150], [0, 0, 1]);
+  const rotate = useTransform(x, [-300, 0, 300], [-18, 0, 18]);
+  const leftOpacity = useTransform(x, [-120, -30, 0], [1, 0, 0]);
+  const rightOpacity = useTransform(x, [0, 30, 120], [0, 0, 1]);
+  const cardOpacity = useTransform(x, [-300, -150, 0, 150, 300], [0, 1, 1, 1, 0]);
+  const [exitDir, setExitDir] = useState<null | "left" | "right">(null);
+
+  const triggerSwipe = (dir: "left" | "right") => {
+    if (selectedChoice || exitDir) return;
+    setExitDir(dir);
+    setTimeout(() => onAnswer(dir === "left" ? "A" : "B"), 220);
+  };
 
   const handleDragEnd = (_: any, info: PanInfo) => {
     if (selectedChoice) return;
-    if (info.offset.x < -100) onAnswer("A");
-    else if (info.offset.x > 100) onAnswer("B");
-    else x.set(0);
+    const SWIPE_DIST = 80;
+    const SWIPE_VEL = 500;
+    if (info.offset.x < -SWIPE_DIST || info.velocity.x < -SWIPE_VEL) triggerSwipe("left");
+    else if (info.offset.x > SWIPE_DIST || info.velocity.x > SWIPE_VEL) triggerSwipe("right");
   };
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (selectedChoice) return;
-      if (e.key === "ArrowLeft") onAnswer("A");
-      if (e.key === "ArrowRight") onAnswer("B");
+      if (e.key === "ArrowLeft") triggerSwipe("left");
+      if (e.key === "ArrowRight") triggerSwipe("right");
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [selectedChoice, onAnswer]);
+  }, [selectedChoice]);
 
-  // Neutrálne štýly pred odpoveďou. Farby sa zobrazia až PO výbere.
+  // Po odpovedi farby; pred odpoveďou neutrálne
   const getBtnStyle = (choice: "A" | "B") => {
-    if (!selectedChoice) return "border-border bg-muted/40 hover:bg-muted/60";
+    if (!selectedChoice) return "border-border bg-muted/40";
     const opt = choice === "A" ? question.optionA : question.optionB;
     if (opt.correct) return "border-primary bg-primary/10";
     if (selectedChoice === choice && !opt.correct) return "border-destructive bg-destructive/10";
@@ -181,71 +190,79 @@ const ScenarioView = ({ question, selectedChoice, onAnswer }: {
   };
 
   return (
-    <div className="relative">
-      {!selectedChoice && (
-        <>
-          <motion.div style={{ opacity: leftOpacity }} className="pointer-events-none absolute left-2 top-1/2 -translate-y-1/2 z-10">
-            <div className="rounded-xl border-2 border-foreground/40 bg-foreground/10 px-3 py-1 -rotate-6">
-              <span className="text-sm font-extrabold text-foreground">A ←</span>
-            </div>
-          </motion.div>
-          <motion.div style={{ opacity: rightOpacity }} className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 z-10">
-            <div className="rounded-xl border-2 border-foreground/40 bg-foreground/10 px-3 py-1 rotate-6">
-              <span className="text-sm font-extrabold text-foreground">→ B</span>
-            </div>
-          </motion.div>
-        </>
-      )}
-
+    <div className="relative" style={{ minHeight: 380 }}>
       <motion.div
-        drag={selectedChoice ? false : "x"}
+        drag={selectedChoice || exitDir ? false : "x"}
         dragConstraints={{ left: 0, right: 0 }}
-        dragElastic={0.9}
+        dragElastic={1}
         dragMomentum={false}
         onDragEnd={handleDragEnd}
-        style={{ x, rotate, touchAction: "pan-y" }}
-        whileDrag={{ scale: 1.02 }}
+        animate={
+          exitDir
+            ? { x: exitDir === "left" ? -500 : 500, rotate: exitDir === "left" ? -25 : 25, opacity: 0 }
+            : undefined
+        }
+        transition={exitDir ? { duration: 0.22, ease: "easeOut" } : { type: "spring", stiffness: 500, damping: 35 }}
+        style={{ x, rotate, opacity: cardOpacity, touchAction: "pan-y" }}
+        whileTap={{ cursor: "grabbing" }}
         className="cursor-grab active:cursor-grabbing select-none touch-pan-y"
       >
-        <div className="rounded-3xl border-2 border-border bg-card p-5 shadow-float">
+        <div className="relative rounded-3xl border-2 border-border bg-card p-5 shadow-float overflow-hidden">
+          {/* Swipe overlay labels — INSIDE card so they move with it */}
+          {!selectedChoice && (
+            <>
+              <motion.div style={{ opacity: leftOpacity }} className="pointer-events-none absolute left-3 top-3 z-10">
+                <div className="rounded-xl border-2 border-destructive bg-destructive/20 px-3 py-1 -rotate-12">
+                  <span className="text-sm font-extrabold text-destructive">A</span>
+                </div>
+              </motion.div>
+              <motion.div style={{ opacity: rightOpacity }} className="pointer-events-none absolute right-3 top-3 z-10">
+                <div className="rounded-xl border-2 border-primary bg-primary/20 px-3 py-1 rotate-12">
+                  <span className="text-sm font-extrabold text-primary">B</span>
+                </div>
+              </motion.div>
+            </>
+          )}
+
           <div className="mb-2 inline-flex items-center gap-1 rounded-full bg-accent/10 px-3 py-1">
             <Sparkles className="h-3 w-3 text-accent" />
             <span className="text-[11px] font-bold text-accent">Reálna situácia · 👈 swipe 👉</span>
           </div>
           <h4 className="text-lg font-extrabold text-foreground leading-tight">{question.title}</h4>
           <p className="mt-1 text-sm text-muted-foreground">{question.context}</p>
+
+          {/* Options INSIDE the card so they move together */}
+          <div className="mt-4 space-y-2">
+            <button
+              onClick={() => !selectedChoice && triggerSwipe("left")}
+              disabled={!!selectedChoice || !!exitDir}
+              className={`w-full flex items-center gap-3 rounded-2xl border-2 p-3 text-left transition-all ${getBtnStyle("A")}`}
+            >
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-foreground/10">
+                <ArrowLeftIcon className="h-4 w-4 text-foreground" />
+              </div>
+              <span className="text-sm font-semibold text-foreground flex-1">{question.optionA.label}</span>
+              {selectedChoice && question.optionA.correct && <CheckCircle2 className="h-5 w-5 text-primary shrink-0" />}
+              {selectedChoice === "A" && !question.optionA.correct && <XCircle className="h-5 w-5 text-destructive shrink-0" />}
+            </button>
+            <button
+              onClick={() => !selectedChoice && triggerSwipe("right")}
+              disabled={!!selectedChoice || !!exitDir}
+              className={`w-full flex items-center gap-3 rounded-2xl border-2 p-3 text-left transition-all ${getBtnStyle("B")}`}
+            >
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-foreground/10">
+                <ArrowRightIcon className="h-4 w-4 text-foreground" />
+              </div>
+              <span className="text-sm font-semibold text-foreground flex-1">{question.optionB.label}</span>
+              {selectedChoice && question.optionB.correct && <CheckCircle2 className="h-5 w-5 text-primary shrink-0" />}
+              {selectedChoice === "B" && !question.optionB.correct && <XCircle className="h-5 w-5 text-destructive shrink-0" />}
+            </button>
+          </div>
         </div>
       </motion.div>
 
-      <div className="mt-3 space-y-2">
-        <button
-          onClick={() => !selectedChoice && onAnswer("A")}
-          disabled={!!selectedChoice}
-          className={`w-full flex items-center gap-3 rounded-2xl border-2 p-3 text-left transition-all ${getBtnStyle("A")}`}
-        >
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-foreground/10">
-            <ArrowLeftIcon className="h-4 w-4 text-foreground" />
-          </div>
-          <span className="text-sm font-semibold text-foreground flex-1">{question.optionA.label}</span>
-          {selectedChoice && question.optionA.correct && <CheckCircle2 className="h-5 w-5 text-primary shrink-0" />}
-          {selectedChoice === "A" && !question.optionA.correct && <XCircle className="h-5 w-5 text-destructive shrink-0" />}
-        </button>
-        <button
-          onClick={() => !selectedChoice && onAnswer("B")}
-          disabled={!!selectedChoice}
-          className={`w-full flex items-center gap-3 rounded-2xl border-2 p-3 text-left transition-all ${getBtnStyle("B")}`}
-        >
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-foreground/10">
-            <ArrowRightIcon className="h-4 w-4 text-foreground" />
-          </div>
-          <span className="text-sm font-semibold text-foreground flex-1">{question.optionB.label}</span>
-          {selectedChoice && question.optionB.correct && <CheckCircle2 className="h-5 w-5 text-primary shrink-0" />}
-          {selectedChoice === "B" && !question.optionB.correct && <XCircle className="h-5 w-5 text-destructive shrink-0" />}
-        </button>
-      </div>
-
       {!selectedChoice && (
-        <p className="mt-2 text-center text-[10px] text-muted-foreground">Potiahni vľavo/vpravo alebo použi šípky ← →</p>
+        <p className="mt-2 text-center text-[10px] text-muted-foreground">Potiahni vľavo (A) alebo vpravo (B) · alebo použi šípky ← →</p>
       )}
     </div>
   );

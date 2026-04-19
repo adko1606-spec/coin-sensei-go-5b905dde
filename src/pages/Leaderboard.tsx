@@ -122,11 +122,12 @@ const PlayerProfileModal = ({ player, onClose, t }: { player: LeaderboardEntry; 
           ) : (
             <div className="h-20 w-20 rounded-2xl bg-accent/10 flex items-center justify-center text-4xl">🎓</div>
           )}
-          <h4 className="text-xl font-extrabold text-foreground">{player.display_name}</h4>
+          <h4 className="text-xl font-extrabold text-foreground">{livePlayer.display_name}</h4>
           <div className="flex items-center gap-2">
             <span className="text-lg">{rankInfo.icon}</span>
-            <span className={`text-sm font-bold ${rankInfo.color}`}>{player.rank}</span>
-            <span className="text-sm text-muted-foreground">({player.rating})</span>
+            <span className={`text-sm font-bold ${rankInfo.color}`}>{livePlayer.rank}</span>
+            <span className="text-sm text-muted-foreground">({livePlayer.rating})</span>
+            {!loadingLive && <span className="ml-1 inline-flex items-center gap-1 text-[10px] font-bold text-primary"><span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />LIVE</span>}
           </div>
         </div>
 

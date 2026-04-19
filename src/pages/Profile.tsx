@@ -370,8 +370,9 @@ const Profile = () => {
                 {cosmeticItems.filter((item: any) => item.category === shopCategory).map((item: any) => {
                   const owned = userCosmetics.some((uc) => uc.item_id === item.id);
                   const equipped = userCosmetics.some((uc) => uc.item_id === item.id && uc.equipped);
-                  const hasDiscount = !owned && discountIds.includes(item.id);
-                  const finalPrice = hasDiscount ? Math.round(item.price * 0.8) : item.price;
+                  const discountPercent = discountMap.get(item.id);
+                  const hasDiscount = !owned && discountPercent !== undefined;
+                  const finalPrice = hasDiscount ? Math.round(item.price * (1 - discountPercent! / 100)) : item.price;
                   return (
                     <motion.div key={item.id} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
                       className={`rounded-2xl transition-all relative ${equipped ? "bg-primary/10 ring-2 ring-primary shadow-lg" : owned ? "bg-card border border-border shadow-sm" : "bg-muted/40 border border-border/50"}`}

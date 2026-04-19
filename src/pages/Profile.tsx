@@ -21,45 +21,63 @@ const COSMETIC_CATEGORIES = [
   { id: "car", labelKey: "profile.cars" },
 ];
 
-// Daily discount: 20% off 5 random items across ALL categories, seeded by today's date
-function getDailyDiscountIds(items: any[]): string[] {
+// Daily discount: ~8 položiek (10-40% zľava) náhodne rozhodených cez celý sortiment.
+// Použitá vážená náhodnosť: lacnejšie položky majú vyššiu šancu, drahšie nižšiu.
+// Deterministicky seedované dnešným dátumom — reset o polnoci.
+function mulberry32(seed: number) {
+  return function () {
+    let t = (seed += 0x6d2b79f5);
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function getDailyDiscountIds(items: any[]): { id: string; percent: number }[] {
+  if (items.length === 0) return [];
   const today = new Date().toDateString();
-  let hash = 0;
+  let seed = 0;
   for (let i = 0; i < today.length; i++) {
-    hash = ((hash << 5) - hash) + today.charCodeAt(i);
-    hash |= 0;
+    seed = ((seed << 5) - seed) + today.charCodeAt(i);
+    seed |= 0;
   }
-  // Group items by category, pick 1 from each category first, then fill remaining
-  const byCategory: Record<string, any[]> = {};
-  items.forEach((item) => {
-    const cat = item.category || "other";
-    if (!byCategory[cat]) byCategory[cat] = [];
-    byCategory[cat].push(item);
+  const rand = mulberry32(Math.abs(seed));
+
+  // Cieľový počet zľavnených položiek: 8 (alebo menej ak sortiment je menší)
+  const targetCount = Math.min(8, Math.max(3, Math.floor(items.length * 0.15)));
+
+  // Váhy: lacnejšie položky majú vyššiu váhu (vyššiu šancu byť vybrané)
+  const maxPrice = Math.max(...items.map((i) => i.price || 1));
+  const weighted = items.map((item) => {
+    const priceRatio = (item.price || 1) / maxPrice;
+    // Lineárna inverzná váha: lacné = ~1.0, drahé = ~0.2
+    const weight = 1 - priceRatio * 0.8;
+    return { item, weight };
   });
-  const catKeys = Object.keys(byCategory);
-  const picked: string[] = [];
-  // Sort each category's items deterministically using hash
-  catKeys.forEach((cat) => {
-    byCategory[cat].sort((a: any, b: any) => {
-      const ha = ((hash * 31 + a.id.charCodeAt(0) + a.id.charCodeAt(1)) | 0);
-      const hb = ((hash * 31 + b.id.charCodeAt(0) + b.id.charCodeAt(1)) | 0);
-      return ha - hb;
-    });
-  });
-  // Round-robin: pick 1 from each category
-  let catIdx = 0;
-  const catOrder = [...catKeys].sort((a, b) => ((hash * 7 + a.charCodeAt(0)) | 0) - ((hash * 7 + b.charCodeAt(0)) | 0));
-  const catPointers: Record<string, number> = {};
-  catOrder.forEach((c) => { catPointers[c] = 0; });
-  while (picked.length < 5 && catIdx < catOrder.length * 3) {
-    const cat = catOrder[catIdx % catOrder.length];
-    const ptr = catPointers[cat];
-    if (ptr < byCategory[cat].length) {
-      picked.push(byCategory[cat][ptr].id);
-      catPointers[cat] = ptr + 1;
+
+  const picked: { id: string; percent: number }[] = [];
+  const usedIds = new Set<string>();
+  const pool = [...weighted];
+
+  while (picked.length < targetCount && pool.length > 0) {
+    const totalWeight = pool.reduce((s, w) => s + w.weight, 0);
+    let r = rand() * totalWeight;
+    let chosenIdx = 0;
+    for (let i = 0; i < pool.length; i++) {
+      r -= pool[i].weight;
+      if (r <= 0) {
+        chosenIdx = i;
+        break;
+      }
     }
-    catIdx++;
-    if (picked.length >= 5) break;
+    const chosen = pool[chosenIdx];
+    if (!usedIds.has(chosen.item.id)) {
+      // Zľava 10-40% v 5% krokoch
+      const percent = 10 + Math.floor(rand() * 7) * 5;
+      picked.push({ id: chosen.item.id, percent });
+      usedIds.add(chosen.item.id);
+    }
+    pool.splice(chosenIdx, 1);
   }
   return picked;
 }
@@ -143,8 +161,9 @@ const Profile = () => {
   const equippedItems = userCosmetics.filter((uc) => uc.equipped);
   const equippedCosmeticItems = equippedItems.map((uc) => cosmeticItems.find((i: any) => i.id === uc.item_id)).filter(Boolean) as any[];
 
-  // Compute daily discount IDs from ALL cosmetic items (not filtered by category)
-  const discountIds = getDailyDiscountIds(cosmeticItems);
+  // Compute daily discounts (random items + variable %) across ALL cosmetic items
+  const discountList = getDailyDiscountIds(cosmeticItems);
+  const discountMap = new Map(discountList.map((d) => [d.id, d.percent]));
 
   if (loading) {
     return (<div className="min-h-screen gradient-hero flex items-center justify-center"><div className="animate-pulse text-primary font-bold text-xl">{t("common.loading")}</div></div>);
@@ -351,15 +370,16 @@ const Profile = () => {
                 {cosmeticItems.filter((item: any) => item.category === shopCategory).map((item: any) => {
                   const owned = userCosmetics.some((uc) => uc.item_id === item.id);
                   const equipped = userCosmetics.some((uc) => uc.item_id === item.id && uc.equipped);
-                  const hasDiscount = !owned && discountIds.includes(item.id);
-                  const finalPrice = hasDiscount ? Math.round(item.price * 0.8) : item.price;
+                  const discountPercent = discountMap.get(item.id);
+                  const hasDiscount = !owned && discountPercent !== undefined;
+                  const finalPrice = hasDiscount ? Math.round(item.price * (1 - discountPercent! / 100)) : item.price;
                   return (
                     <motion.div key={item.id} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
                       className={`rounded-2xl transition-all relative ${equipped ? "bg-primary/10 ring-2 ring-primary shadow-lg" : owned ? "bg-card border border-border shadow-sm" : "bg-muted/40 border border-border/50"}`}
                       style={{ overflow: "visible" }}>
                       {equipped && (<div className="absolute -top-2 -right-2 z-10 bg-primary text-primary-foreground text-[10px] font-bold px-2 py-0.5 rounded-full shadow">✓ {t("profile.active")}</div>)}
                       {owned && !equipped && (<div className="absolute -top-2 -right-2 z-10 bg-muted text-foreground text-[10px] font-bold px-2 py-0.5 rounded-full border border-border shadow-sm">{t("profile.owned")}</div>)}
-                      {hasDiscount && !owned && (<div className="absolute -top-2 -left-2 z-10 bg-accent text-accent-foreground text-[10px] font-bold px-2 py-0.5 rounded-full shadow">-20%</div>)}
+                      {hasDiscount && !owned && (<div className="absolute -top-2 -left-2 z-10 bg-accent text-accent-foreground text-[10px] font-bold px-2 py-0.5 rounded-full shadow">-{discountPercent}%</div>)}
                       <div className="p-4 pt-6" style={{ overflow: "visible" }}>
                         <div className="flex justify-center mb-3" style={{ overflow: "visible" }}>
                           {(item.category === "hat" || item.category === "color") ? (

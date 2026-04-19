@@ -200,14 +200,17 @@ const ScenarioView = ({ question, selectedChoice, onAnswer }: {
       <motion.div
         drag={selectedChoice ? false : "x"}
         dragConstraints={{ left: 0, right: 0 }}
+        dragElastic={0.9}
+        dragMomentum={false}
         onDragEnd={handleDragEnd}
-        style={{ x, rotate }}
-        className="cursor-grab active:cursor-grabbing"
+        style={{ x, rotate, touchAction: "pan-y" }}
+        whileDrag={{ scale: 1.02 }}
+        className="cursor-grab active:cursor-grabbing select-none touch-pan-y"
       >
         <div className="rounded-3xl border-2 border-border bg-card p-5 shadow-float">
           <div className="mb-2 inline-flex items-center gap-1 rounded-full bg-accent/10 px-3 py-1">
             <Sparkles className="h-3 w-3 text-accent" />
-            <span className="text-[11px] font-bold text-accent">Reálna situácia</span>
+            <span className="text-[11px] font-bold text-accent">Reálna situácia · 👈 swipe 👉</span>
           </div>
           <h4 className="text-lg font-extrabold text-foreground leading-tight">{question.title}</h4>
           <p className="mt-1 text-sm text-muted-foreground">{question.context}</p>

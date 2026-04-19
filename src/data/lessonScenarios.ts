@@ -25,6 +25,24 @@ export const scenariosByCategory: Record<string, ScenarioTemplate[]> = {
       optionB: { label: "Prečítam si zmluvu a zvážim ju 📄", correct: true, explanation: "Vždy čítaj malé písmo — kreditka môže byť past." },
       explanation: "Vždy si prečítaj podmienky pred podpisom.",
     },
+    {
+      type: "scenario",
+      text: "Čo urobíš?",
+      title: "Kamarát si chce požičať €300",
+      context: "Hovorí, že ti to vráti 'čoskoro'. Nemá konkrétny dátum.",
+      optionA: { label: "Požičiam — sme priatelia 🤝", correct: false, explanation: "Pôžičky bez dohody ničia priateľstvá. Buď daruj, alebo žiadaj zmluvu." },
+      optionB: { label: "Spýtam sa na presný dátum splatenia 📅", correct: true, explanation: "Bez dohody nie je pôžička — daj len toľko, čo si môžeš dovoliť stratiť." },
+      explanation: "Pri pôžičkách rodine/priateľom vždy daj len toľko, koľko si ochotný stratiť.",
+    },
+    {
+      type: "scenario",
+      text: "Čo zvolíš?",
+      title: "Inflácia je 8%, sporiaci účet má 1%",
+      context: "Máš €5 000 na bežnom účte už 2 roky.",
+      optionA: { label: "Nechám tam — je to bezpečné 🏦", correct: false, explanation: "Pri inflácii 8% strácaš ročne reálnu hodnotu." },
+      optionB: { label: "Časť investujem do dlhodobých aktív 📈", correct: true, explanation: "Bez investovania ti inflácia 'zožerie' kúpnu silu." },
+      explanation: "Peniaze na účte pri vysokej inflácii strácajú hodnotu.",
+    },
   ],
   saving: [
     {
@@ -54,6 +72,24 @@ export const scenariosByCategory: Record<string, ScenarioTemplate[]> = {
       optionB: { label: "Investujem do akcií 📈", correct: false, explanation: "Akcie robia priemerne 7-10%, ale dlh ti zožerie 20%." },
       explanation: "Najprv splať drahé dlhy, potom investuj.",
     },
+    {
+      type: "scenario",
+      text: "Čo urobíš?",
+      title: "Káva každý deň €4",
+      context: "Pijes ju 5x do týždňa. Ročne to je ~€1 000.",
+      optionA: { label: "Pokračujem — je to malá vec ☕", correct: false, explanation: "€1 000 ročne investovaných pri 7% výnose = ~€100 000 za 30 rokov." },
+      optionB: { label: "Robím si kávu doma + investujem rozdiel 🏠", correct: true, explanation: "Malé denné výdavky tvoria veľké celoročné sumy." },
+      explanation: "Pravidelné drobné výdavky (latte factor) ti berú bohatstvo.",
+    },
+    {
+      type: "scenario",
+      text: "Aký cieľ je realistický?",
+      title: "Chceš nasporiť na byt €30 000",
+      context: "Mesačne si vieš odložiť €500.",
+      optionA: { label: "Za 2 roky — budem extrémne šetriť 🚀", correct: false, explanation: "€500/mes × 24 = €12 000. Nereálne bez bonusov." },
+      optionB: { label: "Za 5 rokov — reálny plán 🎯", correct: true, explanation: "€500/mes × 60 = €30 000. SMART cieľ." },
+      explanation: "Realistické ciele = vyššia šanca, že ich dosiahneš.",
+    },
   ],
   investing: [
     {
@@ -73,6 +109,24 @@ export const scenariosByCategory: Record<string, ScenarioTemplate[]> = {
       optionA: { label: "Investujem do indexového fondu 📈", correct: true, explanation: "Dlhodobé investovanie do diverzifikovaných fondov je cesta k bohatstvu." },
       optionB: { label: "Idem na drahú večeru 🍽️", correct: false, explanation: "Občasná odmena je OK, ale väčšinu treba pracovať pre teba." },
       explanation: "Nechaj peniaze pracovať pre seba.",
+    },
+    {
+      type: "scenario",
+      text: "Čo spravíš?",
+      title: "Trh padá -20% za týždeň",
+      context: "Tvoje portfólio stratilo €2 000.",
+      optionA: { label: "Predávam, kým neprídem o všetko! 😱", correct: false, explanation: "Predaj v panike = realizovaná strata. Trhy historicky vždy rastú." },
+      optionB: { label: "Nehýbem sa, prípadne dokupujem 🧘", correct: true, explanation: "Prepady sú normálne. Dlhodobí investori zarábajú práve preto, lebo nepanikária." },
+      explanation: "Najhoršie investičné rozhodnutia sa robia v panike.",
+    },
+    {
+      type: "scenario",
+      text: "Aký prístup zvolíš?",
+      title: "Máš €10 000 na investovanie",
+      context: "Si začiatočník, nevyznáš sa v jednotlivých akciách.",
+      optionA: { label: "Vsadím všetko na 1 'horúcu' akciu 🎰", correct: false, explanation: "Bez diverzifikácie môžeš stratiť všetko pri jednej zlej voľbe." },
+      optionB: { label: "Diverzifikujem cez ETF (napr. S&P 500) 🌍", correct: true, explanation: "ETF rozkladá riziko cez stovky firiem." },
+      explanation: "Diverzifikácia = základné pravidlo investovania.",
     },
   ],
   budgeting: [
@@ -94,6 +148,15 @@ export const scenariosByCategory: Record<string, ScenarioTemplate[]> = {
       optionB: { label: "Spočítam, či sa mi to oplatí ⚖️", correct: true, explanation: "€200 / 40h = €5/hod. Zvážiť treba aj čas a energiu." },
       explanation: "Čas má svoju hodnotu — vždy počítaj.",
     },
+    {
+      type: "scenario",
+      text: "Ako reaguješ?",
+      title: "Minul si o €200 viac než si plánoval",
+      context: "Si v polovici mesiaca a rozpočet je už takmer vyčerpaný.",
+      optionA: { label: "Použijem kreditku 💳", correct: false, explanation: "Kreditka prekrýva problém, ale úroky ti ho zhoršia." },
+      optionB: { label: "Obmedzím nepotrebné výdavky do konca mesiaca ✂️", correct: true, explanation: "Korekcia v reálnom čase je kľúčom k zdravým financiám." },
+      explanation: "Rozpočet nie je trest — je to nástroj na korekciu.",
+    },
   ],
   crypto: [
     {
@@ -104,6 +167,24 @@ export const scenariosByCategory: Record<string, ScenarioTemplate[]> = {
       optionA: { label: "Áno, kým je čas! ⚡", correct: false, explanation: "FOMO investovanie končí takmer vždy stratou." },
       optionB: { label: "Najprv si o nej naštudujem 📚", correct: true, explanation: "Investuj len do toho, čomu rozumieš." },
       explanation: "Influenceri sú často platení za promo.",
+    },
+    {
+      type: "scenario",
+      text: "Aký podiel?",
+      title: "Chceš investovať do kryptomien",
+      context: "Máš celkové portfólio €10 000.",
+      optionA: { label: "100% do BTC — to je budúcnosť 🚀", correct: false, explanation: "Krypto je extrémne volatilné — môžeš stratiť 80% hodnoty za mesiace." },
+      optionB: { label: "Max 5-10% portfólia do krypta 🎯", correct: true, explanation: "Krypto patrí do 'high risk' časti portfólia — nie do základu." },
+      explanation: "Pri vysoko rizikových aktívach drž malý podiel.",
+    },
+    {
+      type: "scenario",
+      text: "Čo urobíš?",
+      title: "Niekto ti napíše: 'Pošli BTC, vrátim 2x'",
+      context: "Tvári sa ako známa osobnosť na Twitteri.",
+      optionA: { label: "Pošlem — znie to legit 💸", correct: false, explanation: "Klasický crypto scam. Nikto ti nepošle 2x späť." },
+      optionB: { label: "Ignorujem a nahlásim ako spam 🚫", correct: true, explanation: "Ak ti niekto sľubuje zdvojnásobenie peňazí, je to 100% podvod." },
+      explanation: "V kryptosvete je obrovské množstvo podvodov.",
     },
   ],
   taxes: [
@@ -116,6 +197,15 @@ export const scenariosByCategory: Record<string, ScenarioTemplate[]> = {
       optionB: { label: "Odložím 30-40% na dane a odvody 🏛️", correct: true, explanation: "Živnostník si musí sám platiť odvody a dane zo zisku." },
       explanation: "Dane nie sú tvoje peniaze — odlož ich hneď.",
     },
+    {
+      type: "scenario",
+      text: "Ako sa rozhodneš?",
+      title: "Kamarát ti ponúka prácu 'na čierno'",
+      context: "Bez zmluvy, bez odvodov, +20% k bežnej mzde.",
+      optionA: { label: "Beriem — viac peňazí na ruke 💰", correct: false, explanation: "Bez odvodov nemáš dôchodok, PN-ku, ani nárok na podporu." },
+      optionB: { label: "Odmietnem — chcem zmluvu a istotu 📋", correct: true, explanation: "Práca 'na čierno' je riziko: pokuty + nulová sociálna ochrana." },
+      explanation: "Krátkodobý zisk vs. dlhodobé riziko.",
+    },
   ],
   legal: [
     {
@@ -127,6 +217,15 @@ export const scenariosByCategory: Record<string, ScenarioTemplate[]> = {
       optionB: { label: "Prečítam si ju celú doma a vrátim sa 📋", correct: true, explanation: "Nikdy nepodpisuj, čo si si neprečítal — aj 'štandardné' zmluvy skrývajú pokuty." },
       explanation: "Nepodpisuj nič, čo si si neprečítal.",
     },
+    {
+      type: "scenario",
+      text: "Ako reaguješ?",
+      title: "Predavač tlačí: 'Akcia končí dnes!'",
+      context: "Drahý produkt na splátky, musíš sa rozhodnúť hneď.",
+      optionA: { label: "Podpíšem — nesmiem prísť o akciu 🔥", correct: false, explanation: "Časový tlak je manipulácia — vždy si daj čas premyslieť." },
+      optionB: { label: "Odídem a rozmyslím si to v pokoji 🚪", correct: true, explanation: "Skutočne dobré ponuky sa neminú za hodinu. Tlak = červená vlajka." },
+      explanation: "Časový tlak je manipulačná taktika.",
+    },
   ],
   insurance: [
     {
@@ -137,6 +236,15 @@ export const scenariosByCategory: Record<string, ScenarioTemplate[]> = {
       optionA: { label: "Podpíšem — istota 🛡️", correct: false, explanation: "V mladom veku bez závislých osôb je životné poistenie zbytočný výdavok." },
       optionB: { label: "Odmietnem — nemám deti ani hypotéku ✋", correct: true, explanation: "Životné poistenie potrebuješ, keď na tebe finančne závisia iní." },
       explanation: "Poistenie = riešenie rizika, nie sporenie.",
+    },
+    {
+      type: "scenario",
+      text: "Čo zvolíš?",
+      title: "Cestuješ do USA na 2 týždne",
+      context: "Cestovné poistenie stojí €40, bez neho ošetrenie môže byť €10 000+.",
+      optionA: { label: "Nepoistím sa — nič sa nestane 🍀", correct: false, explanation: "Jedna návšteva pohotovosti v USA = bankrot bez poistenia." },
+      optionB: { label: "Cestovné poistenie je nutnosť ✈️", correct: true, explanation: "Pri cestách mimo EÚ je poistenie absolútna nutnosť." },
+      explanation: "Pri vysokom riziku a malej cene = vždy sa poisti.",
     },
   ],
 };

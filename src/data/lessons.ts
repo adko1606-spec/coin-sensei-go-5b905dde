@@ -653,12 +653,40 @@ export const lessons: Lesson[] = [
   },
 ];
 
-// Obohatí lekcie o scenárové (swipe-style) otázky podľa kategórie
+// Obohatí lekcie o scenárové (swipe-style) otázky a premieša ich medzi ostatné otázky.
+// Použijeme deterministický "interleave" — scenáre sa rovnomerne rozložia v rámci lekcie,
+// takže nikdy nie sú len na konci.
 import { getScenariosForCategory } from "./lessonScenarios";
+
+function interleaveScenarios(base: Question[], scenarios: Question[]): Question[] {
+  if (scenarios.length === 0) return base;
+  const total = base.length + scenarios.length;
+  const result: Question[] = [];
+  // Pozície pre scenáre — rovnomerne rozdelené, ale nikdy ako prvá otázka (aby najprv bola "klasika")
+  const scenarioPositions = new Set<number>();
+  for (let i = 0; i < scenarios.length; i++) {
+    // Rovnomerné rozdelenie cez interval [1, total-1]
+    const pos = Math.round(((i + 1) * total) / (scenarios.length + 1));
+    scenarioPositions.add(Math.min(total - 1, Math.max(1, pos)));
+  }
+  let baseIdx = 0;
+  let scnIdx = 0;
+  for (let i = 0; i < total; i++) {
+    if (scenarioPositions.has(i) && scnIdx < scenarios.length) {
+      result.push(scenarios[scnIdx++]);
+    } else if (baseIdx < base.length) {
+      result.push(base[baseIdx++]);
+    } else if (scnIdx < scenarios.length) {
+      result.push(scenarios[scnIdx++]);
+    }
+  }
+  return result;
+}
+
 lessons.forEach((lesson) => {
   const extras = getScenariosForCategory(lesson.category, lesson.id);
   if (extras.length > 0) {
-    lesson.questions = [...lesson.questions, ...extras];
+    lesson.questions = interleaveScenarios(lesson.questions, extras);
   }
 });
 

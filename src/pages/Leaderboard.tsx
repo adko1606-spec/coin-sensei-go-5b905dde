@@ -39,28 +39,65 @@ const getRankIcon = (rank: number) => {
 
 // Player Profile Modal with estate & investment info
 const PlayerProfileModal = ({ player, onClose, t }: { player: LeaderboardEntry; onClose: () => void; t: (k: string) => string }) => {
-  const char = characters.find((c) => c.id === player.selected_character);
-  const rankInfo = getRankInfo(player.rank);
+  const [livePlayer, setLivePlayer] = useState<LeaderboardEntry>(player);
+  const char = characters.find((c) => c.id === livePlayer.selected_character);
+  const rankInfo = getRankInfo(livePlayer.rank);
   const [equippedItems, setEquippedItems] = useState<any[]>([]);
   const [investPerf, setInvestPerf] = useState<{ total_invested: number; current_value: number; count: number; profitable: number } | null>(null);
+  const [loadingLive, setLoadingLive] = useState(true);
 
   useEffect(() => {
+    let cancelled = false;
     const load = async () => {
-      const { data: ucs } = await supabase.from("user_cosmetics").select("item_id").eq("user_id", player.user_id).eq("equipped", true);
-      if (ucs && ucs.length > 0) {
-        const ids = ucs.map(u => u.item_id);
+      setLoadingLive(true);
+      const [profileRes, progressRes, ratingRes, ucsRes, invsRes] = await Promise.all([
+        supabase.from("profiles").select("display_name, selected_character, coins, current_streak").eq("user_id", player.user_id).maybeSingle(),
+        supabase.from("user_progress").select("xp_earned, completed").eq("user_id", player.user_id).eq("completed", true),
+        supabase.from("player_ratings").select("rating, rank").eq("user_id", player.user_id).maybeSingle(),
+        supabase.from("user_cosmetics").select("item_id").eq("user_id", player.user_id).eq("equipped", true),
+        supabase.from("user_investments").select("invested_coins, current_value").eq("user_id", player.user_id).eq("is_active", true),
+      ]);
+      if (cancelled) return;
+
+      // Live profile fields
+      const p = profileRes.data;
+      const totalXp = (progressRes.data || []).reduce((s: number, r: any) => s + Number(r.xp_earned || 0), 0);
+      const completedLessons = (progressRes.data || []).length;
+      setLivePlayer({
+        ...player,
+        display_name: p?.display_name ?? player.display_name,
+        selected_character: p?.selected_character ?? player.selected_character,
+        coins: p?.coins ?? player.coins,
+        current_streak: p?.current_streak ?? player.current_streak,
+        total_xp: totalXp,
+        completed_lessons: completedLessons,
+        rating: ratingRes.data?.rating ?? player.rating,
+        rank: ratingRes.data?.rank ?? player.rank,
+      });
+
+      // Cosmetics
+      if (ucsRes.data && ucsRes.data.length > 0) {
+        const ids = ucsRes.data.map((u: any) => u.item_id);
         const { data: items } = await supabase.from("cosmetic_items").select("*").in("id", ids);
-        if (items) setEquippedItems(items);
+        if (!cancelled && items) setEquippedItems(items);
+      } else {
+        setEquippedItems([]);
       }
-      const { data: invs } = await supabase.from("user_investments").select("invested_coins, current_value").eq("user_id", player.user_id).eq("is_active", true);
-      if (invs && invs.length > 0) {
+
+      // Investments
+      const invs = invsRes.data || [];
+      if (invs.length > 0) {
         const total_invested = invs.reduce((s: number, i: any) => s + Number(i.invested_coins), 0);
         const current_value = invs.reduce((s: number, i: any) => s + Number(i.current_value), 0);
         const profitable = invs.filter((i: any) => Number(i.current_value) > Number(i.invested_coins)).length;
         setInvestPerf({ total_invested, current_value, count: invs.length, profitable });
+      } else {
+        setInvestPerf(null);
       }
+      setLoadingLive(false);
     };
     load();
+    return () => { cancelled = true; };
   }, [player.user_id]);
 
   const equippedHouse = equippedItems.find((i: any) => i.category === "house");
@@ -85,11 +122,12 @@ const PlayerProfileModal = ({ player, onClose, t }: { player: LeaderboardEntry; 
           ) : (
             <div className="h-20 w-20 rounded-2xl bg-accent/10 flex items-center justify-center text-4xl">🎓</div>
           )}
-          <h4 className="text-xl font-extrabold text-foreground">{player.display_name}</h4>
+          <h4 className="text-xl font-extrabold text-foreground">{livePlayer.display_name}</h4>
           <div className="flex items-center gap-2">
             <span className="text-lg">{rankInfo.icon}</span>
-            <span className={`text-sm font-bold ${rankInfo.color}`}>{player.rank}</span>
-            <span className="text-sm text-muted-foreground">({player.rating})</span>
+            <span className={`text-sm font-bold ${rankInfo.color}`}>{livePlayer.rank}</span>
+            <span className="text-sm text-muted-foreground">({livePlayer.rating})</span>
+            {!loadingLive && <span className="ml-1 inline-flex items-center gap-1 text-[10px] font-bold text-primary"><span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />LIVE</span>}
           </div>
         </div>
 
@@ -184,22 +222,22 @@ const PlayerProfileModal = ({ player, onClose, t }: { player: LeaderboardEntry; 
           <div className="rounded-xl bg-xp/10 p-3 text-center">
             <Zap className="h-4 w-4 text-xp mx-auto mb-1" />
             <p className="text-xs text-muted-foreground">{t("profile.totalXp")}</p>
-            <p className="text-lg font-bold text-foreground">{player.total_xp}</p>
+            <p className="text-lg font-bold text-foreground">{livePlayer.total_xp}</p>
           </div>
           <div className="rounded-xl bg-streak/10 p-3 text-center">
             <Flame className="h-4 w-4 text-streak mx-auto mb-1" />
             <p className="text-xs text-muted-foreground">{t("profile.currentStreak")}</p>
-            <p className="text-lg font-bold text-foreground">{player.current_streak} {t("profile.days")}</p>
+            <p className="text-lg font-bold text-foreground">{livePlayer.current_streak} {t("profile.days")}</p>
           </div>
           <div className="rounded-xl bg-primary/10 p-3 text-center">
             <BookOpen className="h-4 w-4 text-primary mx-auto mb-1" />
             <p className="text-xs text-muted-foreground">{t("profile.completedLessons")}</p>
-            <p className="text-lg font-bold text-foreground">{player.completed_lessons}</p>
+            <p className="text-lg font-bold text-foreground">{livePlayer.completed_lessons}</p>
           </div>
           <div className="rounded-xl bg-coin/10 p-3 text-center">
             <span className="text-sm">🪙</span>
             <p className="text-xs text-muted-foreground">{t("profile.fince")}</p>
-            <p className="text-lg font-bold text-foreground">{player.coins}</p>
+            <p className="text-lg font-bold text-foreground">{livePlayer.coins}</p>
           </div>
         </div>
       </motion.div>

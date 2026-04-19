@@ -220,9 +220,9 @@ const Profile = () => {
             <ChevronRight className="h-5 w-5 text-muted-foreground" />
           </button>
 
-          <button onClick={() => setShowShop(true)} className="w-full flex items-center justify-between rounded-2xl bg-card p-4 shadow-card hover:bg-muted/50 transition-colors">
-            <div className="flex items-center gap-3"><ShoppingBag className="h-6 w-6 text-secondary" /><div><p className="text-sm font-bold text-foreground">{t("profile.shop")}</p><p className="text-xs text-muted-foreground">{t("profile.unlockCosmetics")}</p></div></div>
-            <ChevronRight className="h-5 w-5 text-muted-foreground" />
+          <button onClick={() => setShowShop(true)} className="w-full flex items-center justify-between rounded-2xl gradient-gold p-4 shadow-button hover:opacity-90 transition-opacity">
+            <div className="flex items-center gap-3"><ShoppingBag className="h-6 w-6 text-primary-foreground" /><div className="text-left"><p className="text-sm font-extrabold text-primary-foreground">{t("profile.shop")}</p><p className="text-xs text-primary-foreground/80">{t("profile.unlockCosmetics")}</p></div></div>
+            <ChevronRight className="h-5 w-5 text-primary-foreground" />
           </button>
         </motion.div>
 

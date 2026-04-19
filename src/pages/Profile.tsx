@@ -161,8 +161,9 @@ const Profile = () => {
   const equippedItems = userCosmetics.filter((uc) => uc.equipped);
   const equippedCosmeticItems = equippedItems.map((uc) => cosmeticItems.find((i: any) => i.id === uc.item_id)).filter(Boolean) as any[];
 
-  // Compute daily discount IDs from ALL cosmetic items (not filtered by category)
-  const discountIds = getDailyDiscountIds(cosmeticItems);
+  // Compute daily discounts (random items + variable %) across ALL cosmetic items
+  const discountList = getDailyDiscountIds(cosmeticItems);
+  const discountMap = new Map(discountList.map((d) => [d.id, d.percent]));
 
   if (loading) {
     return (<div className="min-h-screen gradient-hero flex items-center justify-center"><div className="animate-pulse text-primary font-bold text-xl">{t("common.loading")}</div></div>);

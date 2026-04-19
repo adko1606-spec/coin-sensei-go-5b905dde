@@ -93,59 +93,92 @@ const PlayerProfileModal = ({ player, onClose, t }: { player: LeaderboardEntry; 
           </div>
         </div>
 
-        {/* Assets section */}
-        {(equippedHouse || equippedCar || otherCosmetics.length > 0) && (
-          <div className="mt-4 rounded-xl border border-border bg-muted/40 p-3">
-            <p className="text-xs font-extrabold text-foreground mb-2 flex items-center gap-1">🏘️ Majetok & kozmetika</p>
-            <div className="flex flex-wrap items-center justify-center gap-3">
-              {equippedHouse && (
-                <div className="text-center">
-                  {ESTATE_IMAGES[equippedHouse.id] ? (
-                    <img src={ESTATE_IMAGES[equippedHouse.id]} alt={equippedHouse.name} className="h-14 w-14 object-contain mx-auto" />
-                  ) : <span className="text-3xl">🏠</span>}
-                  <p className="text-[10px] font-bold text-foreground mt-1">{equippedHouse.name}</p>
-                </div>
-              )}
-              {equippedCar && (
-                <div className="text-center">
-                  {ESTATE_IMAGES[equippedCar.id] ? (
-                    <img src={ESTATE_IMAGES[equippedCar.id]} alt={equippedCar.name} className="h-14 w-14 object-contain mx-auto" />
-                  ) : <span className="text-3xl">🚗</span>}
-                  <p className="text-[10px] font-bold text-foreground mt-1">{equippedCar.name}</p>
-                </div>
-              )}
-              {otherCosmetics.slice(0, 4).map((c: any) => (
-                <div key={c.id} className="text-center">
-                  <div className="h-10 w-10 rounded-xl bg-card flex items-center justify-center text-2xl mx-auto">{c.preview_emoji || c.icon || "🎨"}</div>
-                  <p className="text-[9px] font-bold text-muted-foreground mt-1 truncate max-w-[60px]">{c.name}</p>
-                </div>
-              ))}
+        {/* Sekcia: Aktíva */}
+        <div className="mt-5">
+          <h5 className="text-xs font-extrabold text-foreground mb-2 uppercase tracking-wide">🏘️ Aktíva</h5>
+          <div className="rounded-xl border border-border bg-muted/40 p-3">
+            <div className="grid grid-cols-3 gap-2">
+              {/* Dom */}
+              <div className="rounded-lg bg-card/60 p-2 text-center">
+                <div className="text-[10px] font-bold text-muted-foreground mb-1">🏠 Dom</div>
+                {equippedHouse ? (
+                  <>
+                    {ESTATE_IMAGES[equippedHouse.id] ? (
+                      <img src={ESTATE_IMAGES[equippedHouse.id]} alt={equippedHouse.name} className="h-12 w-12 object-contain mx-auto" />
+                    ) : <span className="text-2xl">🏠</span>}
+                    <p className="text-[9px] font-bold text-foreground mt-1 truncate">{equippedHouse.name}</p>
+                  </>
+                ) : (
+                  <div className="h-12 flex items-center justify-center text-muted-foreground/50 text-2xl">—</div>
+                )}
+              </div>
+              {/* Auto */}
+              <div className="rounded-lg bg-card/60 p-2 text-center">
+                <div className="text-[10px] font-bold text-muted-foreground mb-1">🚗 Auto</div>
+                {equippedCar ? (
+                  <>
+                    {ESTATE_IMAGES[equippedCar.id] ? (
+                      <img src={ESTATE_IMAGES[equippedCar.id]} alt={equippedCar.name} className="h-12 w-12 object-contain mx-auto" />
+                    ) : <span className="text-2xl">🚗</span>}
+                    <p className="text-[9px] font-bold text-foreground mt-1 truncate">{equippedCar.name}</p>
+                  </>
+                ) : (
+                  <div className="h-12 flex items-center justify-center text-muted-foreground/50 text-2xl">—</div>
+                )}
+              </div>
+              {/* Kozmetika */}
+              <div className="rounded-lg bg-card/60 p-2 text-center">
+                <div className="text-[10px] font-bold text-muted-foreground mb-1">🎨 Kozmetika</div>
+                {otherCosmetics.length > 0 ? (
+                  <div className="flex flex-wrap items-center justify-center gap-1">
+                    {otherCosmetics.slice(0, 3).map((c: any) => (
+                      <span key={c.id} className="text-xl" title={c.name}>{c.preview_emoji || c.icon || "🎨"}</span>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="h-12 flex items-center justify-center text-muted-foreground/50 text-2xl">—</div>
+                )}
+              </div>
             </div>
-            {!equippedHouse && !equippedCar && otherCosmetics.length === 0 && (
-              <p className="text-xs text-muted-foreground text-center">Žiadny majetok</p>
-            )}
           </div>
-        )}
+        </div>
 
-        {/* Investment performance */}
-        {investPerf && (
-          <div className={`mt-3 rounded-xl p-3 border ${profitLoss >= 0 ? "bg-primary/10 border-primary/30" : "bg-destructive/10 border-destructive/30"}`}>
-            <div className="flex items-center gap-2 mb-1">
-              {profitLoss >= 0 ? <TrendingUp className="h-4 w-4 text-primary" /> : <TrendingDown className="h-4 w-4 text-destructive" />}
-              <p className="text-xs font-extrabold text-foreground">💰 Investičný výkon</p>
-              <span className={`ml-auto text-[10px] font-bold px-2 py-0.5 rounded-full ${profitLoss >= 0 ? "bg-primary/20 text-primary" : "bg-destructive/20 text-destructive"}`}>
-                {profitLoss >= 0 ? "🟢 V zisku" : "🔴 V strate"}
-              </span>
+        {/* Sekcia: Výkonnosť investícií */}
+        <div className="mt-4">
+          <h5 className="text-xs font-extrabold text-foreground mb-2 uppercase tracking-wide">💰 Výkonnosť investícií</h5>
+          {investPerf ? (
+            <div className={`rounded-xl p-3 border ${profitLoss >= 0 ? "bg-primary/10 border-primary/30" : "bg-destructive/10 border-destructive/30"}`}>
+              <div className="flex items-center gap-2 mb-1">
+                {profitLoss >= 0 ? <TrendingUp className="h-4 w-4 text-primary" /> : <TrendingDown className="h-4 w-4 text-destructive" />}
+                <p className="text-xs font-bold text-foreground">Celkový zisk/strata</p>
+                <span className={`ml-auto text-[10px] font-bold px-2 py-0.5 rounded-full ${profitLoss >= 0 ? "bg-primary/20 text-primary" : "bg-destructive/20 text-destructive"}`}>
+                  {profitLoss >= 0 ? "🟢 V zisku" : "🔴 V strate"}
+                </span>
+              </div>
+              <p className={`text-xl font-extrabold ${profitLoss >= 0 ? "text-primary" : "text-destructive"}`}>
+                {profitLoss >= 0 ? "+" : ""}{Math.round(profitLoss)} F ({profitPercent >= 0 ? "+" : ""}{profitPercent}%)
+              </p>
+              <div className="mt-2 grid grid-cols-3 gap-2 text-center">
+                <div className="rounded-lg bg-card/60 p-1.5">
+                  <p className="text-[9px] text-muted-foreground">Obchody</p>
+                  <p className="text-sm font-extrabold text-foreground">{investPerf.count}</p>
+                </div>
+                <div className="rounded-lg bg-card/60 p-1.5">
+                  <p className="text-[9px] text-muted-foreground">Úspešnosť</p>
+                  <p className="text-sm font-extrabold text-foreground">{winRate}%</p>
+                </div>
+                <div className="rounded-lg bg-card/60 p-1.5">
+                  <p className="text-[9px] text-muted-foreground">Vložené</p>
+                  <p className="text-sm font-extrabold text-foreground">{investPerf.total_invested}</p>
+                </div>
+              </div>
             </div>
-            <p className={`text-lg font-extrabold ${profitLoss >= 0 ? "text-primary" : "text-destructive"}`}>
-              {profitLoss >= 0 ? "+" : ""}{Math.round(profitLoss)} Fince ({profitPercent >= 0 ? "+" : ""}{profitPercent}%)
-            </p>
-            <div className="mt-1 flex items-center gap-3 text-[11px] text-muted-foreground">
-              <span>📊 {investPerf.count} aktív</span>
-              <span>✅ Win rate: <span className="font-bold text-foreground">{winRate}%</span></span>
+          ) : (
+            <div className="rounded-xl border border-border bg-muted/30 p-3 text-center">
+              <p className="text-xs text-muted-foreground">Hráč zatiaľ nemá žiadne aktívne investície</p>
             </div>
-          </div>
-        )}
+          )}
+        </div>
 
         <div className="mt-4 grid grid-cols-2 gap-3">
           <div className="rounded-xl bg-xp/10 p-3 text-center">

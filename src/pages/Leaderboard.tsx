@@ -222,22 +222,22 @@ const PlayerProfileModal = ({ player, onClose, t }: { player: LeaderboardEntry; 
           <div className="rounded-xl bg-xp/10 p-3 text-center">
             <Zap className="h-4 w-4 text-xp mx-auto mb-1" />
             <p className="text-xs text-muted-foreground">{t("profile.totalXp")}</p>
-            <p className="text-lg font-bold text-foreground">{player.total_xp}</p>
+            <p className="text-lg font-bold text-foreground">{livePlayer.total_xp}</p>
           </div>
           <div className="rounded-xl bg-streak/10 p-3 text-center">
             <Flame className="h-4 w-4 text-streak mx-auto mb-1" />
             <p className="text-xs text-muted-foreground">{t("profile.currentStreak")}</p>
-            <p className="text-lg font-bold text-foreground">{player.current_streak} {t("profile.days")}</p>
+            <p className="text-lg font-bold text-foreground">{livePlayer.current_streak} {t("profile.days")}</p>
           </div>
           <div className="rounded-xl bg-primary/10 p-3 text-center">
             <BookOpen className="h-4 w-4 text-primary mx-auto mb-1" />
             <p className="text-xs text-muted-foreground">{t("profile.completedLessons")}</p>
-            <p className="text-lg font-bold text-foreground">{player.completed_lessons}</p>
+            <p className="text-lg font-bold text-foreground">{livePlayer.completed_lessons}</p>
           </div>
           <div className="rounded-xl bg-coin/10 p-3 text-center">
             <span className="text-sm">🪙</span>
             <p className="text-xs text-muted-foreground">{t("profile.fince")}</p>
-            <p className="text-lg font-bold text-foreground">{player.coins}</p>
+            <p className="text-lg font-bold text-foreground">{livePlayer.coins}</p>
           </div>
         </div>
       </motion.div>

@@ -127,7 +127,7 @@ const PlayerProfileModal = ({ player, onClose, t }: { player: LeaderboardEntry; 
             <span className="text-lg">{rankInfo.icon}</span>
             <span className={`text-sm font-bold ${rankInfo.color}`}>{livePlayer.rank}</span>
             <span className="text-sm text-muted-foreground">({livePlayer.rating})</span>
-            {!loadingLive && <span className="ml-1 inline-flex items-center gap-1 text-[10px] font-bold text-primary"><span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />LIVE</span>}
+            
           </div>
         </div>
 

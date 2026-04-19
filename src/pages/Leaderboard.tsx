@@ -39,28 +39,65 @@ const getRankIcon = (rank: number) => {
 
 // Player Profile Modal with estate & investment info
 const PlayerProfileModal = ({ player, onClose, t }: { player: LeaderboardEntry; onClose: () => void; t: (k: string) => string }) => {
-  const char = characters.find((c) => c.id === player.selected_character);
-  const rankInfo = getRankInfo(player.rank);
+  const [livePlayer, setLivePlayer] = useState<LeaderboardEntry>(player);
+  const char = characters.find((c) => c.id === livePlayer.selected_character);
+  const rankInfo = getRankInfo(livePlayer.rank);
   const [equippedItems, setEquippedItems] = useState<any[]>([]);
   const [investPerf, setInvestPerf] = useState<{ total_invested: number; current_value: number; count: number; profitable: number } | null>(null);
+  const [loadingLive, setLoadingLive] = useState(true);
 
   useEffect(() => {
+    let cancelled = false;
     const load = async () => {
-      const { data: ucs } = await supabase.from("user_cosmetics").select("item_id").eq("user_id", player.user_id).eq("equipped", true);
-      if (ucs && ucs.length > 0) {
-        const ids = ucs.map(u => u.item_id);
+      setLoadingLive(true);
+      const [profileRes, progressRes, ratingRes, ucsRes, invsRes] = await Promise.all([
+        supabase.from("profiles").select("display_name, selected_character, coins, current_streak").eq("user_id", player.user_id).maybeSingle(),
+        supabase.from("user_progress").select("xp_earned, completed").eq("user_id", player.user_id).eq("completed", true),
+        supabase.from("player_ratings").select("rating, rank").eq("user_id", player.user_id).maybeSingle(),
+        supabase.from("user_cosmetics").select("item_id").eq("user_id", player.user_id).eq("equipped", true),
+        supabase.from("user_investments").select("invested_coins, current_value").eq("user_id", player.user_id).eq("is_active", true),
+      ]);
+      if (cancelled) return;
+
+      // Live profile fields
+      const p = profileRes.data;
+      const totalXp = (progressRes.data || []).reduce((s: number, r: any) => s + Number(r.xp_earned || 0), 0);
+      const completedLessons = (progressRes.data || []).length;
+      setLivePlayer({
+        ...player,
+        display_name: p?.display_name ?? player.display_name,
+        selected_character: p?.selected_character ?? player.selected_character,
+        coins: p?.coins ?? player.coins,
+        current_streak: p?.current_streak ?? player.current_streak,
+        total_xp: totalXp,
+        completed_lessons: completedLessons,
+        rating: ratingRes.data?.rating ?? player.rating,
+        rank: ratingRes.data?.rank ?? player.rank,
+      });
+
+      // Cosmetics
+      if (ucsRes.data && ucsRes.data.length > 0) {
+        const ids = ucsRes.data.map((u: any) => u.item_id);
         const { data: items } = await supabase.from("cosmetic_items").select("*").in("id", ids);
-        if (items) setEquippedItems(items);
+        if (!cancelled && items) setEquippedItems(items);
+      } else {
+        setEquippedItems([]);
       }
-      const { data: invs } = await supabase.from("user_investments").select("invested_coins, current_value").eq("user_id", player.user_id).eq("is_active", true);
-      if (invs && invs.length > 0) {
+
+      // Investments
+      const invs = invsRes.data || [];
+      if (invs.length > 0) {
         const total_invested = invs.reduce((s: number, i: any) => s + Number(i.invested_coins), 0);
         const current_value = invs.reduce((s: number, i: any) => s + Number(i.current_value), 0);
         const profitable = invs.filter((i: any) => Number(i.current_value) > Number(i.invested_coins)).length;
         setInvestPerf({ total_invested, current_value, count: invs.length, profitable });
+      } else {
+        setInvestPerf(null);
       }
+      setLoadingLive(false);
     };
     load();
+    return () => { cancelled = true; };
   }, [player.user_id]);
 
   const equippedHouse = equippedItems.find((i: any) => i.category === "house");
